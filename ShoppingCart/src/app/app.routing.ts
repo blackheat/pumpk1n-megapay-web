@@ -3,10 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { HomeComponent } from './home/home.component';
-import { CartComponent } from './cart/cart.component';
-import { AboutComponent } from './about/about.component';
 import { AuthGuard } from './auth.guard';
-import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
   {
@@ -30,18 +27,6 @@ const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent
-      },
-      {
-        path: 'cart',
-        component: CartComponent
-      },
-      {
-        path: 'about',
-        component: AboutComponent
-      },
-      {
-        path: 'user',
-        component: UserComponent
       },
       {
         path: '**',

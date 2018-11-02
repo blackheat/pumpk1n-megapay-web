@@ -18,11 +18,44 @@ import { NavbarComponent } from '../shared/navbar/navbar.component';
   styleUrls: ['./login-form.component.css']
 })
 export class LoginFormComponent implements OnInit {
-  constructor() {
+  loginForm: FormGroup;
+  id: string;
+  password: string;
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private service: AccountService
+  ) {
   }
 
   ngOnInit() {
 
+    if (this.service.isLoggedIn()) {
+      this.router.navigate(['/home']);
+    }
+    this.loginForm = new FormGroup({
+      id: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required)
+    });
   }
 
+  onSubmit(value) {
+  //   this.service.Login(value).subscribe(
+  //     (result: any[]) => {
+  //       swal({
+  //         title: 'Congratulations!',
+  //         text: 'Login successfully.',
+  //         icon: 'success'
+  //       });
+  //       this.router.navigate(['/home']);
+  //     },
+  //     error => {
+  //       swal({
+  //         title: 'Error!',
+  //         text: 'ID or password is incorrect.',
+  //         icon: 'error'
+  //       });
+  //     }
+  //   );
+  }
 }

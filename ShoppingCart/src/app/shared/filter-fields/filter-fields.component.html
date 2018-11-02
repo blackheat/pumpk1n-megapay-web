@@ -1,1 +1,41 @@
-<p>Search advanced - products</p>
+<div class="card">      
+  <div class="card-header text-center">
+    <h2>Filters</h2>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="filterForm" (ngSubmit)="Search(filterForm.value)">
+      <div class="row" style="padding: 10px">
+        <label for="productName" class="col-3">
+          <h4>Name</h4>
+        </label>
+        <input id="productName" class="col-8" type="text" formControlName="productName">
+      </div>
+
+      <div class="row" style="padding: 10px">
+        <label class="col-3" for="productPrice">
+          <h4>Price</h4>
+        </label>
+        <select class="col-8" id="productPrice" formControlName="productPrice">
+          <option value="1">Less than 10.000.000 VND</option>
+          <option value="2">10.000.000 - 15.000.000 VND</option>
+          <option value="3">15.000.000 - 20.000.000 VND</option>
+          <option value="4">More than 20.000.000 VND</option>
+        </select>
+      </div>
+
+      <div class="row" style="padding: 10px">
+        <label class="col-3" for="productModel">
+          <h4>Model</h4>
+        </label>
+        <select class="col-8" id="productModel" formControlName="productModel">
+          <option *ngFor="let model of models" value="model">{{model}}</option>
+        </select>
+      </div>
+      <div class="text-center ">
+        <button class="btn btn-default text-center" type="submit">
+          <i class="fa fa-search " aria-hidden="true "></i><b> Search</b>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

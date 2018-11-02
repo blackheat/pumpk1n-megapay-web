@@ -6,7 +6,6 @@ import { ProductRoutes } from './products.routing';
 
 import { SharedModule } from '../shared/shared.module';
 import { ProductsComponent } from './products.component';
-import { ProductInfoComponent } from './product-info/product-info.component';
 
 @NgModule({
   imports: [
@@ -15,8 +14,7 @@ import { ProductInfoComponent } from './product-info/product-info.component';
     SharedModule
   ],
   declarations: [
-    ProductsComponent,
-    ProductInfoComponent
+    ProductsComponent
   ],
   exports: []
 })

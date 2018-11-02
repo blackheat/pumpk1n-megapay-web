@@ -1,1 +1,22 @@
-<p>Login Form</p>
+<br>
+<div class="justify-content-center row col-10 offset-1">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)" class="align-content-center">
+    <div class="form-container card bg-light">
+      <div class="card-header text-center">
+        <h4>Login</h4>
+      </div>
+      <div class="card-body">
+        <label>ID:
+          <input type="text" style="width: 30rem" class="form-control" id="id" name="id" formControlName="id">
+        </label>
+        <br>
+        <label>Password:
+          <input type="password" style="width: 30rem;" class="form-control" id="password" name="password" formControlName="password">
+        </label>
+      </div>
+      <div class="card-footer text-center">
+        <button class="btn btn-primary" type="submit">Login</button>
+      </div>
+    </div>
+  </form>
+</div>
