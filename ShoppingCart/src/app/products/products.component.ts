@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -74,8 +75,8 @@ export class ProductsComponent implements OnInit {
     'assets/pictures/img/DE03.jpg',
     'assets/pictures/img/DE04.jpg',
   ];
-  images = []
-  constructor() { }
+  images = [];
+  constructor(private router: Router) { }
 
   ngOnInit() {
     const self = this;

@@ -33,7 +33,8 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
     MatCheckboxModule,
     AngularFontAwesomeModule,
     OwlModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   bootstrap: [AppComponent],
   exports: []

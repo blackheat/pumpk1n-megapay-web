@@ -6,15 +6,18 @@ import { ProductRoutes } from './products.routing';
 
 import { SharedModule } from '../shared/shared.module';
 import { ProductsComponent } from './products.component';
+import { ProductInfoComponent } from './product-info/product-info.component';
 
 @NgModule({
   imports: [
     RouterModule.forChild(ProductRoutes),
     CommonModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   declarations: [
-    ProductsComponent
+    ProductsComponent,
+    ProductInfoComponent
   ],
   exports: []
 })
