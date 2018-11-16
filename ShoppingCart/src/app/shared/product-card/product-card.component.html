@@ -1,11 +1,11 @@
 <div class="card" style="width: 18em;">
   <img class="card-img-top" src="{{image}}" alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
-    <h5 class="card-title">Laptop name</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.
+    <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text">{{product.description}}
     </p>
     <div>
-      <h4 style = "color: rgb(235, 235, 122)"><i class="fa fa-dollar"></i> 10.000.000 VND</h4>
+      <h4 style = "color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} VND</h4>
     </div>
     <br>
     <div>
