@@ -8,8 +8,8 @@
         <h2>Products</h2>
       </div>
       <div class="card-body row">
-        <div *ngFor="let image of images" class="col-3">
-          <app-product-card [image]="image" style="padding: 10px;"></app-product-card>
+        <div *ngFor="let product of products" class="col-3">
+          <app-product-card [product]="product" style="padding: 10px;"></app-product-card>
         </div>
       </div>
       <nav class="mx-auto" aria-label="Pagination">

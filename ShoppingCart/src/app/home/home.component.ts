@@ -4,7 +4,7 @@ import { AccountService } from '../services/account.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
   // userRole;
@@ -20,21 +20,41 @@ export class HomeComponent implements OnInit {
     'assets/pictures/slideshow/slideshow2.jpg',
     'assets/pictures/slideshow/slideshow3.jpg'
   ];
-  images = [
-    'assets/pictures/img/DE01.jpg',
-    'assets/pictures/img/DE02.jpg',
-    'assets/pictures/img/DE03.jpg',
-    'assets/pictures/img/DE04.jpg',
+  products = [
+    {
+      image: 'assets/pictures/img/DE01.jpg',
+      name: 'Laptop name',
+      description: 'Laptop description',
+      price: 12000000
+    },
+    {
+      image: 'assets/pictures/img/DE02.jpg',
+      name: 'Laptop name',
+      description: 'Laptop description',
+      price: 10000000
+    },
+    {
+      image: 'assets/pictures/img/DE03.jpg',
+      name: 'Laptop name',
+      description: 'Laptop description',
+      price: 23000000
+    },
+    {
+      image: 'assets/pictures/img/DE04.jpg',
+      name: 'Laptop name',
+      description: 'Laptop description',
+      price: 14000000
+    },
   ];
   options: any;
   ngOnInit() {
     this.options = {
       dots: false,
       responsive: {
-        '0': { items: 1},
-        '400': { items: 2},
-        '550': { items: 3},
-        '670': { items: 4}
+        '0': { items: 1 },
+        '400': { items: 2 },
+        '550': { items: 3 },
+        '670': { items: 4 }
       },
       autoplay: true,
       loop: true,

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HttpClient } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-product-card',
@@ -8,22 +7,12 @@ import { HttpClient } from 'selenium-webdriver/http';
 })
 export class ProductCardComponent implements OnInit {
 
-  @Input() image: string;
-
-  product = {
-    name: 'Laptop name',
-    description: 'Laptop description',
-    price: 10000000
-  }
+  @Input() product: string;
 
   getProduct() {
-    this.service.getProduct.subscribe(data => {
-      this.product = data;
-    })
   }
 
-  constructor(private service: ProductService) {
-    
+  constructor() {
   }
 
   ngOnInit() {
