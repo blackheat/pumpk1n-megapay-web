@@ -14,7 +14,7 @@ import {
   styleUrls: ['./filter-fields.component.css']
 })
 export class FilterFieldsComponent implements OnInit {
-  models = ['DELL', 'HP', 'ASUS', 'LENOVO'];
+  models = ['', 'DELL', 'HP', 'ASUS', 'LENOVO'];
   filterForm: FormGroup;
 
   constructor() { }
@@ -24,6 +24,7 @@ export class FilterFieldsComponent implements OnInit {
     self.filterForm = new FormGroup({
       productName: new FormControl(),
       productPrice: new FormControl(),
+      productType: new FormControl(),
       productModel: new FormControl()
     });
    }
