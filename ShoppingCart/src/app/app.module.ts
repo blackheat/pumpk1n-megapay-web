@@ -14,14 +14,12 @@ import { ProductsModule } from './products/products.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { AdminComponent } from './admin/admin.component';
 @NgModule({
   declarations: [
     AppComponent,
     RoutingComponent,
     HomeComponent,
-    NavbarComponent,
-    AdminComponent
+    NavbarComponent
   ],
   imports: [
     NgbModule.forRoot(),
