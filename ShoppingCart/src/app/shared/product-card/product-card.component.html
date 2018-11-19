@@ -1,5 +1,5 @@
 <div class="card" style="width: 18em;">
-  <img class="card-img-top" src="{{product.image}}" alt="Card image cap">
+  <img class="card-img-top" src={{image}} alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
     <h5 class="card-title">{{product.name}}</h5>
     <p class="card-text">{{product.description}}
@@ -9,7 +9,7 @@
     </div>
     <br>
     <div>
-      <a [routerLink]="[product.id]" class="btn" style="color: white; background-color: rgb(192, 192, 192)">
+      <a (click)="productInfo(product.id)" class="btn" style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-info-circle"></i>
         <b> Detail</b>
       </a>

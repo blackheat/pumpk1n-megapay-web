@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { IMAGE_PATH } from '../constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-card',
@@ -7,15 +9,19 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ProductCardComponent implements OnInit {
 
-  @Input() product: string;
+  @Input() product;
+  image: string;
 
-  getProduct() {
-  }
-
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
+    const self = this;
+    self.image = `${IMAGE_PATH}/${self.product.id}.jpg`;
   }
 
+  productInfo(id: number) {
+    const self = this;
+    self.router.navigate(['/products/', id]);
+  }
 }
