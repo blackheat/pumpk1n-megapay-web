@@ -37,4 +37,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+<<<<<<< HEAD
 ../.vs/*
+=======
+
+.vs/*
+>>>>>>> dev
