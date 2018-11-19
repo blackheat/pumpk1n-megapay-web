@@ -11,7 +11,7 @@ export const ProductRoutes: Routes = [
         component: ProductsComponent
       },
       {
-        path: 'product/:id',
+        path: ':id',
         component: ProductInfoComponent
       }
     ]

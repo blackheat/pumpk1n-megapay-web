@@ -14,18 +14,14 @@ import { ProductsModule } from './products/products.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { CartComponent } from './cart/cart.component';
-import { AboutComponent } from './about/about.component';
-import { UserComponent } from './user/user.component';
+import { AdminComponent } from './admin/admin.component';
 @NgModule({
   declarations: [
     AppComponent,
     RoutingComponent,
     HomeComponent,
     NavbarComponent,
-    CartComponent,
-    AboutComponent,
-    UserComponent
+    AdminComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -39,7 +35,8 @@ import { UserComponent } from './user/user.component';
     MatCheckboxModule,
     AngularFontAwesomeModule,
     OwlModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   bootstrap: [AppComponent],
   exports: []

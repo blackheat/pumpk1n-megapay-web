@@ -59,5 +59,8 @@ export class AppRoutingModule {}
 export const RoutingComponent = [
   NotFoundComponent,
   LoginFormComponent,
-  HomeComponent
+  HomeComponent,
+  CartComponent,
+  AboutComponent,
+  UserComponent
 ];

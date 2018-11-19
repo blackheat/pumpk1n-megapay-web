@@ -7,12 +7,15 @@ import { ErrorInterceptor } from './helper/error.interceptor';
 import { JwtInterceptor } from './helper/jwt.interceptor';
 import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { RouterModule } from '@angular/router';
+import { NgxSpinnerModule } from 'ngx-spinner';
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
+    NgxSpinnerModule
   ],
   declarations: [
     ProductCardComponent,

@@ -1,1 +1,14 @@
-<p>Home page</p>
+<div class="mx-auto" style="max-width: 75em;">
+  <ngb-carousel *ngIf="slides">
+    <ng-template *ngFor="let slide of slides" ngbSlide>
+      <img src={{slide}} alt="Random first slide">
+    </ng-template>
+  </ngb-carousel>
+</div>
+<div class="mx-auto" style="max-width: 75em;">
+  <owl-carousel style="margin-left: 10px" [options]="options" [items]="images" [carouselClasses]="['owl-theme', 'row', 'sliding']">
+    <div class="item" style="padding:10px" *ngFor="let product of products;let i = index">
+      <app-product-card [product] = "product"></app-product-card>
+    </div>
+  </owl-carousel>
+</div>

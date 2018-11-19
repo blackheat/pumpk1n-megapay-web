@@ -14,10 +14,25 @@ import { NgbModal } from 'node_modules/@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  auth: boolean;
+  listener: EventEmitter<any>;
   constructor(private service: AccountService,
     private router: Router,
     private modalService: NgbModal) {
+    this.listener = service.listener;
+    this.listener.subscribe(() => {
+      this.auth = this.service.isLoggedIn();
+    });
   }
+  numberOfProducts = 0;
+
+  logout() {
+    this.auth = !this.auth;
+    this.service.Logout();
+    this.router.navigate(['/login']);
+  }
+
   ngOnInit() {
+    this.auth = this.service.isLoggedIn();
   }
 }

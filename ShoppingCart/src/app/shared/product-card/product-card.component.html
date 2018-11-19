@@ -1,1 +1,23 @@
-<p>Product card</p>
+<div class="card" style="width: 18em;">
+  <img class="card-img-top" src="{{product.image}}" alt="Card image cap">
+  <div class="card-body" style="background-color: gray; color: ghostwhite">
+    <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text">{{product.description}}
+    </p>
+    <div>
+      <h4 style = "color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} VND</h4>
+    </div>
+    <br>
+    <div>
+      <a [routerLink]="[product.id]" class="btn" style="color: white; background-color: rgb(192, 192, 192)">
+        <i class="fa fa-info-circle"></i>
+        <b> Detail</b>
+      </a>
+      &nbsp;
+      <a class="btn" style="color: white; background-color: rgb(192, 192, 192)">
+        <i class="fa fa-cart-plus"></i>
+        <b> Add to Cart</b>
+      </a>
+    </div>
+  </div>
+</div>

@@ -12,7 +12,8 @@ import { ProductInfoComponent } from './product-info/product-info.component';
   imports: [
     RouterModule.forChild(ProductRoutes),
     CommonModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   declarations: [
     ProductsComponent,
