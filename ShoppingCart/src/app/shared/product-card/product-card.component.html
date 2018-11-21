@@ -1,15 +1,20 @@
 <div class="card" style="width: 18em;">
-  <img class="card-img-top" src="{{product.image}}" alt="Card image cap">
+  <img class="card-img-top" src={{image}} alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
-    <h5 class="card-title">{{product.name}}</h5>
-    <p class="card-text">{{product.description}}
-    </p>
+    <h5 *ngIf="product.name.length > 50; else nameElseBlock" class="card-title">{{product.name | truncate : 50 : true}}</h5>
+    <ng-template #nameElseBlock>
+      <h5 class="card-title">{{product.name}}</h5>
+    </ng-template>
+    <p *ngIf="product.description.length > 100; else desElseBlock" class="card-text">{{product.description | truncate : 100 : true}}</p>
+    <ng-template #desElseBlock>
+      <p class="card-text">{{product.description}}</p>
+    </ng-template>
     <div>
       <h4 style = "color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} VND</h4>
     </div>
     <br>
     <div>
-      <a [routerLink]="[product.id]" class="btn" style="color: white; background-color: rgb(192, 192, 192)">
+      <a (click)="productInfo(product.id)" class="btn" style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-info-circle"></i>
         <b> Detail</b>
       </a>

@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { AccountService } from '../services/account.service';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-home',
@@ -20,35 +21,13 @@ export class HomeComponent implements OnInit {
     'assets/pictures/slideshow/slideshow2.jpg',
     'assets/pictures/slideshow/slideshow3.jpg'
   ];
-  products = [
-    {
-      image: 'assets/pictures/img/DE01.jpg',
-      name: 'Laptop name',
-      description: 'Laptop description',
-      price: 12000000
-    },
-    {
-      image: 'assets/pictures/img/DE02.jpg',
-      name: 'Laptop name',
-      description: 'Laptop description',
-      price: 10000000
-    },
-    {
-      image: 'assets/pictures/img/DE03.jpg',
-      name: 'Laptop name',
-      description: 'Laptop description',
-      price: 23000000
-    },
-    {
-      image: 'assets/pictures/img/DE04.jpg',
-      name: 'Laptop name',
-      description: 'Laptop description',
-      price: 14000000
-    },
-  ];
+  products = [];
+  constructor (private service: ProductService) {}
+  isShowingSpinner = true;
   options: any;
   ngOnInit() {
-    this.options = {
+    const self = this;
+    self.options = {
       dots: false,
       responsive: {
         '0': { items: 1 },
@@ -61,6 +40,12 @@ export class HomeComponent implements OnInit {
       autoplayTimeout: 3000,
       lazyLoad: true
     };
+    self.service.getNewestProducts().subscribe((result: any) => {
+      self.isShowingSpinner = false;
+      result.forEach(product => {
+        self.products.push(product);
+      });
+    });
     // this.userRole = this.service.getDecodedAccessToken(JSON.parse(localStorage.getItem('currentUser')).accessToken).role;
   }
 }
