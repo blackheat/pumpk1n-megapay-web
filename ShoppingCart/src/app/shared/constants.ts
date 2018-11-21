@@ -3,6 +3,7 @@ export const DEFAULT_OBJECT = {
     'value' : 0,
     'name' : '',
 };
+export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
 export const API_URL = `http://localhost:3000`;
 export const API_PRODUCT = `${API_URL}/products`;

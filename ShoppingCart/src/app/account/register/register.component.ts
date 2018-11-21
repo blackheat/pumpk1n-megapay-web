@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
       password: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)])),
       confirmedPassword: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)])),
       email: new FormControl('', Validators.compose([Validators.required,
-        Validators.pattern(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)]))
+      Validators.pattern(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)]))
     });
   }
 
@@ -75,13 +75,15 @@ export class RegisterComponent implements OnInit {
       });
     } else {
       self.service.register(value).subscribe(() => {
-        swal({
-          title: 'Congratulations!',
-          text: 'Register successfully.',
-          icon: 'success'
-        }).then(() => {
-          self.router.navigate(['/home']);
-        });
+        // self.service.login(value).subscribe(() => {
+          swal({
+            title: 'Congratulations!',
+            text: 'Register successfully.',
+            icon: 'success'
+          }).then(() => {
+            self.router.navigate(['/home']);
+          });
+        // });
       }, error => {
         swal({
           title: 'Failed to register!',

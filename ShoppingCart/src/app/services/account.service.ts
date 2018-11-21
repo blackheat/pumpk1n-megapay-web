@@ -28,7 +28,7 @@ export class AccountService {
     return this.loggedInStatus;
   }
 
-  // Login(account) {
+  // login(account) {
   //   return this.httpClient
   //     .post(
   //       `http://localhost:51930/login`,

@@ -66,9 +66,9 @@
         </li>
       </ng-template>
     </ul>
-    <form class="form-inline">
+    <form [formGroup] = "navSearchForm" (ngSubmit) = "search(navSearchForm.value)" class="form-inline">
       <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"> &nbsp;</i>
-      <input style="width: 20em" class="form-control" type="search" placeholder="Search products by name" aria-label="Search">
+      <input style="width: 20em" class="form-control" id = "search" name="search" formControlName="search" type="text" placeholder="Search products by name" aria-label="Search">
       <button style="margin: 0.5em" class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>

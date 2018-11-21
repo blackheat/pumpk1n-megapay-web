@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { TruncatePipe } from './custom-pipe/truncate.pipe';
+import { PaginationComponent } from './pagination/pagination.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,7 +23,8 @@ import { TruncatePipe } from './custom-pipe/truncate.pipe';
     ProductCardComponent,
     FilterFieldsComponent,
     LoadingSpinnerComponent,
-    TruncatePipe
+    TruncatePipe,
+    PaginationComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -32,7 +34,8 @@ import { TruncatePipe } from './custom-pipe/truncate.pipe';
     ProductCardComponent,
     FilterFieldsComponent,
     LoadingSpinnerComponent,
-    TruncatePipe
+    TruncatePipe,
+    PaginationComponent
   ]
 })
 export class SharedModule { }

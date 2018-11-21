@@ -1,4 +1,5 @@
 <app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
+<br>
 <div class="row d-flex justify-content-center" syle="max-width: 80em">
   <div class="col-3">
     <app-filter-fields (searchFilter)="filter($event)"></app-filter-fields>
@@ -13,96 +14,9 @@
           <app-product-card [product]="product" style="padding: 10px;"></app-product-card>
         </div>
       </div>
-      <!-- Xài tạm tới khi có backend -->
-
-      <nav class="mx-auto" aria-label="Pagination">
-        <ul class="pagination">
-          <li class="page-item" [class.disabled]="currentPage == 1">
-            <a class="page-link" (click)="goToFirstPage()">
-              <i class="fa fa-fast-backward"></i>
-            </a>
-          </li>
-          <li class="page-item"  (click)="goToPage(currentPage-1)" [class.disabled]="currentPage == 1">
-            <a class="page-link">
-              <i class="fa fa-backward"></i>
-            </a>
-          </li>
-          <li class="page-item">
-            <a *ngIf="currentPage>2" (click)="goToPage(currentPage-2)" class="page-link">...</a>
-          </li>
-          <li *ngIf="currentPage>1" class="page-item" (click)="goToPage(currentPage-1)">
-            <a class="page-link" >{{currentPage - 1}}</a>
-          </li>
-          <li class="page-item" [class.active]="currentPage">
-            <span style="background-color: gray; border: gainsboro" class="page-link">
-              {{currentPage}}
-            </span>
-          </li>
-          <li *ngIf="totalPage>=2 && currentPage < totalPage" (click)="goToPage(currentPage+1)" class="page-item">
-            <a class="page-link" >{{currentPage + 1}}</a>
-          </li>
-          <li *ngIf="currentPage == 1 && totalPage >= 3" (click)="goToPage(currentPage+2)" class="page-item">
-            <a class="page-link" >{{currentPage + 2}}</a>
-          </li>
-          <li *ngIf="totalPage>3 && currentPage < totalPage - 2" class="page-item" (click)="goToPage(currentPage+2)" >
-            <a class="page-link" >...</a>
-          </li>
-          <li [class.disabled]="currentPage == totalPage" (click)="goToPage(currentPage+1)"  class="page-item">
-            <a class="page-link">
-              <i class="fa fa-forward"></i>
-            </a>
-          </li>
-          <li [class.disabled]="currentPage == totalPage" (click)="goToLastPage()" class="page-item">
-            <a class="page-link">
-              <i class="fa fa-fast-forward"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- <nav class="mx-auto" aria-label="Pagination">
-          <ul class="pagination">
-            <li class="page-item" [class.disabled]="currentPage == 1">
-              <a class="page-link" (click)="goToPage(1)">
-                <i class="fa fa-fast-backward"></i>
-              </a>
-            </li>
-            <li class="page-item"  (click)="goToPage(currentPage-1)" [class.disabled]="currentPage == 1">
-              <a class="page-link">
-                <i class="fa fa-backward"></i>
-              </a>
-            </li>
-            <li class="page-item">
-              <a *ngIf="currentPage>2" (click)="goToPage(currentPage-2)" class="page-link">...</a>
-            </li>
-            <li *ngIf="currentPage>1" class="page-item" (click)="goToPage(currentPage-1)">
-              <a class="page-link" >{{currentPage - 1}}</a>
-            </li>
-            <li class="page-item" [class.active]="currentPage">
-              <span style="background-color: gray; border: gainsboro" class="page-link">
-                {{currentPage}}
-              </span>
-            </li>
-            <li *ngIf="totalPage>=2 && currentPage < totalPage" (click)="goToPage(currentPage+1)" class="page-item">
-              <a class="page-link" >{{currentPage + 1}}</a>
-            </li>
-            <li *ngIf="currentPage == 1 && totalPage >= 3" (click)="goToPage(currentPage+2)" class="page-item">
-              <a class="page-link" >{{currentPage + 2}}</a>
-            </li>
-            <li *ngIf="totalPage>3 && currentPage < totalPage - 2" class="page-item" (click)="goToPage(currentPage+2)" >
-              <a class="page-link" >...</a>
-            </li>
-            <li [class.disabled]="currentPage == totalPage" (click)="goToPage(currentPage+1)"  class="page-item">
-              <a class="page-link">
-                <i class="fa fa-forward"></i>
-              </a>
-            </li>
-            <li [class.disabled]="currentPage == totalPage" (click)="goToPage(totalPage)" class="page-item">
-              <a class="page-link">
-                <i class="fa fa-fast-forward"></i>
-              </a>
-            </li>
-          </ul>
-        </nav> -->
+      <div class="mx-auto">
+      <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage"></app-pagination>
+      </div>
     </div>
   </div>
 </div>

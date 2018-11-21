@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from '../services/product.service';
-import { MAX_PRODUCTS_PER_PAGE } from '../shared/constants';
+import { MAX_PRODUCTS_PER_PAGE, DEFAULT_ID } from '../shared/constants';
+
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -13,7 +15,8 @@ export class ProductsComponent implements OnInit {
   products = [];
   isShowingSpinner = true;
   totalProducts = [];
-  constructor(private router: Router, private service: ProductService) {}
+  constructor(private router: Router,
+  private service: ProductService) {}
   searchFilter = null;
   ngOnInit() {
     const self = this;
@@ -23,23 +26,44 @@ export class ProductsComponent implements OnInit {
       self.totalPage = self.totalProducts.length % MAX_PRODUCTS_PER_PAGE === 0 ?
       Math.floor(self.totalProducts.length / MAX_PRODUCTS_PER_PAGE) :
       Math.floor(self.totalProducts.length / MAX_PRODUCTS_PER_PAGE) + 1;
-      self.goToFirstPage();
+      self.goToPage(1);
     });
-    // self.service.getSearchFilter('', 0, 0, 0, 1, MAX_PRODUCTS_PER_PAGE).subscribe((result: any) => {
+    // self.service.searchByNavbar.subscribe((value) => {
+    //   if (value !== null) {
+    //     self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, value).subscribe((result: any) => {
+    //     //   self.isShowingSpinner = false;
+    //     //   self.totalPage = result.totalPage;
+    //     //   self.products = result.products;
+    //     });
+    //   }
+    // });
+    // self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE).subscribe((result: any) => {
     //   self.isShowingSpinner = false;
     //   self.totalPage = result.totalPage;
     //   self.products = result.products;
     // });
   }
 
+  // Chờ có backend
+  // goToPage(page) {
+  //   const self = this;
+  //   self.isShowingSpinner = true;
+  //   page > self.totalPage
+  //     ? (self.currentPage = self.totalPage)
+  //     : page < 1 ? (self.currentPage = 1) : (self.currentPage = page);
+
+  //     self.service.getSearchFilter(page, MAX_PRODUCTS_PER_PAGE,
+  //       self.searchFilter.productName,
+  //       self.searchFilter.priceOption,
+  //       self.searchFilter.typeId,
+  //       self.searchFilter.brandId
+  //     ).subscribe((result: any) => {
+  //       self.isShowingSpinner = false;
+  //       self.products = result.products;
+  //     });
+  // }
+
   // Xài tạm tới khi có backend
-
-  goToFirstPage() {
-    const self = this;
-    self.currentPage = 1;
-    self.setListProducts(0, MAX_PRODUCTS_PER_PAGE);
-  }
-
   goToPage(page) {
     const self = this;
     page > self.totalPage
@@ -58,18 +82,6 @@ export class ProductsComponent implements OnInit {
       self.setListProducts(min, min + 8);
     }
   }
-
-  goToLastPage() {
-    const self = this;
-    const min = Math.floor(self.totalProducts.length / MAX_PRODUCTS_PER_PAGE) * MAX_PRODUCTS_PER_PAGE;
-    self.currentPage = self.totalPage;
-    self.totalProducts.length % MAX_PRODUCTS_PER_PAGE === 0
-      ? self.setListProducts(
-          self.totalProducts.length - MAX_PRODUCTS_PER_PAGE,
-          self.totalProducts.length
-        )
-      : self.setListProducts(min, self.totalProducts.length);
-  }
   setListProducts(start, end) {
     const self = this;
     self.products = [];
@@ -81,29 +93,16 @@ export class ProductsComponent implements OnInit {
       }
     }
   }
-  
-
-
-  // goToPage(page) {
-  //   const self = this;
-  //   self.isShowingSpinner = true;
-  //   page > self.totalPage
-  //     ? (self.currentPage = self.totalPage)
-  //     : page < 1 ? (self.currentPage = 1) : (self.currentPage = page);
-
-  //     self.service.getSearchFilter(self.searchFilter.productName,
-  //       self.searchFilter.priceOption,
-  //       self.searchFilter.typeId,
-  //       self.searchFilter.brandId,
-  //     1, MAX_PRODUCTS_PER_PAGE).subscribe((result: any) => {
-  //       self.isShowingSpinner = false;
-  //       self.products = result.products;
-  //     });
-  // }
 
   filter(value) {
     const self = this;
-    console.log(value);
+    // self.isShowingSpinner = true;
     self.searchFilter = value;
+    // self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, value.productName, value.priceOption, value.typeId, value.brandId,)
+    // .subscribe((result: any) => {
+    // self.isShowingSpinner = false;
+    // self.totalPage = result.totalPage;
+    // self.products = result.products;
+    // });
   }
 }
