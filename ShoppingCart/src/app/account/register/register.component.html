@@ -1,3 +1,30 @@
-<p>
-  register works!
-</p>
+<br>
+<div class="justify-content-center row col-10 offset-1">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)" class="align-content-center">
+    <div class="form-container card bg-light">
+      <div class="card-header text-center">
+        <h4>Register</h4>
+      </div>
+      <div class="card-body">
+        <label>Username:
+          <input type="text" style="width: 30rem" class="form-control" id="username" name="username" formControlName="username">
+        </label>
+        <br>
+        <label>Password:
+          <input type="password" style="width: 30rem;" class="form-control" id="password" name="password" formControlName="password">
+        </label>
+        <br>
+        <label>Confirmed Password:
+          <input type="password" style="width: 30rem;" class="form-control" id="confirmedPassword" name="confirmedPassword" formControlName="confirmedPassword">
+        </label>
+        <br>
+        <label>Email:
+          <input type="text" style="width: 30rem;" class="form-control" id="email" name="email" formControlName="email">
+        </label>
+      </div>
+      <div class="card-footer text-center">
+        <button class="btn btn-primary" type="submit">Register</button>
+      </div>
+    </div>
+  </form>
+</div>

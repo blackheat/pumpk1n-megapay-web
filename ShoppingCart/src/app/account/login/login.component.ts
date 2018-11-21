@@ -19,7 +19,7 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  id: string;
+  username: string;
   password: string;
   constructor(
     private fb: FormBuilder,
@@ -29,18 +29,18 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    if (this.service.isLoggedIn()) {
-      this.router.navigate(['/home']);
+    const self = this;
+    if (self.service.isLoggedIn()) {
+      self.router.navigate(['/home']);
     }
-    this.loginForm = new FormGroup({
-      id: new FormControl(null, Validators.required),
+    self.loginForm = new FormGroup({
+      username: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required)
     });
   }
 
   onSubmit(value) {
-  //   this.service.Login(value).subscribe(
+  //   this.service.login(value).subscribe(
   //     (result: any[]) => {
   //       swal({
   //         title: 'Congratulations!',

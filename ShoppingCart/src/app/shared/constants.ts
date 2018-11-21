@@ -9,4 +9,5 @@ export const API_PRODUCT = `${API_URL}/products`;
 export const API_TYPE = `${API_URL}/types`;
 export const API_BRAND = `${API_URL}/brands`;
 export const API_NEWEST_PRODUCTS = `${API_URL}/newestProducts`;
+export const API_REGISTER = `${API_URL}/register`;
 

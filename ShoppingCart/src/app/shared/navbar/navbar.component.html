@@ -32,7 +32,9 @@
           </span>
         </a>
       </li>
-      <li *ngIf="!auth; else elseBlock" class="nav-item">
+      <div *ngIf="!auth then thenBlock; else elseBlock"></div>
+      <ng-template #thenBlock>
+      <li  class="nav-item">
         <a class="nav-link" [routerLink]="['/login']">
           <span>
             <i class="fa fa-user-circle-o" aria-hidden="true"></i>
@@ -40,6 +42,15 @@
           </span>
         </a>
       </li>
+      <li *ngIf="!auth; else elseBlock" class="nav-item">
+        <a class="nav-link" [routerLink]="['/register']">
+          <span>
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            Register
+          </span>
+        </a>
+      </li>
+    </ng-template>
       <ng-template #elseBlock>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/user']">Welcome {{userName}}</a>

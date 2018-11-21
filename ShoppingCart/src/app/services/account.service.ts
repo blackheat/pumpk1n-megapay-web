@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { throwError } from '../../../node_modules/rxjs';
 import * as jwt_decode from 'jwt-decode';
+import { API_REGISTER } from '../shared/constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -52,16 +53,17 @@ export class AccountService {
 
 
 
-  Logout() {
+  logout() {
     // remove user from local storage to log user out
     this.setLoggedIn(false);
     localStorage.removeItem('currentUser');
   }
 
-  // getScoreByStudentId(id: string) {
-  //   return this.httpClient
-  //   .get(`http://localhost:51930/api/score/` + id);
-  // }
+  register(value) {
+    const self = this;
+    return self.httpClient
+    .post(API_REGISTER, value);
+  }
 
   getDecodedAccessToken(token: string): any {
     try {
