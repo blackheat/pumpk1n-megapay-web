@@ -1,9 +1,12 @@
 <div class="card" style="width: 18em;">
   <img class="card-img-top" src={{image}} alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
-    <h5 class="card-title">{{product.name}}</h5>
-    <p *ngIf="product.description.length > 100; else elseBlock" class="card-text">{{product.description | truncate : 100 : true}}</p>
-    <ng-template #elseBlock>
+    <h5 *ngIf="product.name.length > 50; else nameElseBlock" class="card-title">{{product.name | truncate : 50 : true}}</h5>
+    <ng-template #nameElseBlock>
+      <h5 class="card-title">{{product.name}}</h5>
+    </ng-template>
+    <p *ngIf="product.description.length > 100; else desElseBlock" class="card-text">{{product.description | truncate : 100 : true}}</p>
+    <ng-template #desElseBlock>
       <p class="card-text">{{product.description}}</p>
     </ng-template>
     <div>
