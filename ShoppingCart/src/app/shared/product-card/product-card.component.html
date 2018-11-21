@@ -2,8 +2,10 @@
   <img class="card-img-top" src={{image}} alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
     <h5 class="card-title">{{product.name}}</h5>
-    <p class="card-text">{{product.description}}
-    </p>
+    <p *ngIf="product.description.length > 100; else elseBlock" class="card-text">{{product.description | truncate : 100 : true}}</p>
+    <ng-template #elseBlock>
+      <p class="card-text">{{product.description}}</p>
+    </ng-template>
     <div>
       <h4 style = "color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} VND</h4>
     </div>
