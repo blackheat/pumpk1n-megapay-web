@@ -12,6 +12,7 @@ import { AccountService } from '../../services/account.service';
 import { switchAll } from '../../../../node_modules/rxjs/operators';
 import swal from 'sweetalert';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { isValidDate } from 'src/app/shared/validators/validators';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -29,6 +30,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     const self = this;
+    console.log(isValidDate('20/10/2010'));
     if (self.service.isLoggedIn()) {
       self.router.navigate(['/home']);
     }
@@ -73,24 +75,24 @@ export class RegisterComponent implements OnInit {
         text: self.validate(),
         icon: 'error'
       });
-    } else {
-      self.service.register(value).subscribe(() => {
-        // self.service.login(value).subscribe(() => {
-          swal({
-            title: 'Congratulations!',
-            text: 'Register successfully.',
-            icon: 'success'
-          }).then(() => {
-            self.router.navigate(['/home']);
-          });
-        // });
-      }, error => {
-        swal({
-          title: 'Failed to register!',
-          text: 'This username is unavailable, please try another.',
-          icon: 'error'
-        });
-      });
+      return;
     }
+    self.service.register(value).subscribe(() => {
+      // self.service.login(value).subscribe(() => {
+        swal({
+          title: 'Congratulations!',
+          text: 'Register successfully.',
+          icon: 'success'
+        }).then(() => {
+          self.router.navigate(['/home']);
+        });
+      // });
+    }, error => {
+      swal({
+        title: 'Failed to register!',
+        text: 'This username is unavailable, please try another.',
+        icon: 'error'
+      });
+    });
   }
 }

@@ -39,22 +39,22 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(value) {
-  //   this.service.login(value).subscribe(
-  //     (result: any[]) => {
-  //       swal({
-  //         title: 'Congratulations!',
-  //         text: 'Login successfully.',
-  //         icon: 'success'
-  //       });
-  //       this.router.navigate(['/home']);
-  //     },
-  //     error => {
-  //       swal({
-  //         title: 'Error!',
-  //         text: 'ID or password is incorrect.',
-  //         icon: 'error'
-  //       });
-  //     }
-  //   );
+    this.service.login(value).subscribe(
+      (result: any[]) => {
+        swal({
+          title: 'Congratulations!',
+          text: 'Login successfully.',
+          icon: 'success'
+        });
+        this.router.navigate(['/home']);
+      },
+      error => {
+        swal({
+          title: 'Error!',
+          text: 'ID or password is incorrect.',
+          icon: 'error'
+        });
+      }
+    );
   }
 }
