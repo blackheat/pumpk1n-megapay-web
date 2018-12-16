@@ -24,13 +24,13 @@ export class ProductService {
   }
 
   getSearchFilter(page: number, productsPerPage: number, productName?: string, priceOption?: string, typeId?: number, brandId?: number) {
-    
+
     let queryParam = `${API_PRODUCT}?page=${page}&productsPerPage=${productsPerPage}`;
 
-    productName || productName == '' ? queryParam + `&productName=${productName}` : null;
-    priceOption || priceOption == '' ? queryParam + `&priceOption=${priceOption}` : null;
-    typeId || typeId == 0 ? queryParam + `&typeId=${typeId}` : null;
-    brandId || brandId == 0 ? queryParam + `&brandId=${brandId}` : null;
+    productName && productName !== '' ? queryParam = `${queryParam}&productName=${productName}` : null;
+    priceOption && priceOption !== '' ? queryParam = `${queryParam}&priceOption=${priceOption}` : null;
+    typeId && typeId !== 0 ? queryParam = `${queryParam}&typeId=${typeId}` : null;
+    brandId && brandId !== 0 ? queryParam = `${queryParam}&brandId=${brandId}` : null;
 
     return this.httpClient
     .get(queryParam);

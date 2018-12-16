@@ -6,17 +6,20 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent implements OnInit {
-  @Input() currentPage;
-  @Input() totalPage;
+  @Input() currentPage: any;
+  @Input() totalPage: any;
   @Output() changePage: EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
-  goToPage(value) {
-    const self = this;
-    self.changePage.emit(value);
-  }
 
   ngOnInit() {
   }
 
+  goToPage(value) {
+    const self = this;
+    if (value <= self.totalPage && value >= 0) {
+      self.changePage.emit(value);
+    }
+  }
 }

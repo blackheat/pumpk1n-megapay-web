@@ -1,8 +1,4 @@
 export const MAX_PRODUCTS_PER_PAGE = 8;
-export const DEFAULT_OBJECT = {
-    'value' : 0,
-    'name' : '',
-};
 export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
 export const API_URL = `http://localhost:9090/api`;
