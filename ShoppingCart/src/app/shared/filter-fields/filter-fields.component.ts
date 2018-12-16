@@ -39,10 +39,10 @@ export class FilterFieldsComponent implements OnInit {
     self.searchFilter.emit(self.filterForm.value);
     self.getTypesAndBrands().subscribe((result: any) => {
       self.isShowingSpinner = false;
-      result[0].forEach((brand) => {
+      result[0].data.listBrands.forEach((brand) => {
         self.brands.push(brand);
       });
-      result[1].forEach((type) => {
+      result[1].data.listType.forEach((type) => {
         self.types.push(type);
       });
       self.isShowingSpinner = false;

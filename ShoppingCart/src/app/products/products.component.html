@@ -9,14 +9,19 @@
       <div class="card-header">
         <h2>Products</h2>
       </div>
-      <div class="card-body row">
-        <div *ngFor="let product of products" class="col-3">
-          <app-product-card [product]="product" style="padding: 10px;"></app-product-card>
+      <ng-container *ngIf="products.length > 0; else Elseblock">
+        <div class="card-body row">
+          <div *ngFor="let product of products" class="col-3">
+            <app-product-card [product]="product" style="padding: 10px;"></app-product-card>
+          </div>
         </div>
-      </div>
-      <div class="mx-auto">
-      <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage"></app-pagination>
-      </div>
+        <div class="mx-auto">
+        <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage"></app-pagination>
+        </div>
+      </ng-container>
+      <ng-template #Elseblock>
+          <h4 style="color:rgb(37, 37, 37)">Not finding what you're looking for.</h4>
+      </ng-template>
     </div>
   </div>
 </div>

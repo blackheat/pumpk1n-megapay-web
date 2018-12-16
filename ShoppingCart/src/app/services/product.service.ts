@@ -13,31 +13,27 @@ export class ProductService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getListProducts() { // xài tạm tới khi có backend
-  return this.httpClient
-  .get(API_PRODUCT);
-  }
+  // getListProducts() { // xài tạm tới khi có backend
+  // return this.httpClient
+  // .get(API_PRODUCT);
+  // }
 
   getProductById(id: number) {
     return this.httpClient
     .get(`${API_PRODUCT}/${id}`);
   }
 
-  getSearchFilter(page: number, productPerPage: number, productName?: string, priceOption?: number, typeId?: number, brandId?: number) {
+  getSearchFilter(page: number, productsPerPage: number, productName?: string, priceOption?: string, typeId?: number, brandId?: number) {
+    
+    let queryParam = `${API_PRODUCT}?page=${page}&productsPerPage=${productsPerPage}`;
 
-    productName = productName ? productName : '';
-    priceOption = priceOption ? priceOption : 0;
-    typeId = typeId ? typeId : 0;
-    brandId = brandId ? brandId : 0;
+    productName || productName == '' ? queryParam + `&productName=${productName}` : null;
+    priceOption || priceOption == '' ? queryParam + `&priceOption=${priceOption}` : null;
+    typeId || typeId == 0 ? queryParam + `&typeId=${typeId}` : null;
+    brandId || brandId == 0 ? queryParam + `&brandId=${brandId}` : null;
 
     return this.httpClient
-    .get(`${API_PRODUCT}?
-    productName=${productName}&
-    priceOption=${priceOption}&
-    typeId=${typeId}&
-    brandId=${brandId}&
-    page=${page}&
-    productPerPage=${productPerPage}`);
+    .get(queryParam);
   }
 
   getListType() {

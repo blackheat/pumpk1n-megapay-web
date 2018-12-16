@@ -5,7 +5,7 @@
     <ng-template #nameElseBlock>
       <h5 class="card-title">{{product.name}}</h5>
     </ng-template>
-    <p *ngIf="product.description.length > 100; else desElseBlock" class="card-text">{{product.description | truncate : 100 : true}}</p>
+    <p *ngIf="product.description.length > 100; else desElseBlock" class="card-text">{{product.description | truncate : 80 : true}}</p>
     <ng-template #desElseBlock>
       <p class="card-text">{{product.description}}</p>
     </ng-template>
