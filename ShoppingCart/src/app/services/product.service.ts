@@ -9,14 +9,11 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
 
-  searchByNavbar: EventEmitter<string> = new EventEmitter<string>();
-
+  searchByNavbar = '';
+  searchNavBarEvent: EventEmitter<any> = new EventEmitter();
+  cartChange: EventEmitter<any> = new EventEmitter();
   constructor(private httpClient: HttpClient) { }
 
-  // getListProducts() { // xài tạm tới khi có backend
-  // return this.httpClient
-  // .get(API_PRODUCT);
-  // }
 
   getProductById(id: number) {
     return this.httpClient
@@ -50,4 +47,65 @@ export class ProductService {
     return this.httpClient
     .get(API_NEWEST_PRODUCTS);
   }
+
+  getCart() {
+    if (localStorage.getItem('cart')) {
+      return JSON.parse(localStorage.getItem('cart'));
+    }
+    return null;
+  }
+
+  addCart(product, quantity) {
+    const self = this;
+    if (localStorage.getItem('cart')) {
+      const currentCart = self.getCart();
+      if (currentCart.listProducts.map(function(e) { return e.product.id; }).includes(product.id)) {
+        const index = currentCart.listProducts.map(function(e) { return e.product.id; }).indexOf(product.id);
+        currentCart.listProducts[index].quantity += quantity;
+        currentCart.total += quantity;
+      } else {
+        currentCart.listProducts.push({
+          product: product,
+          quantity: quantity
+        });
+        currentCart.total += quantity;
+      }
+      localStorage.setItem('cart', JSON.stringify(currentCart));
+      self.cartChange.emit();
+    }
+  }
+
+  editCart(product, quantity) {
+    const self = this;
+    if (localStorage.getItem('cart')) {
+      const currentCart = self.getCart();
+      if (currentCart.listProducts.map(function(e) { return e.product.id; }).includes(product.id)) {
+        const index = currentCart.listProducts.map(function(e) { return e.product.id; }).indexOf(product.id);
+        const num = quantity - currentCart.listProducts[index].quantity;
+        currentCart.listProducts[index].quantity = quantity;
+        currentCart.total += num;
+      } else {
+        return;
+      }
+      localStorage.setItem('cart', JSON.stringify(currentCart));
+      self.cartChange.emit();
+    }
+  }
+
+  deleteCart(id) {
+    const self = this;
+    if (localStorage.getItem('cart')) {
+      const currentCart = self.getCart();
+      if (currentCart.listProducts.map(function(e) { return e.product.id; }).includes(id)) {
+        const index = currentCart.listProducts.map(function(e) { return e.product.id; }).indexOf(id);
+        currentCart.total -= currentCart.listProducts[index].quantity;
+        currentCart.listProducts.splice(index, 1);
+      } else {
+        return;
+      }
+      localStorage.setItem('cart', JSON.stringify(currentCart));
+      self.cartChange.emit();
+    }
+  }
+
 }

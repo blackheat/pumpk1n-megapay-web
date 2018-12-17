@@ -1,7 +1,7 @@
 <div class="card" style="width: 18em;">
   <img class="card-img-top" src={{image}} alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
-    <h5 *ngIf="product.name.length > 50; else nameElseBlock" class="card-title">{{product.name | truncate : 50 : true}}</h5>
+    <h5 *ngIf="product.name.length >= 40; else nameElseBlock" class="card-title">{{product.name | truncate : 40 : true}}</h5>
     <ng-template #nameElseBlock>
       <h5 class="card-title">{{product.name}}</h5>
     </ng-template>
@@ -19,7 +19,7 @@
         <b> Detail</b>
       </a>
       &nbsp;
-      <a class="btn" style="color: white; background-color: rgb(192, 192, 192)">
+      <a class="btn" (click)="addToCart(product.id)" style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-cart-plus"></i>
         <b> Add to Cart</b>
       </a>

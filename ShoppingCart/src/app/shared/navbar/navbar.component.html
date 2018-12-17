@@ -53,19 +53,19 @@
     </ng-template>
       <ng-template #elseBlock>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/user']">Welcome {{userName}}</a>
-        </li>
-        <a [routerLink]="['/cart']" style="margin-right:1em" class="btn btn-dark">
-          <span>
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            {{numberOfProducts}}
-          </span>
-        </a>
-        <li class="nav-item">
-          <a class="nav-link" (click)="logout()">Logout</a>
+          <a class="nav-link" [routerLink]="['/home']" (click)="logout()">Logout</a>
         </li>
       </ng-template>
     </ul>
+    <ng-container *ngIf="auth">
+      <a class="btn btn-dark" [routerLink]="['/user']">Welcome {{username}}</a>
+      <a [routerLink]="['/cart']" style="margin-right:1em" class="btn btn-dark">
+        <span>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          {{numberOfProducts}}
+        </span>
+      </a>
+    </ng-container>
     <form [formGroup] = "navSearchForm" (ngSubmit) = "search(navSearchForm.value)" class="form-inline">
       <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"> &nbsp;</i>
       <input style="width: 20em" class="form-control" id = "search" name="search" formControlName="search" type="text" placeholder="Search products by name" aria-label="Search">

@@ -18,22 +18,23 @@ export class ProductsComponent implements OnInit {
   searchFilter = null;
   ngOnInit() {
     const self = this;
-    // self.service.searchByNavbar.subscribe((value) => {
-    //   if (value !== null) {
-    //     self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, value).subscribe((result: any) => {
-    //       self.isShowingSpinner = false;
-    //       self.totalPage = result.totalPage;
-    //       self.products = result.data.listProducts;
-    //     });
-    //   }
-    // });
-    self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE).subscribe((result: any) => {
-      self.isShowingSpinner = false;
-      if (result.returnMessage === 'SUCCESS') {
-        self.totalPage = result.data.numberOfPage;
-        self.products = result.data.listProducts;
-      }
-    });
+      self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
+        self.isShowingSpinner = false;
+        if (result.returnMessage === 'SUCCESS') {
+          self.totalPage = result.data.numberOfPage;
+          self.products = result.data.listProducts;
+        }
+      });
+      self.service.searchNavBarEvent.subscribe(() => {
+        self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
+          self.isShowingSpinner = false;
+          if (result.returnMessage === 'SUCCESS') {
+            self.totalPage = result.data.numberOfPage;
+            self.products = result.data.listProducts;
+            self.currentPage = 1;
+          }
+        });
+      });
   }
 
   goToPage(page) {
@@ -47,7 +48,7 @@ export class ProductsComponent implements OnInit {
       .getSearchFilter(
         self.currentPage,
         MAX_PRODUCTS_PER_PAGE,
-        self.searchFilter ? self.searchFilter.productName : null,
+        self.searchFilter ? self.searchFilter.productName : self.service.searchByNavbar !== '' ? self.service.searchByNavbar : null,
         self.searchFilter ? self.searchFilter.priceOption : null,
         self.searchFilter ? self.searchFilter.typeId : 0,
         self.searchFilter ? self.searchFilter.brandId : 0
@@ -70,6 +71,7 @@ export class ProductsComponent implements OnInit {
         self.isShowingSpinner = false;
         self.totalPage = result.data.numberOfPage;
         self.products = result.data.listProducts;
+        self.service.searchByNavbar = '';
       });
   }
 }
