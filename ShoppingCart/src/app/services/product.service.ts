@@ -75,12 +75,12 @@ export class ProductService {
     }
   }
 
-  editCart(product, quantity) {
+  editCart(id, quantity) {
     const self = this;
     if (localStorage.getItem('cart')) {
       const currentCart = self.getCart();
-      if (currentCart.listProducts.map(function(e) { return e.product.id; }).includes(product.id)) {
-        const index = currentCart.listProducts.map(function(e) { return e.product.id; }).indexOf(product.id);
+      if (currentCart.listProducts.map(function(e) { return e.product.id; }).includes(id)) {
+        const index = currentCart.listProducts.map(function(e) { return e.product.id; }).indexOf(id);
         const num = quantity - currentCart.listProducts[index].quantity;
         currentCart.listProducts[index].quantity = quantity;
         currentCart.total += num;

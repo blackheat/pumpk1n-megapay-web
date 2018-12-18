@@ -9,17 +9,20 @@
     <ng-template #desElseBlock>
       <p class="card-text">{{product.description}}</p>
     </ng-template>
-    <div>
+    <div *ngIf="!product.isDeleted">
       <h4 style = "color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} VND</h4>
     </div>
+    <div *ngIf="product.isDeleted">
+      <h4 style = "color: rgb(235, 235, 122)">Product is unavailable</h4>
+    </div>
     <br>
-    <div>
+    <div >
       <a (click)="productInfo(product.id)" class="btn" style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-info-circle"></i>
         <b> Detail</b>
       </a>
       &nbsp;
-      <a class="btn" (click)="addToCart(product.id)" style="color: white; background-color: rgb(192, 192, 192)">
+      <a class="btn" *ngIf="!product.isDeleted" (click)="addToCart(product.id)" style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-cart-plus"></i>
         <b> Add to Cart</b>
       </a>

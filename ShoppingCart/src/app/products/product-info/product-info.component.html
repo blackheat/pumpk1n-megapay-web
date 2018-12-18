@@ -4,7 +4,7 @@
   <div class="col-3">
     <img class="card-img-top" src={{image}} alt="Card image cap">
     <p></p>
-    <form class="form-group row mx-auto" [formGroup]="quantityForm" (ngSubmit)="addCart(quantityForm.value)">
+    <form *ngIf="!product.isDeleted" class="form-group row mx-auto" [formGroup]="quantityForm" (ngSubmit)="addCart(quantityForm.value)">
       <div class="input-group col-7">
         <div class="input-group-prepend">
           <button type="button" class="btn btn-secondary" (click)="minQuantity()" [disabled]="disableMin">-</button>
@@ -37,9 +37,13 @@
           <th class="product-info-row-header">Type: </th>
           <td class="product-info ">{{type || ''}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="!product.isDeleted">
           <th class="product-info-row-header" style="width:20%">Available quantity:</th>
           <td class="product-info">{{product?.leftItems}}</td>
+        </tr>
+        <tr *ngIf="product.isDeleted">
+          <th class="product-info-row-header" style="width:20%">Status:</th>
+          <td style="color: red" class="product-info">Product is unavailable</td>
         </tr>
         <tr>
           <th class="product-info-row-header">Description:</th>

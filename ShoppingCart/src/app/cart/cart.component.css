@@ -1,0 +1,13 @@
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+a.link {
+    color: rgb(49, 106, 211)
+}
+
+a.link:hover {
+    color: rgb(41, 90, 180);
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -35,6 +35,7 @@ export class NavbarComponent implements OnInit {
     const self = this;
     self.auth = self.accountService.isLoggedIn();
     self.username = self.accountService.getUsername();
+    self.numberOfProducts = self.productService.getCart().total;
     self.navSearchForm = new FormGroup({
       search: new FormControl('', null)
     });
