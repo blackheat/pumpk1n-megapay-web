@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { NotFoundComponent } from './shared/not-found/not-found.component';
-import { LoginFormComponent } from './login-form/login-form.component';
+import { NotFoundComponent } from './shared/errors/not-found/not-found.component';
+import { LoginComponent } from './account/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { CartComponent } from './cart/cart.component';
 import { AboutComponent } from './about/about.component';
 import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
-
+import { AdminComponent } from './admin/admin.component';
+import { RegisterComponent } from './account/register/register.component';
 const routes: Routes = [
   {
     path: '',
@@ -25,7 +26,11 @@ const routes: Routes = [
       },
       {
         path: 'login',
-        component: LoginFormComponent
+        component: LoginComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
       },
       {
         path: 'home',
@@ -58,9 +63,11 @@ const routes: Routes = [
 export class AppRoutingModule {}
 export const RoutingComponent = [
   NotFoundComponent,
-  LoginFormComponent,
+  LoginComponent,
   HomeComponent,
   CartComponent,
   AboutComponent,
-  UserComponent
+  UserComponent,
+  RegisterComponent,
+  AdminComponent
 ];
