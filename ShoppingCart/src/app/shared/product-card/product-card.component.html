@@ -22,7 +22,7 @@
         <b> Detail</b>
       </a>
       &nbsp;
-      <a class="btn" *ngIf="!product.isDeleted" (click)="addToCart(product.id)" style="color: white; background-color: rgb(192, 192, 192)">
+      <a class="btn" *ngIf="!product.isDeleted && product.leftItems > 0" (click)="addToCart(product.id)" style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-cart-plus"></i>
         <b> Add to Cart</b>
       </a>

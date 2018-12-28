@@ -11,13 +11,16 @@ import { RouterModule } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { TruncatePipe } from './custom-pipe/truncate.pipe';
 import { PaginationComponent } from './pagination/pagination.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgbModule
   ],
   declarations: [
     ProductCardComponent,

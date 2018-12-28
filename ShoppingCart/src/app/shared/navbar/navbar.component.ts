@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
     const self = this;
     self.listener = accountService.listener;
     self.listener.subscribe(() => {
+      self.username = self.accountService.getUsername();
       self.auth = self.accountService.isLoggedIn();
     });
   }
@@ -35,7 +36,7 @@ export class NavbarComponent implements OnInit {
     const self = this;
     self.auth = self.accountService.isLoggedIn();
     self.username = self.accountService.getUsername();
-    self.numberOfProducts = self.productService.getCart().total;
+    self.numberOfProducts = self.productService.getCart() ? self.productService.getCart().total : 0;
     self.navSearchForm = new FormGroup({
       search: new FormControl('', null)
     });

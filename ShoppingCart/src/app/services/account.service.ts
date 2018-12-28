@@ -66,7 +66,7 @@ export class AccountService {
           localStorage.setItem('currentUser', JSON.stringify(result.data.session));
           localStorage.setItem('cart', JSON.stringify({listProducts: [], total: 0}));
           self.setLoggedIn(true);
-          self.listener.emit(self.getDecodedAccessToken(result.data.accessToken));
+          self.listener.emit(self.getAccessToken());
         }
         return result.returnMessage;
       })
@@ -93,12 +93,11 @@ export class AccountService {
       .pipe(catchError(self.handleError));
   }
 
-  getDecodedAccessToken(token: string): any {
-    try {
-      return jwt_decode(token);
-    } catch (Error) {
-      return null;
+  getAccessToken() {
+    if (localStorage.getItem('currentUser')) {
+      return JSON.parse(localStorage.getItem('currentUser')).token;
     }
+    return null;
   }
 
   // updateScoreByStudentId(id: string , obj: any) {
