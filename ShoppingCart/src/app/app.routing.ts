@@ -9,14 +9,20 @@ import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { RegisterComponent } from './account/register/register.component';
+import { EmployeeComponent } from './employee/employee.component';
+import { RoleGuard } from './role.guard';
 const routes: Routes = [
   {
     path: '',
-    // canActivate: [AuthGuard],
     children: [
       {
         path: 'products',
-        loadChildren: './products/products.module#ProductsModule'
+        loadChildren: './products/products.module#ProductsModule',
+        canActivate: [RoleGuard],
+        data: {
+          expectedRole: ['user', null],
+          component: 'products'
+        }
       }
       ,
       {
@@ -38,7 +44,11 @@ const routes: Routes = [
       },
       {
         path: 'cart',
-        component: CartComponent
+        component: CartComponent,
+        canActivate: [RoleGuard],
+        data: {
+          expectedRole: ['user']
+        }
       },
       {
         path: 'about',
@@ -46,7 +56,8 @@ const routes: Routes = [
       },
       {
         path: 'user',
-        component: UserComponent
+        component: UserComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: '**',
@@ -69,5 +80,6 @@ export const RoutingComponent = [
   AboutComponent,
   UserComponent,
   RegisterComponent,
-  AdminComponent
+  AdminComponent,
+  EmployeeComponent
 ];

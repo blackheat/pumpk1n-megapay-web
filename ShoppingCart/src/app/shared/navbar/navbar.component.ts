@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit {
     const self = this;
     self.auth = !self.auth;
     self.accountService.logout();
+    self.userRole = null;
     self.router.navigate([ '/login' ]);
   }
 

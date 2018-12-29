@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { EMAIL_PATTERN, DATE_PATTERN, convertDate } from '../shared/constants';
+import { convertDate } from '../shared/constants';
 import { UserService } from '../services/user.service';
 import { AccountService } from '../services/account.service';
 import { Router } from '@angular/router';
