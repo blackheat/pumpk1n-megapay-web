@@ -68,6 +68,8 @@ export class UserComponent implements OnInit {
           text: 'Edit successfully.',
           icon: 'success'
         }).then(() => {
+          self.accountService.setName(value.name);
+          self.accountService.listener.emit();
           self.router.navigate(['/home']);
         });
       }
@@ -76,6 +78,9 @@ export class UserComponent implements OnInit {
 
   validate() {
     const self = this;
+    self.userForm.controls['phone'].setValue(
+      self.userForm.controls['phone'].value && self.userForm.controls['phone'].value[0] !== '0' ?
+       '0'+self.userForm.controls['phone'].value : self.userForm.controls['phone'].value); 
     const errors = [
       !self.userForm.controls['name'].valid ? 'Username is required.' : null,
 
@@ -87,6 +92,7 @@ export class UserComponent implements OnInit {
 
       !isValidDate(convertDate(self.userForm.controls['birthday'].value, 'ddMMyyyy')) ? 'Birthday is invalid.' : null,
 
+      self.userForm.controls['phone'].value && 
       self.userForm.controls['phone'].value.length !== 10 ? 'Phone number must be 10 characters.' : null
     ];
 

@@ -29,8 +29,8 @@ export const convertDate = (date: any, type) => {
     if (!date || !date.day || !date.month || !date.year) {
         return null;
     }
-    date.day = date.day < 10 ? '0' + date.day : date.day;
-    date.month = date.month < 10 ? '0' + date.month : date.month;
+    date.day = parseInt(date.day) < 10 && date.day.toString()[0] !== '0' ? '0' + date.day : date.day;
+    date.month = parseInt(date.month) < 10 && date.month.toString()[0] !== '0' ? '0' + date.month : date.month;
     switch (type) {
         case 'ddMMyyyy':
         {

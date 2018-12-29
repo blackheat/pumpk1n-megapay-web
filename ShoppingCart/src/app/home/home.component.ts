@@ -8,21 +8,14 @@ import { ProductService } from '../services/product.service';
   styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
-  // userRole;
-  // listener: EventEmitter<any>;
-  // constructor(private service:  AccountService) {
-  //   this.listener = this.service.listener;
-  //   this.listener.subscribe((result: any) => {
-  //     this.userRole = result.role;
-  //   });
-  // }
+  userRole;
   slides = [
     'assets/pictures/slideshow/slideshow1.jpg',
     'assets/pictures/slideshow/slideshow2.jpg',
     'assets/pictures/slideshow/slideshow3.jpg'
   ];
   products = [];
-  constructor (private service: ProductService) {}
+  constructor (private service: ProductService, private accountService: AccountService) {}
   isShowingSpinner = true;
   options: any;
   ngOnInit() {
@@ -46,6 +39,6 @@ export class HomeComponent implements OnInit {
         self.products.push(product);
       });
     });
-    // this.userRole = this.service.getDecodedAccessToken(JSON.parse(localStorage.getItem('currentUser')).accessToken).role;
+    self.userRole = self.accountService.getUserRole();
   }
 }

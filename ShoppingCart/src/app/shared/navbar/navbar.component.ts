@@ -15,12 +15,14 @@ export class NavbarComponent implements OnInit {
   listener: EventEmitter<any>;
   navSearchForm: FormGroup;
   username: string;
+  userRole;
   numberOfProducts = 0;
   constructor(private accountService: AccountService, private productService: ProductService, private router: Router) {
     const self = this;
     self.listener = accountService.listener;
     self.listener.subscribe(() => {
-      self.username = self.accountService.getUsername();
+      self.username = self.accountService.getName();
+      self.userRole = self.accountService.getUserRole();
       self.auth = self.accountService.isLoggedIn();
     });
   }
@@ -35,7 +37,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     const self = this;
     self.auth = self.accountService.isLoggedIn();
-    self.username = self.accountService.getUsername();
+    self.username = self.accountService.getName();
+    self.userRole = self.accountService.getUserRole();
     self.numberOfProducts = self.productService.getCart() ? self.productService.getCart().total : 0;
     self.navSearchForm = new FormGroup({
       search: new FormControl('', null)
