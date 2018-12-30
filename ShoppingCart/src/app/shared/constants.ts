@@ -1,5 +1,5 @@
 export const MAX_PRODUCTS_PER_PAGE = 8;
-export const MAX_ORDERS_PER_PAGE = 5;
+export const MAX_ORDERS_PER_PAGE = 8;
 export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
 export const API_URL = `http://localhost:9090/api`;
@@ -29,24 +29,24 @@ export const convertDate = (date: any, type) => {
     if (!date || !date.day || !date.month || !date.year) {
         return null;
     }
-    date.day = date.day < 10 ? '0' + date.day : date.day;
-    date.month = date.month < 10 ? '0' + date.month : date.month;
+    date.day = parseInt(date.day, 10) < 10 && date.day.toString()[0] !== '0' ? '0' + date.day : date.day;
+    date.month = parseInt(date.month, 10) < 10 && date.month.toString()[0] !== '0' ? '0' + date.month : date.month;
     switch (type) {
         case 'ddMMyyyy':
         {
-            return `${date.day}-${date.month}-${date.year}`;
+            return `${date.day}/${date.month}/${date.year}`;
         }
         case 'MMddyyyy':
         {
-            return `${date.month}-${date.day}-${date.year}`;
+            return `${date.month}/${date.day}/${date.year}`;
         }
         case 'yyyyMMdd':
         {
-            return `${date.year}-${date.month}-${date.day}`;
+            return `${date.year}/${date.month}/${date.day}`;
         }
         case 'yyyyddMM':
         {
-            return `${date.year}-${date.day}-${date.month}`;
+            return `${date.year}/${date.day}/${date.month}`;
         }
         default:
         {
@@ -55,3 +55,9 @@ export const convertDate = (date: any, type) => {
     }
 };
 
+// Employee
+
+export const API_EMPLOYEE = `${API_URL}/employee`;
+
+export const API_GET_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/getOrders`;
+export const API_MODIFY_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/modifyOrder`;

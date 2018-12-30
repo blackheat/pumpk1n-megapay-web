@@ -1,21 +1,32 @@
 <app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
-<div class="mx-auto" style="max-width: 75em;">
-  <ngb-carousel *ngIf="slides">
-    <ng-template *ngFor="let slide of slides" ngbSlide>
-      <img src={{slide}} alt="Random first slide">
-    </ng-template>
-  </ngb-carousel>
-</div>
-<br>
-<div class="mx-auto" style="max-width: 75em;">
-  <h2 class="text-center" style="color:rgb(87, 36, 7)">
-    <i style = "color: rgb(255, 234, 117)" class="fa fa-star" aria-hidden="true"></i>
-    <b> OUR NEW PRODUCTS </b>
-    <i style = "color: rgb(255, 234, 117)" class="fa fa-star" aria-hidden="true"></i>
-  </h2>
-  <owl-carousel style="margin-left: 10px" [options]="options" [items]="products" [carouselClasses]="['owl-theme', 'row', 'sliding']">
-    <div class="item" style="padding:10px" *ngFor="let product of products;let i = index">
-      <app-product-card [product] = "product"></app-product-card>
-    </div>
-  </owl-carousel>
-</div>
+<ng-container *ngIf="userRole == 'user' || !userRole">
+  <div class="mx-auto" style="max-width: 75em;">
+    <ngb-carousel *ngIf="slides">
+      <ng-template *ngFor="let slide of slides" ngbSlide>
+        <img src={{slide}} alt="Random first slide">
+      </ng-template>
+    </ngb-carousel>
+  </div>
+  <br>
+  <div class="mx-auto" style="max-width: 75em;">
+    <h2 class="text-center" style="color:rgb(87, 36, 7)">
+      <i style = "color: rgb(255, 234, 117)" class="fa fa-star" aria-hidden="true"></i>
+      <b> OUR NEW PRODUCTS </b>
+      <i style = "color: rgb(255, 234, 117)" class="fa fa-star" aria-hidden="true"></i>
+    </h2>
+    <owl-carousel style="margin-left: 10px" [options]="options" [items]="products" [carouselClasses]="['owl-theme', 'row', 'sliding']">
+      <div class="item" style="padding:10px" *ngFor="let product of products;let i = index">
+        <app-product-card [product] = "product"></app-product-card>
+      </div>
+    </owl-carousel>
+  </div>  
+</ng-container>
+
+
+<ng-container *ngIf="userRole == 'employee'">
+  <app-employee></app-employee>
+</ng-container>
+
+<ng-container *ngIf="userRole == 'admin'">
+  admin
+</ng-container>

@@ -42,11 +42,21 @@ export class AccountService {
     return this.loggedInStatus;
   }
 
-  getUsername() {
+  getName() {
     if (localStorage.getItem('currentUser')) {
-      return JSON.parse(localStorage.getItem('currentUser')).userName;
+      return JSON.parse(localStorage.getItem('currentUser')).name;
     }
     return null;
+  }
+
+  setName(name) {
+    if (localStorage.getItem('currentUser')) {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      currentUser.name = name;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser))
+      return true;
+    }
+    return false;
   }
 
   getUserRole() {
