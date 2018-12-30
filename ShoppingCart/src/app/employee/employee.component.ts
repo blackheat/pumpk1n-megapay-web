@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { isValidDate } from '../shared/validators/validators';
 import { convertDate } from '../shared/constants';
+
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
@@ -46,18 +47,28 @@ export class EmployeeComponent implements OnInit {
 
   ngOnInit() {
     const self = this;
-    self.getListOrders(1);
     self.filterForm = new FormGroup({
       orderId: new FormControl('', null),
       dateFrom: new FormControl('', null),
       dateTo: new FormControl('', null),
     });
+    self.getListOrders(1);
+  }
+
+  getFilter() {
+    const self = this;
+    const filter = new Object;
+    (<any>filter).orderId = self.filterForm.controls['orderId'].value;
+    (<any>filter).dateFrom = convertDate(self.filterForm.controls['dateFrom'].value, 'MMddyyyy');
+    (<any>filter).dateTo = convertDate(self.filterForm.controls['dateTo'].value, 'MMddyyyy');
+    return filter;
   }
 
   getListOrders(page) {
     const self = this;
     self.isShowingSpinner = true;
-    self.service.getListOrders(page).subscribe((value: any) => {
+    const filter = self.getFilter();
+    self.service.getListOrders(page, filter).subscribe((value: any) => {
       self.isShowingSpinner = false;
       if (value.returnMessage === 'SUCCESS') {
         self.currentPage = page;
@@ -146,8 +157,9 @@ export class EmployeeComponent implements OnInit {
 
   validate() {
     const self = this;
-    const date =  Date.parse(convertDate(self.filterForm.controls['dateFrom'].value, 'ddMMyyyy').toString());
 
+    const dF = convertDate(self.filterForm.controls['dateFrom'].value, 'MMddyyyy');
+    const dT = convertDate(self.filterForm.controls['dateTo'].value, 'MMddyyyy');
     const errors = [
       self.filterForm.controls['dateFrom'].value &&
       !isValidDate(convertDate(self.filterForm.controls['dateFrom'].value, 'ddMMyyyy')) ? 'Date from is invalid.' : null,
@@ -155,11 +167,7 @@ export class EmployeeComponent implements OnInit {
       self.filterForm.controls['dateTo'].value &&
       !isValidDate(convertDate(self.filterForm.controls['dateTo'].value, 'ddMMyyyy')) ? 'Date to is invalid.' : null,
 
-      isValidDate(convertDate(self.filterForm.controls['dateFrom'].value, 'ddMMyyyy')) &&
-      isValidDate(convertDate(self.filterForm.controls['dateTo'].value, 'ddMMyyyy')) &&
-      Date.parse(convertDate(self.filterForm.controls['dateFrom'].value, 'ddMMyyyy').toString()) >
-      Date.parse(convertDate(self.filterForm.controls['dateTo'].value, 'ddMMyyyy').toString()) ?
-      'Date From value cannot precede Date To value' : null
+      dF && dT && new Date(dF) > new Date(dT) ? 'Date From value cannot precede Date To value' : null
 
     ];
 
@@ -176,5 +184,6 @@ export class EmployeeComponent implements OnInit {
       });
       return;
     }
+    self.getListOrders(1);
   }
 }

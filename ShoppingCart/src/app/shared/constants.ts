@@ -34,19 +34,19 @@ export const convertDate = (date: any, type) => {
     switch (type) {
         case 'ddMMyyyy':
         {
-            return `${date.day}-${date.month}-${date.year}`;
+            return `${date.day}/${date.month}/${date.year}`;
         }
         case 'MMddyyyy':
         {
-            return `${date.month}-${date.day}-${date.year}`;
+            return `${date.month}/${date.day}/${date.year}`;
         }
         case 'yyyyMMdd':
         {
-            return `${date.year}-${date.month}-${date.day}`;
+            return `${date.year}/${date.month}/${date.day}`;
         }
         case 'yyyyddMM':
         {
-            return `${date.year}-${date.day}-${date.month}`;
+            return `${date.year}/${date.day}/${date.month}`;
         }
         default:
         {
