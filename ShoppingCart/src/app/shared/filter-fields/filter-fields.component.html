@@ -30,7 +30,7 @@
           <h4>Type</h4>
         </label>
         <select class="col-8" id="typeId" formControlName="typeId">
-          <option value="0"></option>
+          <option value=0></option>
           <option *ngFor="let type of types;"  value="{{type.id}}">{{type.name}}</option>
         </select>
       </div>
@@ -40,7 +40,7 @@
           <h4>Brand</h4>
         </label>
         <select  class="col-8" id="brandId" formControlName="brandId">
-          <option value="0"></option>
+          <option value=0></option>
           <option *ngFor="let brand of brands;" value="{{brand.id}}">{{brand.name}}</option>
         </select>
       </div>

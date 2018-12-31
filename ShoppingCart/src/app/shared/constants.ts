@@ -1,4 +1,5 @@
 export const MAX_PRODUCTS_PER_PAGE = 8;
+export const MAX_PRODUCTS_ROW_PER_PAGE = 5;
 export const MAX_ORDERS_PER_PAGE = 8;
 export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
@@ -58,6 +59,10 @@ export const convertDate = (date: any, type) => {
 // Employee
 
 export const API_EMPLOYEE = `${API_URL}/employee`;
-
 export const API_GET_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/getOrders`;
 export const API_MODIFY_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/modifyOrder`;
+
+// Admin
+
+export const API_ADMIN = `${API_URL}/admin`;
+export const API_MODIFY_PRODUCT = `${API_ADMIN}/product/modifyProduct`;

@@ -22,7 +22,7 @@
              <option *ngFor="let state of states" value="{{state.value}}">{{state.title}}</option>
           </select>
           <div class="input-group-append">
-            <button (click)="changeState()" style="max-height: 2.2em" class="btn btn-danger" type="button" id="inputGroupFileAddon04">Change State</button>
+            <button (click)="changeState(); c('Change State click')" style="max-height: 2.2em" class="btn btn-danger" type="button" id="inputGroupFileAddon04">Change State</button>
           </div>
         </div>
       </div>
