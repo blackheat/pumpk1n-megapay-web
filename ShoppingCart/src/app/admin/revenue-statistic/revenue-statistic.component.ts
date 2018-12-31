@@ -38,6 +38,11 @@ export class RevenueStatisticComponent implements OnInit {
       dateFrom: new FormControl('', Validators.required),
       dateTo: new FormControl('', Validators.required)
     });
+    self.filterForm.controls['dateTo'].setValue({
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      day: new Date().getDate()
+    });
   }
 
   getFilter() {
