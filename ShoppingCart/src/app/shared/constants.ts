@@ -1,7 +1,7 @@
 export const MAX_PRODUCTS_PER_PAGE = 8;
 export const MAX_PRODUCTS_ROW_PER_PAGE = 5;
 export const MAX_ORDERS_PER_PAGE = 8;
-export const MAX_ACCOUNTS_PER_PAGE = 2;
+export const MAX_ACCOUNTS_PER_PAGE = 10;
 export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
 export const API_URL = `http://localhost:9090/api`;
