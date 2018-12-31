@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IMAGE_PATH } from 'src/app/shared/constants';
 import { ProductService } from 'src/app/services/product.service';
@@ -20,6 +20,7 @@ export class ProductInfoComponent implements OnInit {
   listTypes;
   brand;
   type;
+  specs;
   isShowingSpinner = true;
   constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService) {}
 
@@ -48,6 +49,7 @@ export class ProductInfoComponent implements OnInit {
               .indexOf(self.product.typeId)
           ].name;
       });
+      self.specs = self.productService.convertSpecs(self.product.specs);
     });
     self.quantityForm = new FormGroup({
       quantity: new FormControl(1, Validators.compose([ Validators.min(1), Validators.required ]))

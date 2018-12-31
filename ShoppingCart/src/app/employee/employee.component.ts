@@ -119,6 +119,16 @@ export class EmployeeComponent implements OnInit {
         }
       );
   }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+  
   onChange(value) {
     const self = this;
     self.selectedState = value;
@@ -143,16 +153,6 @@ export class EmployeeComponent implements OnInit {
   goToPage(page) {
     const self = this;
     self.getListOrders(page);
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   validate() {

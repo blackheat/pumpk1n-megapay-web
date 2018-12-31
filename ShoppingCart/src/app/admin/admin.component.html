@@ -1,3 +1,24 @@
-<p>
-  admin works!
-</p>
+<app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
+<br>
+<div class="col-10 offset-1" style="background: white">
+  <ngb-tabset #t="ngbTabset" class="nav-fill" [justify]="justified">
+    <ngb-tab>
+      <ng-template ngbTabTitle><b>Products Management</b></ng-template>
+      <ng-template ngbTabContent>
+        <app-product-management></app-product-management>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+      <ng-template ngbTabTitle><b>Accounts Management</b></ng-template>
+      <ng-template ngbTabContent>
+        <app-account-management></app-account-management>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+      <ng-template ngbTabTitle><b>Revenue Statistics</b></ng-template>
+      <ng-template ngbTabContent>
+        <app-revenue-statistic></app-revenue-statistic>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

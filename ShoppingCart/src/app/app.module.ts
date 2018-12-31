@@ -14,12 +14,18 @@ import { ProductsModule } from './products/products.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { ProductManagementComponent } from './admin/product-management/product-management.component';
+import { AccountManagementComponent } from './admin/account-management/account-management.component';
+import { RevenueStatisticComponent } from './admin/revenue-statistic/revenue-statistic.component';
 @NgModule({
   declarations: [
     AppComponent,
     RoutingComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    ProductManagementComponent,
+    AccountManagementComponent,
+    RevenueStatisticComponent
   ],
   imports: [
     NgbModule.forRoot(),

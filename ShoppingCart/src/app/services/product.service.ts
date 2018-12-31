@@ -7,7 +7,8 @@ import {
   API_NEWEST_PRODUCTS,
   API_ADD_USER_ORDERS,
   API_GET_USER_ORDERS,
-  MAX_ORDERS_PER_PAGE
+  MAX_ORDERS_PER_PAGE,
+  API_MODIFY_PRODUCT
 } from '../shared/constants';
 import { AccountService } from './account.service';
 @Injectable({
@@ -37,8 +38,8 @@ export class ProductService {
 
     productName && productName !== '' ? (queryParam = `${queryParam}&productName=${productName}`) : null;
     priceOption && priceOption !== '' ? (queryParam = `${queryParam}&priceOption=${priceOption}`) : null;
-    typeId && typeId !== 0 ? (queryParam = `${queryParam}&typeId=${typeId}`) : null;
-    brandId && brandId !== 0 ? (queryParam = `${queryParam}&brandId=${brandId}`) : null;
+    typeId && typeId !== 0 && typeId.toString() !== '0' ? (queryParam = `${queryParam}&typeId=${typeId}`) : null;
+    brandId && brandId !== 0 && brandId.toString() !== '0' ? (queryParam = `${queryParam}&brandId=${brandId}`) : null;
 
     return this.httpClient.get(queryParam);
   }
@@ -159,10 +160,55 @@ export class ProductService {
     return self.httpClient.post(API_ADD_USER_ORDERS, body.toString(), { headers: self.headers });
   }
 
+  converJsonToMultipleLinesString(value) {
+    let returnValue = '';
+    value.forEach(element => {
+      returnValue += `${element.title}: ${element.value}\n`;
+    });
+    return returnValue.slice(0, -1);
+  }
+
+  convertSpecs(specs) {
+    specs = specs
+      .replace(/\\n/g, '\\n')
+      .replace(/\{/g, '')
+      .replace(/\}/g, '')
+      .replace(/\\'/g, "\\'")
+      .replace(/\\"/g, '\\"')
+      .replace(/\\&/g, '\\&')
+      .replace(/\\r/g, '\\r')
+      .replace(/\\t/g, '\\t')
+      .replace(/\\b/g, '\\b')
+      .replace(/\\f/g, '\\f');
+    // remove non-printable and other non-valid JSON chars
+    specs = specs.replace(/[\u0000-\u0019]+/g, '');
+    const specsList = JSON.parse(`{${specs}}`);
+    const specsReturn = [];
+    Object.keys(specsList).forEach(function(key) {
+      specsReturn.push({title: `"${key.toLocaleUpperCase()}"`, value: `"${specsList[key]}"`});
+    });
+    return specsReturn;
+  }
   getOrdersHistory(page) {
     const self = this;
     return self.httpClient.get(
       `${API_GET_USER_ORDERS}?page=${page}&ordersPerPage=${MAX_ORDERS_PER_PAGE}&token=${self.accountService.getAccessToken()}`
     );
+  }
+  modifyProduct(value) {
+    const self = this;
+    const body = new HttpParams()
+      .set('productId', value.id)
+      .set('brandId', value.brand)
+      .set('typeId', value.type)
+      .set('name', value.name)
+      .set('description', value.description)
+      .set('price', value.price)
+      .set('leftItems', value.quantity)
+      .set('specs', value.specs)
+      .set('isDeleted', value.isDeleted ? '1' : '0')
+      .set('token', self.accountService.getAccessToken());
+
+    return self.httpClient.post(API_MODIFY_PRODUCT, body.toString(), { headers: self.headers });
   }
 }
