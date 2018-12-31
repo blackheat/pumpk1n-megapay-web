@@ -4,11 +4,24 @@
 @import "../node_modules/font-awesome/css/font-awesome.css";
 @import "~owl.carousel/dist/assets/owl.carousel.css";
 @import "~owl.carousel/dist/assets/owl.theme.default.css";
-.errorBorder
-{
-    border: 2px solid red;
+.errorBorder {
+  border: 2px solid red;
 }
 
 body {
-    background-color: rgba(122, 122, 122, 0.247);
+  background-color: rgba(122, 122, 122, 0.247);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.modal-wide > .modal-dialog {
+  max-width: 100em !important;
+  min-width: 50em !important;   
+  width: 95% !important;
 }

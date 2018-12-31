@@ -7,17 +7,27 @@ import { ErrorInterceptor } from './helper/error.interceptor';
 import { JwtInterceptor } from './helper/jwt.interceptor';
 import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { TruncatePipe } from './custom-pipe/truncate.pipe';
+import { PaginationComponent } from './pagination/pagination.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
+    NgxSpinnerModule,
+    NgbModule
   ],
   declarations: [
     ProductCardComponent,
     FilterFieldsComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    TruncatePipe,
+    PaginationComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -26,7 +36,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   exports: [
     ProductCardComponent,
     FilterFieldsComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    TruncatePipe,
+    PaginationComponent
   ]
 })
 export class SharedModule { }

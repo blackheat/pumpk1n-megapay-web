@@ -1,21 +1,28 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { NotFoundComponent } from './shared/not-found/not-found.component';
-import { LoginFormComponent } from './login-form/login-form.component';
+import { NotFoundComponent } from './shared/errors/not-found/not-found.component';
+import { LoginComponent } from './account/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { CartComponent } from './cart/cart.component';
 import { AboutComponent } from './about/about.component';
 import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
-
+import { AdminComponent } from './admin/admin.component';
+import { RegisterComponent } from './account/register/register.component';
+import { EmployeeComponent } from './employee/employee.component';
+import { RoleGuard } from './role.guard';
 const routes: Routes = [
   {
     path: '',
-    // canActivate: [AuthGuard],
     children: [
       {
         path: 'products',
-        loadChildren: './products/products.module#ProductsModule'
+        loadChildren: './products/products.module#ProductsModule',
+        canActivate: [RoleGuard],
+        data: {
+          expectedRole: ['user', null],
+          component: 'products'
+        }
       }
       ,
       {
@@ -25,7 +32,11 @@ const routes: Routes = [
       },
       {
         path: 'login',
-        component: LoginFormComponent
+        component: LoginComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
       },
       {
         path: 'home',
@@ -33,7 +44,11 @@ const routes: Routes = [
       },
       {
         path: 'cart',
-        component: CartComponent
+        component: CartComponent,
+        canActivate: [RoleGuard],
+        data: {
+          expectedRole: ['user']
+        }
       },
       {
         path: 'about',
@@ -41,7 +56,8 @@ const routes: Routes = [
       },
       {
         path: 'user',
-        component: UserComponent
+        component: UserComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: '**',
@@ -58,6 +74,12 @@ const routes: Routes = [
 export class AppRoutingModule {}
 export const RoutingComponent = [
   NotFoundComponent,
-  LoginFormComponent,
-  HomeComponent
+  LoginComponent,
+  HomeComponent,
+  CartComponent,
+  AboutComponent,
+  UserComponent,
+  RegisterComponent,
+  AdminComponent,
+  EmployeeComponent
 ];

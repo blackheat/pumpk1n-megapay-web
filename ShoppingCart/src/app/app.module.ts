@@ -14,18 +14,18 @@ import { ProductsModule } from './products/products.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { CartComponent } from './cart/cart.component';
-import { AboutComponent } from './about/about.component';
-import { UserComponent } from './user/user.component';
+import { ProductManagementComponent } from './admin/product-management/product-management.component';
+import { AccountManagementComponent } from './admin/account-management/account-management.component';
+import { RevenueStatisticComponent } from './admin/revenue-statistic/revenue-statistic.component';
 @NgModule({
   declarations: [
     AppComponent,
     RoutingComponent,
     HomeComponent,
     NavbarComponent,
-    CartComponent,
-    AboutComponent,
-    UserComponent
+    ProductManagementComponent,
+    AccountManagementComponent,
+    RevenueStatisticComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -39,7 +39,8 @@ import { UserComponent } from './user/user.component';
     MatCheckboxModule,
     AngularFontAwesomeModule,
     OwlModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   bootstrap: [AppComponent],
   exports: []

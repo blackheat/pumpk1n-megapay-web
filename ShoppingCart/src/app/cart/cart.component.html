@@ -1,3 +1,140 @@
-<p>
-  cart works!
-</p>
+<app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
+<ng-template #content let-modal let-d="dismiss" let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Order History</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row col-10 offset-1">
+      <table class="table table-light"> 
+        <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+          <th style="width: 25%;">Order ID</th>
+          <th style="width: 25%;">Checkout Date</th>
+          <th style="width: 25%;">Status</th>
+          <th style="width: 25%;"></th>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let order of listOrders" >
+            <td>{{order?.id}}</td>
+            <td>{{order?.createDate}}</td>
+            <td>
+                <span *ngIf="order?.state == 'Chưa giao'" class="badge badge-warning">Pending</span>
+                <span *ngIf="order?.state == 'Đang giao'" class="badge badge-info">Delivering</span>
+                <span *ngIf="order?.state == 'Đã giao'" class="badge badge-success">Done</span>
+            </td>
+            <td>
+                <button class="btn btn-danger" style="margin-left: 5px" (click)="open(orderDetail); getOrderDetail(order)"><b>Detail</b></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class='mx-auto'>
+        <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage"></app-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+
+<ng-template #orderDetail let-modal let-d="dismiss" let-c="close">
+    <div class="modal-header">
+      <h4 class="modal-title">Order Detail</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row col-10 offset-1">
+        <table class="table table-light"> 
+          <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+            <th style="width: 10%;">#</th>
+            <th style="width: 20%;">Image</th>
+            <th style="width: 30%;">Name</th>
+            <th style="width: 20%;">Price</th>
+            <th style="width: 10%; text-align: left">Quantity</th>
+            <th style="width: 10%;">In total</th>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let product of order.listProducts; let i = index" >
+              <td><b>{{i + 1}}</b></td>
+              <td>
+                <img style="width: 50%" src="assets/pictures/img/{{product.product.id}}.jpg">
+              </td>
+              <td>
+                  {{product.product.name}}
+              </td>
+              <td>{{product.product.price | currency:' ':'code':'0.0-0'}} VND</td>
+              <td> {{product.quantity}}
+              </td>
+              <td>{{product.product.price*product.quantity | currency:' ':'code':'0.0-0'}} VND</td>
+            </tr>
+            <tr style="background-color: rgb(238, 238, 238)">
+              <td style="font-size: 1.5em" colspan="7" class="text-center">In total: <span style="font-weight: bold; color: brown">{{getOrderTotal() | currency:' ':'code':'0.0-0'}} VND</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+<br>
+<div class="row col-10 offset-1">
+  <table class="table table-light"> 
+    <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+      <th style="width: 5%;">#</th>
+      <th style="width: 20%;">Image</th>
+      <th style="width: 25%;">Name</th>
+      <th style="width: 10%;">Price</th>
+      <th style="width: 10%; text-align: left">Quantity</th>
+      <th style="width: 10%;">In total</th>
+      <th style="width: 20%;">Action</th>
+    </thead>
+    <tbody class="text-center">
+      <tr *ngFor="let product of cart.listProducts; let i = index" >
+        <td><b>{{i + 1}}</b></td>
+        <td>
+          <img style="width: 50%" src="assets/pictures/img/{{product.product.id}}.jpg">
+        </td>
+        <td>
+          <a class="link" (click)="navigate(product.product.id)">
+            {{product.product.name}}
+          </a>
+        </td>
+        <td>{{product.product.price | currency:' ':'code':'0.0-0'}} VND</td>
+        <td>
+          <form class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <button type="button" class="btn btn-secondary" (click)="minQuantity(product.product.id, product.quantity)"
+                >-</button>
+              </div>
+              <input style="max-width: 2em;" type="number" id="quantity" name="quantity" value="{{product.quantity}}" disabled>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-secondary" (click)="addQuantity(product.product.id, product.quantity, product.product.leftItems)"
+                >+</button>
+              </div>
+            </div>
+          </form>
+        </td>
+        <td>{{product.product.price*product.quantity | currency:' ':'code':'0.0-0'}} VND</td>
+        <td><button class="btn btn-danger" (click) = "deleteCart(product.product.id)">X</button></td>
+      </tr>
+      <tr style="background-color: rgb(238, 238, 238)">
+        <td style="font-size: 1.5em" colspan="7" class="text-center">In total: <span style="font-weight: bold; color: brown">{{getTotal() | currency:' ':'code':'0.0-0'}} VND</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br>
+<div class="text-center">
+  <button class="btn btn-danger" (click)="checkout()"><b>Checkout</b></button>
+  <button class="btn btn-secondary" style="margin-left: 5px" (click)="open(content)"><b>Order History</b></button>
+</div>
