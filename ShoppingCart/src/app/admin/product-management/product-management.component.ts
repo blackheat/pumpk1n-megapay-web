@@ -12,7 +12,7 @@ import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 })
 export class ProductManagementComponent implements OnInit {
   @ViewChild('content') public modal: NgbModalRef;
-  listProducts;
+  listProducts = [];
   currentPage = 1;
   totalPage = 1;
   closeResult: string;
