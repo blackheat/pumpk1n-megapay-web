@@ -1,3 +1,92 @@
-<p>
-  account-management works!
-</p>
+<br>
+<div class="justify-content-center">
+  <div class="card bg-light">
+    <div class="card-header text-center">
+      <h4>Accounts Management</h4>
+    </div>
+  <div class="card-body">
+    <div>
+      <div class="justify-content-center">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h5 class="text-center">Filter</h5>
+                <form [formGroup]="filterForm" (ngSubmit)="filter(filterForm.value)" class="align-content-center">
+                  <div class="row col-6 offset-3">
+                    <label class="col-11">Username:
+                      <input placeholder="Filter by username" type="text"class="form-control" id="username" name="username" formControlName="username">
+                    </label> 
+                    <div class="col-1">
+                      <button class="btn btn-danger" type="submit">
+                          <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+            </div>
+        </div>  
+      </div>
+    </div>
+    <br>
+    <div *ngIf="listAccounts.length > 0">
+      <div class="col-8 offset-2">
+        <table class="table table-light"> 
+          <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+            <th style="width: 10%;">#</th>
+            <th style="width: 20%;">Username</th>
+            <th style="width: 30%;">Name</th>
+            <th style="width: 20%;">Role</th>
+            <th style="width: 20%;">Action</th>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let account of listAccounts; let i = index" >
+              <td class="align-middle"><b>{{i + 1}}</b></td>
+              <td class="align-middle">
+                {{account.username}}
+              </td>
+              <td class="align-middle">
+                {{account.name}}
+              </td>
+              <td class="align-middle">
+                {{account.role}}
+              </td>
+              <td class="align-middle"><button class="btn btn-danger" (click) = "open(content); setRoleForUser(account, i)">Change Role</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    <div *ngIf="listAccounts.length > 0; else notFound" class="mx-auto">
+      <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage"></app-pagination>
+    </div>
+    <ng-template #notFound >
+      <div class="text-center">
+          <h4 style="color:rgb(73, 9, 9)">Cannot find what you are looking for.</h4>
+      </div>
+    </ng-template>
+  </div>  
+</div>
+
+<ng-template #content let-modal let-d="dismiss" let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Set role for User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="offset-1 col-10">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label style="max-height: 2.2em" class="input-group-text btn btn-danger" for="inputGroupSelect01">State</label>
+          </div>
+          <select  (change)="onChange($event.target.value)" style="max-height: 2.2em" class="custom-select form-control" id="inputGroupSelect01" [value]='user.role'>
+              <option *ngFor="let role of listRoles" value="{{role}}">{{role}}</option>
+          </select>
+          <div class="input-group-append">
+            <button (click)="changeRole(); c('Change State click')" style="max-height: 2.2em" class="btn btn-danger" type="button" id="inputGroupFileAddon04">Change State</button>
+          </div>
+        </div>
+      </div> 
+  </div>
+</ng-template>

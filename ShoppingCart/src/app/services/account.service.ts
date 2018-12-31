@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { throwError } from '../../../node_modules/rxjs';
 import * as jwt_decode from 'jwt-decode';
-import { API_REGISTER, API_LOGIN } from '../shared/constants';
+import { API_REGISTER, API_LOGIN, API_GET_ACCOUNT, MAX_ACCOUNTS_PER_PAGE, API_MODIFY_ACCOUNT_ROLE } from '../shared/constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -110,11 +110,24 @@ export class AccountService {
     return null;
   }
 
-  // updateScoreByStudentId(id: string , obj: any) {
-  //   console.log(obj);
-  //   return this.httpClient
-  //   .put(`http://localhost:51930/api/score/` + id, obj, {
-  //     headers: this.headers
-  //   });
-  // }
+  getListAccounts(page, filter) {
+    const self = this;
+    let queryParam = `${API_GET_ACCOUNT}?page=${page}&accountsPerPage=${MAX_ACCOUNTS_PER_PAGE}&token=${self.getAccessToken()}`;
+
+    if (filter.username.trim() !== '') {
+      queryParam += `&username=${filter.username}`;
+    }
+    return self.httpClient.get(queryParam);
+  }
+
+  modifyAccountRole(value) {
+    const self = this;
+    const body = new HttpParams()
+      .set('userId', value.userId)
+      .set('role', value.role)
+      .set('token', self.getAccessToken());
+
+    return self.httpClient
+      .post(API_MODIFY_ACCOUNT_ROLE, body.toString(), { headers: self.headers });
+  }
 }

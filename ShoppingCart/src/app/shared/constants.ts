@@ -1,6 +1,7 @@
 export const MAX_PRODUCTS_PER_PAGE = 8;
 export const MAX_PRODUCTS_ROW_PER_PAGE = 5;
 export const MAX_ORDERS_PER_PAGE = 8;
+export const MAX_ACCOUNTS_PER_PAGE = 2;
 export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
 export const API_URL = `http://localhost:9090/api`;
@@ -66,3 +67,6 @@ export const API_MODIFY_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/modifyOrder`;
 
 export const API_ADMIN = `${API_URL}/admin`;
 export const API_MODIFY_PRODUCT = `${API_ADMIN}/product/modifyProduct`;
+export const API_GET_ACCOUNT = `${API_ADMIN}/account/getAccounts`;
+export const API_MODIFY_ACCOUNT_ROLE = `${API_ADMIN}/account/modifyAccountRole`;
+export const API_GET_ORDER_BY_RANGE = `${API_ADMIN}/order/getOrdersByRange`;
