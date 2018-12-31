@@ -61,7 +61,7 @@
                     <label class="col-5">From date:
                       <div class="input-group">
                         <input class="form-control" placeholder="yyyy-MM-dd"
-                                name="df" [(ngModel)]="dateFormModel" ngbDatepicker #df="ngbDatepicker"
+                                name="df"  ngbDatepicker #df="ngbDatepicker"
                                 class="form-control" id="dateFrom" name="dateFrom" formControlName="dateFrom">
                         <div class="input-group-append">
                           <button class="btn btn-primary" (click)="df.toggle()" type="button">
@@ -73,7 +73,7 @@
                     <label class="col-5">To date:
                       <div class="input-group">
                         <input class="form-control" placeholder="yyyy-MM-dd"
-                                name="dt" [(ngModel)]="dateToModel" ngbDatepicker #dt="ngbDatepicker"
+                                name="dt" ngbDatepicker #dt="ngbDatepicker"
                                 class="form-control" id="dateTo" name="dateTo" formControlName="dateTo">
                         <div class="input-group-append">
                           <button class="btn btn-primary" (click)="dt.toggle()" type="button">

@@ -13,9 +13,6 @@ import { isValidDate, isValidEmail } from '../shared/validators/validators';
 export class UserComponent implements OnInit {
   info;
   userForm: FormGroup;
-
-  model;
-
   constructor(private service: UserService, private accountService: AccountService, private router: Router) {}
 
   ngOnInit() {
@@ -34,13 +31,13 @@ export class UserComponent implements OnInit {
         const userFormControls = self.userForm.controls;
         userFormControls['name'].setValue(self.info[0].name);
         userFormControls['email'].setValue(self.info[0].email);
-        const date = self.info[0].birthday ? self.info[0].birthday.split('-') : null;
+        const date = self.info[0].birthday ? self.info[0].birthday.split('/') : null;
         userFormControls['birthday'].setValue(date ?
           {
             year: parseInt(date[0], 10),
             month: parseInt(date[1], 10),
-            day: parseInt(date[2], 10)} : ''
-          );
+            day: parseInt(date[2], 10)
+          } : '');
         userFormControls['address'].setValue(self.info[0].address ? self.info[0].address : '');
         const phone = self.info[0].phone ?
         self.info[0].phone[0] !== '0' ? '0' + self.info[0].phone.toString() :
