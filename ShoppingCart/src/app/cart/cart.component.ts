@@ -103,6 +103,14 @@ export class CartComponent implements OnInit {
 
   checkout() {
     const self = this;
+    if (!self.service.getCart() || self.service.getCart().listProducts.length <= 0) {
+      swal({
+        title: 'Error!',
+        text: 'Cart is empty.',
+        icon: 'error'
+      });
+      return;
+    }
     swal({
       title: 'Are you sure?',
       text: 'Do you want to checkout?',
