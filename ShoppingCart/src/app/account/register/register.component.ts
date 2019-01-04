@@ -6,7 +6,7 @@ import { AccountService } from '../../services/account.service';
 import { switchAll } from '../../../../node_modules/rxjs/operators';
 import swal from 'sweetalert';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
-import { isValidDate } from 'src/app/shared/validators/validators';
+import { isValidDate, isValidEmail } from 'src/app/shared/validators/validators';
 import { EMAIL_PATTERN } from 'src/app/shared/constants';
 @Component({
   selector: 'app-register',
@@ -30,8 +30,7 @@ export class RegisterComponent implements OnInit {
       email: new FormControl(
         '',
         Validators.compose([
-          Validators.required,
-          Validators.pattern(EMAIL_PATTERN)
+          Validators.required
         ])
       ),
       name: new FormControl('', Validators.required)
@@ -58,7 +57,7 @@ export class RegisterComponent implements OnInit {
           ? 'Password and Confirmed Password do not match.'
           : null,
 
-      !self.registerForm.controls['email'].valid
+      !isValidEmail(self.registerForm.controls['email'].value)
         ? !self.registerForm.controls['email'].value || !self.registerForm.controls['email'].value.trim()
           ? 'Email is required.'
           : 'Email is invalid.'
