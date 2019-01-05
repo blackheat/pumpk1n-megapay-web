@@ -4,10 +4,11 @@ import { IMAGE_PATH } from 'src/app/shared/constants';
 import { ProductService } from 'src/app/services/product.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { AccountService } from 'src/app/services/account.service';
 @Component({
   selector: 'app-product-info',
   templateUrl: './product-info.component.html',
-  styleUrls: [ './product-info.component.css' ]
+  styleUrls: ['./product-info.component.css']
 })
 export class ProductInfoComponent implements OnInit {
   quantityForm: FormGroup;
@@ -22,7 +23,7 @@ export class ProductInfoComponent implements OnInit {
   type;
   specs;
   isShowingSpinner = true;
-  constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService) {}
+  constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService, private accountService: AccountService) { }
 
   ngOnInit() {
     const self = this;
@@ -35,7 +36,7 @@ export class ProductInfoComponent implements OnInit {
         self.brand =
           result[0].data.listBrands[
             result[0].data.listBrands
-              .map(function(e) {
+              .map(function (e) {
                 return e.id;
               })
               .indexOf(self.product.brandId)
@@ -43,7 +44,7 @@ export class ProductInfoComponent implements OnInit {
         self.type =
           result[1].data.listType[
             result[1].data.listType
-              .map(function(e) {
+              .map(function (e) {
                 return e.id;
               })
               .indexOf(self.product.typeId)
@@ -52,7 +53,7 @@ export class ProductInfoComponent implements OnInit {
       self.specs = self.productService.convertSpecs(self.product.specs);
     });
     self.quantityForm = new FormGroup({
-      quantity: new FormControl(1, Validators.compose([ Validators.min(1), Validators.required ]))
+      quantity: new FormControl(1, Validators.compose([Validators.min(1), Validators.required]))
     });
 
     self.quantityForm.valueChanges.subscribe((v) => {
@@ -89,11 +90,15 @@ export class ProductInfoComponent implements OnInit {
 
   addCart(value) {
     const self = this;
-    self.productService.addCart(self.product, value.quantity);
-    swal({
-      title: 'Congratulations!',
-      text: 'Add product to cart successfully.',
-      icon: 'success'
-    });
+    if(!self.accountService.getAccessToken()) {
+      self.router.navigate(['/login']);
+    } else {
+      self.productService.addCart(self.product, value.quantity);
+      swal({
+        title: 'Congratulations!',
+        text: 'Add product to cart successfully.',
+        icon: 'success'
+      });
+    }
   }
 }

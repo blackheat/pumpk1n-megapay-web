@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IMAGE_PATH } from '../constants';
 import { Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-product-card',
@@ -13,7 +14,7 @@ export class ProductCardComponent implements OnInit {
   @Input() product;
   image: string;
 
-  constructor(private router: Router, private service: ProductService) {
+  constructor(private router: Router, private accountService: AccountService, private service: ProductService) {
   }
 
   ngOnInit() {
@@ -27,9 +28,15 @@ export class ProductCardComponent implements OnInit {
   }
 
   addToCart(id) {
+
     const self = this;
-    self.service.getProductById(id).subscribe((value: any) => {
-      self.service.addCart(value.data.product, 1);
-    });
+    if (!self.accountService.getAccessToken()) {
+      self.router.navigate(['/login']);
+    }
+    else {
+      self.service.getProductById(id).subscribe((value: any) => {
+        self.service.addCart(value.data.product, 1);
+      });
+    }
   }
 }
