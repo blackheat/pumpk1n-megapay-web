@@ -20,7 +20,7 @@ export class ProductsComponent implements OnInit {
     const self = this;
       self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
         self.isShowingSpinner = false;
-        if (result.returnMessage === 'SUCCESS') {
+        if (result.responseType === 'success') {
           self.totalPage = result.data.numberOfPage;
           self.products = result.data.listProducts;
         }
@@ -28,7 +28,7 @@ export class ProductsComponent implements OnInit {
       self.service.searchNavBarEvent.subscribe(() => {
         self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
           self.isShowingSpinner = false;
-          if (result.returnMessage === 'SUCCESS') {
+          if (result.responseType === 'success') {
             self.totalPage = result.data.numberOfPage;
             self.products = result.data.listProducts;
             self.currentPage = 1;

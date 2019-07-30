@@ -1,5 +1,5 @@
 <app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
-<ng-container *ngIf="userRole == 'user' || !userRole">
+<ng-container *ngIf="userRole == 'NormalUser'">
   <div class="mx-auto" style="max-width: 75em;">
     <ngb-carousel *ngIf="slides">
       <ng-template *ngFor="let slide of slides" ngbSlide>
@@ -23,10 +23,6 @@
 </ng-container>
 
 
-<ng-container *ngIf="userRole == 'employee'">
+<ng-container *ngIf="userRole == 'InternalUser'">
   <app-employee></app-employee>
-</ng-container>
-
-<ng-container *ngIf="userRole == 'admin'">
-  <app-admin></app-admin>
 </ng-container>

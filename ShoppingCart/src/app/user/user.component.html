@@ -1,5 +1,5 @@
 <br>
-<div class="justify-content-center row col-6 offset-3">
+<div class="justify-content-center col-6 offset-3">
   <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm.value)" class="align-content-center">
     <div class="form-container card bg-light">
       <div class="card-header text-center">
@@ -7,33 +7,15 @@
       </div>
       <div class="card-body row">
         <label class="col-4">Name:
-          <input  type="text"class="form-control" id="name" name="name" formControlName="name">
+          <input disabled=true type="text"class="form-control" id="name" name="name" formControlName="name">
         </label> 
-        <label class="col-5">Email:
-          <input   type="text" class="form-control" id="email" name="email" formControlName="email">
-        </label>
-        <label class="col-3">Birthday:
-          <div class="input-group">
-              <input class="form-control" placeholder="yyyy-MM-dd"
-                     name="dp" ngbDatepicker #d="ngbDatepicker"
-                     class="form-control" id="birthday" name="birthday" formControlName="birthday">
-              <div class="input-group-append">
-                <button class="btn btn-primary" (click)="d.toggle()" type="button">
-                  <i class="fa fa-calendar"></i>
-                </button>
-              </div>
-            </div>
-        </label>
-        <label class="col-4">Address:
-          <input  type="text" class="form-control" id="address" name="address" formControlName="address">
-        </label>
-        <label class="col-2">Phone:
-          <input type="number" class="form-control" id="phone" name="phone" formControlName="phone">
+        <label class="col-8">Email:
+          <input  disabled=true type="text" class="form-control" id="email" name="email" formControlName="email">
         </label>
       </div>
-      <div class="card-footer text-center">
+      <!-- <div class="card-footer text-center">
         <button class="btn btn-primary" type="submit">Edit</button>
-      </div>
+      </div> -->
     </div>
   </form>
 </div>

@@ -12,14 +12,13 @@ import { AccountService } from 'src/app/services/account.service';
 export class ProductCardComponent implements OnInit {
 
   @Input() product;
-  image: string;
 
   constructor(private router: Router, private accountService: AccountService, private service: ProductService) {
   }
 
   ngOnInit() {
-    const self = this;
-    self.image = `${IMAGE_PATH}/${self.product.id}.jpg`;
+    console.log(this.product);
+    
   }
 
   productInfo(id: number) {
@@ -32,8 +31,7 @@ export class ProductCardComponent implements OnInit {
     const self = this;
     if (!self.accountService.getAccessToken()) {
       self.router.navigate(['/login']);
-    }
-    else {
+    } else {
       self.service.getProductById(id).subscribe((value: any) => {
         self.service.addCart(value.data.product, 1);
       });

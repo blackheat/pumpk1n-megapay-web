@@ -31,25 +31,25 @@ export class ProductInfoComponent implements OnInit {
     self.productService.getProductById(self.productId).subscribe((value: any) => {
       self.product = value.data.product;
       self.quantityForm.controls.quantity.setValidators(Validators.max(value.data.product.leftItems));
-      self.getTypesAndBrands().subscribe((result: any) => {
-        self.isShowingSpinner = false;
-        self.brand =
-          result[0].data.listBrands[
-            result[0].data.listBrands
-              .map(function (e) {
-                return e.id;
-              })
-              .indexOf(self.product.brandId)
-          ].name;
-        self.type =
-          result[1].data.listType[
-            result[1].data.listType
-              .map(function (e) {
-                return e.id;
-              })
-              .indexOf(self.product.typeId)
-          ].name;
-      });
+      // self.getTypesAndBrands().subscribe((result: any) => {
+      //   self.isShowingSpinner = false;
+      //   self.brand =
+      //     result[0].data.listBrands[
+      //       result[0].data.listBrands
+      //         .map(function (e) {
+      //           return e.id;
+      //         })
+      //         .indexOf(self.product.brandId)
+      //     ].name;
+      //   self.type =
+      //     result[1].data.listType[
+      //       result[1].data.listType
+      //         .map(function (e) {
+      //           return e.id;
+      //         })
+      //         .indexOf(self.product.typeId)
+      //     ].name;
+      // });
       self.specs = self.productService.convertSpecs(self.product.specs);
     });
     self.quantityForm = new FormGroup({
@@ -69,10 +69,10 @@ export class ProductInfoComponent implements OnInit {
     self.image = `${IMAGE_PATH}/${self.productId}.jpg`;
   }
 
-  getTypesAndBrands() {
-    const self = this;
-    return forkJoin(self.productService.getListBrand(), self.productService.getListType());
-  }
+  // getTypesAndBrands() {
+  //   const self = this;
+  //   return forkJoin(self.productService.getListBrand(), self.productService.getListType());
+  // }
 
   minQuantity() {
     const self = this;

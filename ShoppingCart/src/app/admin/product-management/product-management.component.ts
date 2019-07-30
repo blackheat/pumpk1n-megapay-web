@@ -49,15 +49,15 @@ export class ProductManagementComponent implements OnInit {
       description: new FormControl('', Validators.required),
       isDeleted: new FormControl(false, null)
     });
-    self.getTypesAndBrands().subscribe((result: any) => {
-      self.isShowingSpinner = false;
-      result[0].data.listBrands.forEach((brand) => {
-        self.brands.push(brand);
-      });
-      result[1].data.listType.forEach((type) => {
-        self.types.push(type);
-      });
-    });
+    // self.getTypesAndBrands().subscribe((result: any) => {
+    //   self.isShowingSpinner = false;
+    //   result[0].data.listBrands.forEach((brand) => {
+    //     self.brands.push(brand);
+    //   });
+    //   result[1].data.listType.forEach((type) => {
+    //     self.types.push(type);
+    //   });
+    // });
     self.getListProducts(1, self.filterValue);
   }
 
@@ -66,7 +66,7 @@ export class ProductManagementComponent implements OnInit {
     self.productService
       .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter, null, filter.typeFilter, filter.brandFilter)
       .subscribe((v: any) => {
-        if (v.returnMessage === 'SUCCESS') {
+        if (v.responseType === 'success') {
           self.listProducts = v.data.listProducts;
           self.currentPage = page;
           self.totalPage = v.data.numberOfPage;
@@ -106,47 +106,43 @@ export class ProductManagementComponent implements OnInit {
     }
   }
 
-  getTypesAndBrands() {
-    const self = this;
-    return forkJoin(self.productService.getListBrand(), self.productService.getListType());
-  }
 
-  getProductDetail(product, index) {
-    const self = this;
-    self.productIndex = index;
-    self.productForm.controls['name'].setValue(product.name);
-    self.productForm.controls['price'].setValue(product.price);
-    self.productForm.controls['quantity'].setValue(product.leftItems);
-    self.productForm.controls['isDeleted'].setValue(product.isDeleted);
-    self.productForm.controls['specs'].setValue(
-      self.productService.converJsonToMultipleLinesString(self.productService.convertSpecs(product.specs))
-    );
-    self.productForm.controls['description'].setValue(product.description);
-    self.productService.getProductById(product.id).subscribe((value: any) => {
-      self.product = value.data.product;
-      self.getTypesAndBrands().subscribe((result: any) => {
-        self.isShowingSpinner = false;
-        self.brand =
-          result[0].data.listBrands[
-            result[0].data.listBrands
-              .map(function(e) {
-                return e.id;
-              })
-              .indexOf(self.product.brandId)
-          ];
-        self.type =
-          result[1].data.listType[
-            result[1].data.listType
-              .map(function(e) {
-                return e.id;
-              })
-              .indexOf(self.product.typeId)
-          ];
-        self.productForm.controls['brand'].setValue(self.brand.id);
-        self.productForm.controls['type'].setValue(self.type.id);
-      });
-    });
-  }
+  // getProductDetail(product, index) {
+  //   const self = this;
+  //   self.productIndex = index;
+  //   self.productForm.controls['name'].setValue(product.name);
+  //   self.productForm.controls['price'].setValue(product.price);
+  //   self.productForm.controls['quantity'].setValue(product.leftItems);
+  //   self.productForm.controls['isDeleted'].setValue(product.isDeleted);
+  //   self.productForm.controls['specs'].setValue(
+  //     self.productService.converJsonToMultipleLinesString(self.productService.convertSpecs(product.specs))
+  //   );
+  //   self.productForm.controls['description'].setValue(product.description);
+  //   self.productService.getProductById(product.id).subscribe((value: any) => {
+  //     self.product = value.data.product;
+  //     self.getTypesAndBrands().subscribe((result: any) => {
+  //       self.isShowingSpinner = false;
+  //       self.brand =
+  //         result[0].data.listBrands[
+  //           result[0].data.listBrands
+  //             .map(function(e) {
+  //               return e.id;
+  //             })
+  //             .indexOf(self.product.brandId)
+  //         ];
+  //       self.type =
+  //         result[1].data.listType[
+  //           result[1].data.listType
+  //             .map(function(e) {
+  //               return e.id;
+  //             })
+  //             .indexOf(self.product.typeId)
+  //         ];
+  //       self.productForm.controls['brand'].setValue(self.brand.id);
+  //       self.productForm.controls['type'].setValue(self.type.id);
+  //     });
+  //   });
+  // }
 
   validate() {
     const self = this;
@@ -194,7 +190,7 @@ export class ProductManagementComponent implements OnInit {
     specs = `{${specs}}`;
     value.specs = specs;
     self.productService.modifyProduct(value).subscribe((v: any) => {
-      if (v.returnMessage === 'SUCCESS') {
+      if (v.responseType === 'success') {
         swal({
           title: 'Congratulations',
           text: 'Product is edited successfully.',

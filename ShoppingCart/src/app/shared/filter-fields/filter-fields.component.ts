@@ -27,21 +27,21 @@ export class FilterFieldsComponent implements OnInit {
       typeId: new FormControl(0),
       brandId: new FormControl(0)
     });
-    self.getTypesAndBrands().subscribe((result: any) => {
-      self.isShowingSpinner = false;
-      result[0].data.listBrands.forEach((brand) => {
-        self.brands.push(brand);
-      });
-      result[1].data.listType.forEach((type) => {
-        self.types.push(type);
-      });
-    });
+    // self.getTypesAndBrands().subscribe((result: any) => {
+    //   self.isShowingSpinner = false;
+    //   result[0].data.listBrands.forEach((brand) => {
+    //     self.brands.push(brand);
+    //   });
+    //   result[1].data.listType.forEach((type) => {
+    //     self.types.push(type);
+    //   });
+    // });
   }
 
-  getTypesAndBrands() {
-    const self = this;
-    return forkJoin(self.service.getListBrand(), self.service.getListType());
-  }
+  // getTypesAndBrands() {
+  //   const self = this;
+  //   return forkJoin(self.service.getListBrand(), self.service.getListType());
+  // }
   Search(value) {
     const self = this;
     self.searchFilter.emit(value);

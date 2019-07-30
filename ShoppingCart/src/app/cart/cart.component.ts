@@ -29,20 +29,20 @@ export class CartComponent implements OnInit {
     const self = this;
     self.currentPage = 1;
     self.cart = self.service.getCart();
-    self.updateOrdersHistory();
+    // self.updateOrdersHistory();
   }
 
-  updateOrdersHistory() {
-    const self = this;
-    self.isShowingSpinner = true;
-    self.service.getOrdersHistory(1).subscribe((v: any) => {
-      if (v.returnMessage === 'SUCCESS') {
-        self.listOrders = v.data.listOrders;
-        self.totalPage = v.data.numberOfPage;
-      }
-      self.isShowingSpinner = false;
-    });
-  }
+  // updateOrdersHistory() {
+  //   const self = this;
+  //   self.isShowingSpinner = true;
+  //   self.service.getOrdersHistory(1).subscribe((v: any) => {
+  //     if (v.responseType === 'success') {
+  //       self.listOrders = v.data.listOrders;
+  //       self.totalPage = v.data.numberOfPage;
+  //     }
+  //     self.isShowingSpinner = false;
+  //   });
+  // }
 
   deleteCart(id) {
     const self = this;
@@ -130,26 +130,26 @@ export class CartComponent implements OnInit {
         (<any>result).items = JSON.stringify(listProducts);
         (<any>result).token = self.accountService.getAccessToken();
 
-        self.service.checkout(result).subscribe((value: any) => {
-          if (value.returnMessage === 'SUCCESS') {
-            swal({
-              title: 'Congratulations',
-              text: 'Checkout successfully!',
-              icon: 'success'
-            }).then(() => {
-              self.service.emptyCart();
-              self.cart = self.service.getCart();
-              self.updateOrdersHistory();
-            });
-          }
-          if (value.returnMessage === 'PRODUCT_OVER_QUANTITY') {
-            swal({
-              title: 'Checkout unsuccessfully!',
-              text: 'Product is insufficient.',
-              icon: 'error'
-            });
-          }
-        });
+        // self.service.checkout(result).subscribe((value: any) => {
+        //   if (value.responseType === 'success') {
+        //     swal({
+        //       title: 'Congratulations',
+        //       text: 'Checkout successfully!',
+        //       icon: 'success'
+        //     }).then(() => {
+        //       self.service.emptyCart();
+        //       self.cart = self.service.getCart();
+        //       self.updateOrdersHistory();
+        //     });
+        //   }
+        //   if (value.returnMessage === 'PRODUCT_OVER_QUANTITY') {
+        //     swal({
+        //       title: 'Checkout unsuccessfully!',
+        //       text: 'Product is insufficient.',
+        //       icon: 'error'
+        //     });
+        //   }
+        // });
       }
     });
   }
@@ -178,14 +178,14 @@ export class CartComponent implements OnInit {
 
   goToPage(page) {
     const self = this;
-    self.service.getOrdersHistory(page).subscribe((v: any) => {
-      if (v.returnMessage === 'SUCCESS') {
-        self.listOrders = v.data.listOrders;
-        self.totalPage = v.data.numberOfPage;
-        self.currentPage = page;
-      }
-      self.isShowingSpinner = false;
-    });
+    // self.service.getOrdersHistory(page).subscribe((v: any) => {
+    //   if (v.responseType === 'success') {
+    //     self.listOrders = v.data.listOrders;
+    //     self.totalPage = v.data.numberOfPage;
+    //     self.currentPage = page;
+    //   }
+    //   self.isShowingSpinner = false;
+    // });
   }
 
   getOrderDetail(value) {

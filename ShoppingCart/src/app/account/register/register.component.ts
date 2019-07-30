@@ -11,36 +11,35 @@ import { EMAIL_PATTERN } from 'src/app/shared/constants';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: [ './register.component.css' ]
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private service: AccountService) {}
+  constructor(private fb: FormBuilder, private router: Router, private service: AccountService) { }
 
   ngOnInit() {
     const self = this;
     if (self.service.isLoggedIn()) {
-      self.router.navigate([ '/home' ]);
+      self.router.navigate(['/home']);
     }
     self.registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.compose([ Validators.required, Validators.minLength(6) ])),
-      confirmedPassword: new FormControl('', Validators.compose([ Validators.required, Validators.minLength(6) ])),
+      fullName: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)])),
+      confirmedPassword: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)])),
       email: new FormControl(
         '',
         Validators.compose([
           Validators.required
         ])
       ),
-      name: new FormControl('', Validators.required)
     });
   }
 
   validate() {
     const self = this;
     const errors = [
-      !self.registerForm.controls['username'].valid ? 'Username is required.' : null,
+      !self.registerForm.controls['fullName'].valid ? 'Fullname is required.' : null,
 
       !self.registerForm.controls['password'].valid
         ? !self.registerForm.controls['password'].value || !self.registerForm.controls['password'].value.trim()
@@ -61,9 +60,8 @@ export class RegisterComponent implements OnInit {
         ? !self.registerForm.controls['email'].value || !self.registerForm.controls['email'].value.trim()
           ? 'Email is required.'
           : 'Email is invalid.'
-        : null,
+        : null
 
-      !self.registerForm.controls['name'].valid ? 'Username is required.' : null
     ];
 
     return errors.filter((e) => e != null).join('\n');
@@ -79,27 +77,23 @@ export class RegisterComponent implements OnInit {
       });
       return;
     }
-    self.service.register(value).subscribe((r: any) => {
-      switch (r.returnMessage) {
-        case 'SUCCESS':
-          self.service.login(value).subscribe(() => {
-            swal({
-              title: 'Congratulations!',
-              text: 'Register successfully.',
-              icon: 'success'
-            }).then(() => {
-              self.router.navigate([ '/home' ]);
-            });
-          });
-          break;
-        case 'USER_EXIST':
-          swal({
-            title: 'Failed to register!',
-            text: 'This username is unavailable, please try another.',
-            icon: 'error'
-          });
-          break;
-      }
+    self.service.register(value).subscribe(() => {
+      self.service.login(value).subscribe(() => {
+        swal({
+          title: 'Congratulations!',
+          text: 'Register successfully.',
+          icon: 'success'
+        }).then(() => {
+          self.router.navigate(['/home']);
+        });
+      });
+    },
+    (e) => {
+      swal({
+        title: 'Failed to register!',
+        text: 'Something bad happened, please try again.',
+        icon: 'error'
+      });
     });
   }
 }

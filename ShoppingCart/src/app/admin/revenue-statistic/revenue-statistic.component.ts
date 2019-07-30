@@ -57,7 +57,7 @@ export class RevenueStatisticComponent implements OnInit {
     const self = this;
     const filterSearch = self.getFilter();
     self.service.getListOrdersByDateRange(page, filterSearch).subscribe((value: any) => {
-      if (value.returnMessage === 'SUCCESS') {
+      if (value.responseType === 'success') {
         self.currentPage = page;
         self.totalPage = value.data.numberOfPage;
         self.listOrders = value.data.listOrdersByRange;
@@ -157,7 +157,7 @@ export class RevenueStatisticComponent implements OnInit {
     const self = this;
     const filterSearch = self.getFilter();
     self.service.getListOrdersByDateRange(self.totalPage, filterSearch).subscribe((v: any) => {
-      if (v.returnMessage === 'SUCCESS') {
+      if (v.responseType === 'success') {
         const listProducts = v.data.listOrdersByRange;
         self.numberOfOrdersLastPage = listProducts.length;
         self.service.getListOrdersByDateRange(
@@ -166,7 +166,7 @@ export class RevenueStatisticComponent implements OnInit {
           (self.totalPage - 1) * MAX_ORDERS_PER_PAGE + self.numberOfOrdersLastPage
         )
         .subscribe((val: any) => {
-          if (val.returnMessage === 'SUCCESS') {
+          if (val.responseType === 'success') {
             const orders = val.data.listOrdersByRange;
             orders.forEach((order) => {
               self.totalRevenue += self.getOrderTotal(order);

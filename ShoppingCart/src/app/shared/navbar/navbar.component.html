@@ -16,7 +16,7 @@
           </span>
         </a>
       </li>
-      <li *ngIf="userRole == 'user' || !userRole" class="nav-item">
+      <li *ngIf="userRole == 'NormalUser' || !userRole" class="nav-item">
         <a class="nav-link" [routerLink]="['/products']">
           <span>
             <i class="fa fa-list-ul" aria-hidden="true"></i>
@@ -57,7 +57,7 @@
         </li>
       </ng-template>
     </ul>
-    <ng-container *ngIf="auth && userRole == 'user'">
+    <ng-container *ngIf="auth && userRole == 'NormalUser'">
       <a class="btn btn-dark" [routerLink]="['/user']">Welcome {{username}}</a>
       <a [routerLink]="['/cart']" style="margin-right:1em" class="btn btn-dark">
         <span>

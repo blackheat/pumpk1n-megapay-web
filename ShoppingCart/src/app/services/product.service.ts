@@ -2,11 +2,6 @@ import { Injectable, OnInit, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
   API_PRODUCT,
-  API_TYPE,
-  API_BRAND,
-  API_NEWEST_PRODUCTS,
-  API_ADD_USER_ORDERS,
-  API_GET_USER_ORDERS,
   MAX_ORDERS_PER_PAGE,
   API_MODIFY_PRODUCT
 } from '../shared/constants';
@@ -44,16 +39,8 @@ export class ProductService {
     return this.httpClient.get(queryParam);
   }
 
-  getListType() {
-    return this.httpClient.get(API_TYPE);
-  }
-
-  getListBrand() {
-    return this.httpClient.get(API_BRAND);
-  }
-
   getNewestProducts() {
-    return this.httpClient.get(API_NEWEST_PRODUCTS);
+    return this.httpClient.get(`${API_PRODUCT}?startAt=0&count=5`);
   }
 
   getCart() {
@@ -157,7 +144,7 @@ export class ProductService {
     const self = this;
     const body = new HttpParams().set('items', value.items).set('token', value.token);
 
-    return self.httpClient.post(API_ADD_USER_ORDERS, body.toString(), { headers: self.headers });
+    // return self.httpClient.post(API_ADD_USER_ORDERS, body.toString(), { headers: self.headers });
   }
 
   converJsonToMultipleLinesString(value) {
@@ -189,12 +176,12 @@ export class ProductService {
     });
     return specsReturn;
   }
-  getOrdersHistory(page) {
-    const self = this;
-    return self.httpClient.get(
-      `${API_GET_USER_ORDERS}?page=${page}&ordersPerPage=${MAX_ORDERS_PER_PAGE}&token=${self.accountService.getAccessToken()}`
-    );
-  }
+  // getOrdersHistory(page) {
+  //   const self = this;
+  //   return self.httpClient.get(
+  //     `${API_GET_USER_ORDERS}?page=${page}&ordersPerPage=${MAX_ORDERS_PER_PAGE}&token=${self.accountService.getAccessToken()}`
+  //   );
+  // }
   modifyProduct(value) {
     const self = this;
     const body = new HttpParams()

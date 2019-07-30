@@ -5,13 +5,14 @@ import { map, catchError } from 'rxjs/operators';
 import { throwError } from '../../../node_modules/rxjs';
 import * as jwt_decode from 'jwt-decode';
 import { API_REGISTER, API_LOGIN, API_GET_ACCOUNT, MAX_ACCOUNTS_PER_PAGE, API_MODIFY_ACCOUNT_ROLE } from '../shared/constants';
+import { decode } from 'punycode';
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
   private loggedInStatus = false;
 
-  headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' });
+  headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
 
   listener: EventEmitter<any> = new EventEmitter<any>();
 
@@ -22,14 +23,14 @@ export class AccountService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
-    }
+    // if (error.error instanceof ErrorEvent) {
+    //   // A client-side or network error occurred. Handle it accordingly.
+    //   console.error('An error occurred:', error.error.message);
+    // } else {
+    //   // The backend returned an unsuccessful response code.
+    //   // The response body may contain clues as to what went wrong,
+    //   console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
+    // }
     // return an observable with a user-facing error message
     return throwError('Something bad happened; please try again later.');
   }
@@ -68,17 +69,22 @@ export class AccountService {
 
   login(account) {
     const self = this;
-    const body = new HttpParams().set('username', account.username).set('password', account.password);
-    return self.httpClient.post(API_LOGIN, body.toString(), { headers: self.headers }).pipe(
+    return self.httpClient.post(API_LOGIN, {email: account.email, password: account.password}, { headers: self.headers }).pipe(
       map((result: any) => {
         // login successful if there's a jwt token in the response
-        if (result.returnMessage === 'SUCCESS') {
-          localStorage.setItem('currentUser', JSON.stringify(result.data.session));
-          localStorage.setItem('cart', JSON.stringify({listProducts: [], total: 0}));
+        if (result.responseType === 'success') {
+          const decoding = this.decodeJWT(result.data.token);
+          const currentUser = {
+            token: result.data.token,
+            name: decoding.unique_name,
+            permission: decoding.role
+          };
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          localStorage.setItem('cart', JSON.stringify({ listProducts: [], total: 0 }));
           self.setLoggedIn(true);
           self.listener.emit(self.getAccessToken());
         }
-        return result.returnMessage;
+        return result.responseType;
       })
     );
   }
@@ -92,14 +98,13 @@ export class AccountService {
 
   register(value) {
     const self = this;
-    const body = new HttpParams()
-      .set('username', value.username)
-      .set('password', value.password)
-      .set('email', value.email)
-      .set('name', value.name);
-
+    const info = {
+      fullName: value.fullName,
+      email: value.email,
+      password: value.password
+    }
     return self.httpClient
-      .post(API_REGISTER, body.toString(), { headers: self.headers })
+      .post(API_REGISTER, info, { headers: self.headers })
       .pipe(catchError(self.handleError));
   }
 
@@ -129,5 +134,13 @@ export class AccountService {
 
     return self.httpClient
       .post(API_MODIFY_ACCOUNT_ROLE, body.toString(), { headers: self.headers });
+  }
+
+  decodeJWT(jwt) {
+    if (jwt) {
+      return jwt_decode(jwt);
+    } else {
+      return null;
+    }
   }
 }

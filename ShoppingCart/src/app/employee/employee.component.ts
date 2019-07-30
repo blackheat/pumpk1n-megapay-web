@@ -70,7 +70,7 @@ export class EmployeeComponent implements OnInit {
     const filter = self.getFilter();
     self.service.getListOrders(page, filter).subscribe((value: any) => {
       self.isShowingSpinner = false;
-      if (value.returnMessage === 'SUCCESS') {
+      if (value.responseType === 'success') {
         self.currentPage = page;
         self.totalPage = value.data.numberOfPage;
         self.listOrders = value.data.listOrders;
@@ -138,7 +138,7 @@ export class EmployeeComponent implements OnInit {
     const self = this;
     (<any>self.order).state = self.selectedState;
     self.service.modifyOrder(self.order).subscribe((v: any) => {
-      if (v.returnMessage === 'SUCCESS') {
+      if (v.responseType === 'success') {
         swal({
           title: 'Congratulations',
           text: 'State is changed successfully.',

@@ -18,16 +18,12 @@ const routes: Routes = [
       {
         path: 'products',
         loadChildren: './products/products.module#ProductsModule',
-        canActivate: [RoleGuard],
-        data: {
-          expectedRole: ['user', null],
-          component: 'products'
-        }
-      }
-      ,
+        canActivate: [AuthGuard]
+      },
       {
         path: '',
         redirectTo: '/home',
+        canActivate: [AuthGuard],
         pathMatch: 'full'
       },
       {
@@ -40,14 +36,15 @@ const routes: Routes = [
       },
       {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'cart',
         component: CartComponent,
         canActivate: [RoleGuard],
         data: {
-          expectedRole: ['user']
+          expectedRole: ['InternalUser']
         }
       },
       {

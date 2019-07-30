@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
     };
     self.service.getNewestProducts().subscribe((result: any) => {
       self.isShowingSpinner = false;
-      result.data.listProducts.forEach(product => {
+      result.data.forEach(product => {
         self.products.push(product);
       });
     });

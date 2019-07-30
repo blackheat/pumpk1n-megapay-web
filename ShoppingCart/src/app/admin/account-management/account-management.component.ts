@@ -42,7 +42,7 @@ export class AccountManagementComponent implements OnInit {
     self.accountService
       .getListAccounts(page, filter)
       .subscribe((v: any) => {
-        if (v.returnMessage === 'SUCCESS') {
+        if (v.responseType === 'success') {
           self.listAccounts = v.data.listAccounts;
           self.currentPage = page;
           self.totalPage = v.data.numberOfPage;
@@ -100,7 +100,7 @@ export class AccountManagementComponent implements OnInit {
       role: self.selectedRole
     };
     self.accountService.modifyAccountRole(value).subscribe((v: any) => {
-      if (v.returnMessage === 'SUCCESS') {
+      if (v.responseType === 'success') {
         swal({
           title: 'Congratulations',
           text: 'Change role successfully.',

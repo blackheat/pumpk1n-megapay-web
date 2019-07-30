@@ -4,24 +4,20 @@ export const MAX_ORDERS_PER_PAGE = 8;
 export const MAX_ACCOUNTS_PER_PAGE = 10;
 export const DEFAULT_ID = 0;
 export const IMAGE_PATH = 'assets/pictures/img';
-export const API_URL = `http://localhost:9090/api`;
+export const API_URL = `https://api.pumpk1n.xyz`;
 
 // Guest
 
-export const API_PRODUCT = `${API_URL}/products`;
-export const API_TYPE = `${API_URL}/types`;
-export const API_BRAND = `${API_URL}/brands`;
-export const API_NEWEST_PRODUCTS = `${API_URL}/products/newest`;
-export const API_REGISTER = `${API_URL}/auth/register`;
-export const API_LOGIN = `${API_URL}/auth/login`;
+export const API_PRODUCT = `${API_URL}/product`;
+export const API_REGISTER = `${API_URL}/account/register`;
+export const API_LOGIN = `${API_URL}/account/login`;
+export const API_INTERNAL_REGISTER = `${API_URL}/internal/account/register`;
 
 // User
-export const API_USER = `${API_URL}/user`;
-
-export const API_GET_USER_INFO = `${API_USER}/account/getInfo`;
-export const API_MODIFY_USER_INFO = `${API_USER}/account/modifyInfo`;
-export const API_GET_USER_ORDERS = `${API_USER}/order/getOrders`;
-export const API_ADD_USER_ORDERS = `${API_USER}/order/addOrder`;
+export const API_GET_USER_INFO = `${API_URL}/account/info`;
+// export const API_MODIFY_USER_INFO = `${API_USER}/account/modifyInfo`;
+// export const API_GET_USER_ORDERS = `${API_USER}/order/getOrders`;
+// export const API_ADD_USER_ORDERS = `${API_USER}/order/addOrder`;
 
 export const EMAIL_PATTERN =  /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/g;
 // dd-mm-yyyy

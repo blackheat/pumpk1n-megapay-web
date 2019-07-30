@@ -9,21 +9,21 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: [ './login.component.css' ]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  username: string;
+  email: string;
   password: string;
-  constructor(private router: Router, private service: AccountService) {}
+  constructor(private router: Router, private service: AccountService) { }
 
   ngOnInit() {
     const self = this;
     if (self.service.isLoggedIn()) {
-      self.router.navigate([ '/home' ]);
+      self.router.navigate(['/home']);
     }
     self.loginForm = new FormGroup({
-      username: new FormControl(null, Validators.required),
+      email: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required)
     });
   }
@@ -31,22 +31,17 @@ export class LoginComponent implements OnInit {
   onSubmit(value) {
     const self = this;
     this.service.login(value).subscribe((r) => {
-      switch (r) {
-        case 'SUCCESS':
-          swal({
-            title: 'Congratulations!',
-            text: 'Login successfully.',
-            icon: 'success'
-          }).then(() => self.router.navigate([ '/home' ]));
-          break;
-        case 'USERNAME_OR_PASSWORD_INVALID':
-          swal({
-            title: 'Error!',
-            text: 'ID or password is incorrect.',
-            icon: 'error'
-          });
-          break;
-      }
+      swal({
+        title: 'Congratulations!',
+        text: 'Login successfully.',
+        icon: 'success'
+      }).then(() => self.router.navigate(['/home']));
+    }, (e) => {
+      swal({
+        title: 'Error!',
+        text: 'ID or password is incorrect.',
+        icon: 'error'
+      });
     });
   }
 }
