@@ -1,6 +1,6 @@
 {
-  "name": "class-management",
-  "version": "0.0.0",
+  "name": "pumpk1n",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
