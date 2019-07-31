@@ -1,0 +1,21 @@
+<br>
+<div class="justify-content-center col-6 offset-3">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm.value)" class="align-content-center">
+    <div class="form-container card bg-light">
+      <div class="card-header text-center">
+        <h4>User Information</h4>
+      </div>
+      <div class="card-body row">
+        <label class="col-4">Name:
+          <input disabled=true type="text"class="form-control" id="name" name="name" formControlName="name">
+        </label> 
+        <label class="col-8">Email:
+          <input  disabled=true type="text" class="form-control" id="email" name="email" formControlName="email">
+        </label>
+      </div>
+      <!-- <div class="card-footer text-center">
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div> -->
+    </div>
+  </form>
+</div>
