@@ -23,9 +23,9 @@ export class FilterFieldsComponent implements OnInit {
     const self = this;
     self.filterForm = new FormGroup({
       productName: new FormControl(''),
-      priceOption: new FormControl(''),
-      typeId: new FormControl(0),
-      brandId: new FormControl(0)
+      // priceOption: new FormControl(''),
+      // typeId: new FormControl(0),
+      // brandId: new FormControl(0)
     });
     // self.getTypesAndBrands().subscribe((result: any) => {
     //   self.isShowingSpinner = false;

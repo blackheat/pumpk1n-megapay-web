@@ -44,7 +44,7 @@ const routes: Routes = [
         component: CartComponent,
         canActivate: [RoleGuard],
         data: {
-          expectedRole: ['InternalUser']
+          expectedRole: ['NormalUser']
         }
       },
       {

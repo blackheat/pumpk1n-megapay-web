@@ -2,7 +2,7 @@
 <br>
 <div class="row offset-2 col-8">
   <div class="col-3">
-    <img class="card-img-top" src={{image}} alt="Card image cap">
+    <img class="card-img-top img-background" src={{product?.image}} alt="Card image cap">
     <p></p>
     <form *ngIf="!product?.isDeleted" class="form-group row mx-auto" [formGroup]="quantityForm" (ngSubmit)="addCart(quantityForm.value)">
       <div class="input-group col-7">
@@ -14,7 +14,7 @@
           <button type="button" class="btn btn-secondary" (click)="addQuantity()"  [disabled]="disableAdd">+</button>
         </div>
       </div>
-      <button class="btn btn-success col-auto" type="submit" [disabled]="!quantityForm.valid || product?.leftItems <= 0">Add to cart</button>
+      <button class="btn btn-success col-auto" type="submit" [disabled]="!quantityForm.valid">Add to cart</button>
     </form>
   </div>
   <div class="col-9">
@@ -33,35 +33,35 @@
           <th class="product-info-row-header">Price: </th>
           <td class="product-info ">{{product?.price | currency:' ':'code':'0.0-0'}} VND</td>
         </tr>
-        <tr>
+        <!-- <tr>
           <th class="product-info-row-header">Brand: </th>
           <td class="product-info ">{{brand || ''}}</td>
         </tr>
         <tr>
           <th class="product-info-row-header">Type: </th>
           <td class="product-info ">{{type || ''}}</td>
-        </tr>
-        <tr *ngIf="!product?.isDeleted && product?.leftItems > 0">
+        </tr> -->
+        <!-- <tr *ngIf="!product?.isDeleted && product?.leftItems > 0">
           <th class="product-info-row-header" style="width:20%">Available quantity:</th>
           <td class="product-info">{{product?.leftItems}}</td>
         </tr>
         <tr *ngIf="!product?.isDeleted && product?.leftItems <= 0">
           <th class="product-info-row-header" style="width:20%">Available quantity:</th>
           <td style="color: red" class="product-info">Product is out of stock, please come back later!</td>
-        </tr>
-        <tr *ngIf="product?.isDeleted">
+        </tr> -->
+        <tr *ngIf="product?.deprecated">
           <th class="product-info-row-header" style="width:20%">Status:</th>
           <td style="color: red" class="product-info">Product is unavailable</td>
         </tr>
-        <tr>
+        <!-- <tr>
           <th class="product-info-row-header">Specs:</th>
           <td class="product-info">
             <span *ngFor="let item of specs"><b>{{item.title}}:</b> {{item.value}}<br></span>
           </td>
-        </tr>
+        </tr> -->
         <tr>
           <th class="product-info-row-header">Description:</th>
-          <td class="product-info">{{product?.description}}</td>
+          <td class="product-info">{{product?.longDescription}}</td>
         </tr>
 
       </tbody>

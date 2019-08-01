@@ -13,7 +13,7 @@ export class ProductService {
   searchByNavbar = '';
   searchNavBarEvent: EventEmitter<any> = new EventEmitter();
   cartChange: EventEmitter<any> = new EventEmitter();
-  constructor(private httpClient: HttpClient, private accountService: AccountService) {}
+  constructor(private httpClient: HttpClient, private accountService: AccountService) { }
 
   headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' });
 
@@ -25,16 +25,16 @@ export class ProductService {
     page: number,
     productsPerPage: number,
     productName?: string,
-    priceOption?: string,
-    typeId?: number,
-    brandId?: number
+    // priceOption?: string,
+    // typeId?: number,
+    // brandId?: number
   ) {
-    let queryParam = `${API_PRODUCT}?page=${page}&productsPerPage=${productsPerPage}`;
+    let queryParam = `${API_PRODUCT}?startAt=${(page - 1) * productsPerPage}&count=${productsPerPage}`;
 
-    productName && productName !== '' ? (queryParam = `${queryParam}&productName=${productName}`) : null;
-    priceOption && priceOption !== '' ? (queryParam = `${queryParam}&priceOption=${priceOption}`) : null;
-    typeId && typeId !== 0 && typeId.toString() !== '0' ? (queryParam = `${queryParam}&typeId=${typeId}`) : null;
-    brandId && brandId !== 0 && brandId.toString() !== '0' ? (queryParam = `${queryParam}&brandId=${brandId}`) : null;
+    productName && productName !== '' ? (queryParam = `${queryParam}&name=${productName}`) : null;
+    // priceOption && priceOption !== '' ? (queryParam = `${queryParam}&priceOption=${priceOption}`) : null;
+    // typeId && typeId !== 0 && typeId.toString() !== '0' ? (queryParam = `${queryParam}&typeId=${typeId}`) : null;
+    // brandId && brandId !== 0 && brandId.toString() !== '0' ? (queryParam = `${queryParam}&brandId=${brandId}`) : null;
 
     return this.httpClient.get(queryParam);
   }
@@ -56,13 +56,13 @@ export class ProductService {
       const currentCart = self.getCart();
       if (
         currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .includes(product.id)
       ) {
         const index = currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .indexOf(product.id);
@@ -86,13 +86,13 @@ export class ProductService {
       const currentCart = self.getCart();
       if (
         currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .includes(id)
       ) {
         const index = currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .indexOf(id);
@@ -113,13 +113,13 @@ export class ProductService {
       const currentCart = self.getCart();
       if (
         currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .includes(id)
       ) {
         const index = currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .indexOf(id);
@@ -171,8 +171,8 @@ export class ProductService {
     specs = specs.replace(/[\u0000-\u0019]+/g, '');
     const specsList = JSON.parse(`{${specs}}`);
     const specsReturn = [];
-    Object.keys(specsList).forEach(function(key) {
-      specsReturn.push({title: `"${key.toLocaleUpperCase()}"`, value: `"${specsList[key]}"`});
+    Object.keys(specsList).forEach(function (key) {
+      specsReturn.push({ title: `"${key.toLocaleUpperCase()}"`, value: `"${specsList[key]}"` });
     });
     return specsReturn;
   }

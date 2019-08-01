@@ -64,7 +64,7 @@ export class ProductManagementComponent implements OnInit {
   getListProducts(page, filter) {
     const self = this;
     self.productService
-      .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter, null, filter.typeFilter, filter.brandFilter)
+      .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter)
       .subscribe((v: any) => {
         if (v.responseType === 'success') {
           self.listProducts = v.data.listProducts;

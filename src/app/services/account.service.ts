@@ -76,7 +76,7 @@ export class AccountService {
           const decoding = this.decodeJWT(result.data.token);
           const currentUser = {
             token: result.data.token,
-            name: decoding.unique_name,
+            name: decoding.nameid,
             permission: decoding.role
           };
           localStorage.setItem('currentUser', JSON.stringify(currentUser));

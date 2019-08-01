@@ -29,10 +29,11 @@ export class ProductInfoComponent implements OnInit {
     const self = this;
     self.productId = self.route.snapshot.paramMap.get('id');
     self.productService.getProductById(self.productId).subscribe((value: any) => {
-      self.product = value.data.product;
-      self.quantityForm.controls.quantity.setValidators(Validators.max(value.data.product.leftItems));
+      self.product = value.data;
+      self.isShowingSpinner = false;
+      // self.quantityForm.controls.quantity.setValidators(Validators.max(value.data.product.leftItems));
       // self.getTypesAndBrands().subscribe((result: any) => {
-      //   self.isShowingSpinner = false;
+      //   
       //   self.brand =
       //     result[0].data.listBrands[
       //       result[0].data.listBrands
@@ -50,10 +51,10 @@ export class ProductInfoComponent implements OnInit {
       //         .indexOf(self.product.typeId)
       //     ].name;
       // });
-      self.specs = self.productService.convertSpecs(self.product.specs);
+      // self.specs = self.productService.convertSpecs(self.product.specs);
     });
     self.quantityForm = new FormGroup({
-      quantity: new FormControl(1, Validators.compose([Validators.min(1), Validators.required]))
+      quantity: new FormControl(1, Validators.compose([Validators.min(1), Validators.required, Validators.max(10)]))
     });
 
     self.quantityForm.valueChanges.subscribe((v) => {
@@ -61,12 +62,11 @@ export class ProductInfoComponent implements OnInit {
       if (v.quantity <= 1) {
         self.disableMin = true;
       }
-      if (v.quantity >= self.product.leftItems) {
+      if (v.quantity >= 10) {
         self.disableAdd = true;
       }
     });
 
-    self.image = `${IMAGE_PATH}/${self.productId}.jpg`;
   }
 
   // getTypesAndBrands() {
@@ -83,7 +83,7 @@ export class ProductInfoComponent implements OnInit {
 
   addQuantity() {
     const self = this;
-    if (self.quantityForm.controls.quantity.value < self.product.leftItems) {
+    if (self.quantityForm.controls.quantity.value < 10) {
       self.quantityForm.controls.quantity.setValue(self.quantityForm.controls.quantity.value + 1);
     }
   }
