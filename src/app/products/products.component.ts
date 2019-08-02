@@ -6,7 +6,7 @@ import { MAX_PRODUCTS_PER_PAGE, DEFAULT_ID } from '../shared/constants';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: [ './products.component.css' ]
+  styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
   currentPage = 1;
@@ -14,37 +14,39 @@ export class ProductsComponent implements OnInit {
   products = [];
   isShowingSpinner = true;
   totalProducts = [];
-  constructor(private router: Router, private service: ProductService) {}
+  constructor(private router: Router, private service: ProductService) { }
   searchFilter = null;
   ngOnInit() {
     const self = this;
+    self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
+      self.isShowingSpinner = false;
+      if (result.responseType === 'success') {
+        self.totalPage = result.paginationReturnData.totalPages;
+        self.products = result.data;
+      }
+    });
+    self.service.searchNavBarEvent.subscribe(() => {
       self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
         self.isShowingSpinner = false;
         if (result.responseType === 'success') {
-          // self.totalPage = result.data.numberOfPage;
-          self.totalPage = 1;
+          self.totalPage = result.paginationReturnData.totalPages;
           self.products = result.data;
+          self.currentPage = 1;
         }
       });
-      self.service.searchNavBarEvent.subscribe(() => {
-        self.service.getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, self.service.searchByNavbar).subscribe((result: any) => {
-          self.isShowingSpinner = false;
-          if (result.responseType === 'success') {
-            // self.totalPage = result.data.numberOfPage;
-            self.totalPage = 1;
-            self.products = result.data;
-            self.currentPage = 1;
-          }
-        });
-      });
+    });
   }
 
   goToPage(page) {
     const self = this;
+    if (page > self.totalPage || (page === self.totalPage && self.currentPage === self.totalPage)) {
+      return;
+    }
+    if (page < 1 || (page === 1 && self.currentPage === 1)) {
+      return;
+    }
     self.isShowingSpinner = true;
-    page > self.totalPage
-      ? (self.currentPage = self.totalPage)
-      : page < 1 ? (self.currentPage = 1) : (self.currentPage = page);
+    self.currentPage = page;
 
     self.service
       .getSearchFilter(
@@ -57,8 +59,7 @@ export class ProductsComponent implements OnInit {
       )
       .subscribe((result: any) => {
         self.isShowingSpinner = false;
-        // self.totalPage = result.data.numberOfPage;
-        self.totalPage = 1;
+        self.totalPage = result.paginationReturnData.totalPages;
         self.products = result.data;
       });
   }
@@ -72,8 +73,7 @@ export class ProductsComponent implements OnInit {
       .getSearchFilter(1, MAX_PRODUCTS_PER_PAGE, value.productName)
       .subscribe((result: any) => {
         self.isShowingSpinner = false;
-        // self.totalPage = result.data.numberOfPage;
-        self.totalPage = 1;
+        self.totalPage = result.paginationReturnData.totalPages;
         self.products = result.data;
         self.service.searchByNavbar = '';
       });

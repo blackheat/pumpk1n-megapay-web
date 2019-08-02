@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { OrderService } from '../services/order.service';
-import { AccountService } from '../services/account.service';
+import { OrderService } from '../../services/order.service';
+import { AccountService } from '../../services/account.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ProductService } from '../services/product.service';
-import { isValidDate } from '../shared/validators/validators';
-import { convertDate } from '../shared/constants';
+import { ProductService } from '../../services/product.service';
+import { isValidDate } from '../../shared/validators/validators';
+import { convertDate } from '../../shared/constants';
 
 @Component({
-  selector: 'app-employee',
-  templateUrl: './employee.component.html',
-  styleUrls: [ './employee.component.css' ]
+  selector: 'app-order-management',
+  templateUrl: './order-management.component.html',
+  styleUrls: [ './order-management.component.css' ]
 })
-export class EmployeeComponent implements OnInit {
+export class OrderManagementComponent implements OnInit {
   currentPage = 1;
   totalPage = 1;
   order = new Object();

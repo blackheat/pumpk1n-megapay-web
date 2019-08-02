@@ -15,7 +15,7 @@ import { AccountService } from 'src/app/services/account.service';
 export class AccountManagementComponent implements OnInit {
   @ViewChild('content') public modal: NgbModalRef;
   listAccounts = [];
-  listRoles = ['user', 'employee', 'admin']
+  listRoles = ['NormalUser', 'InternalUser']
   currentPage = 1;
   totalPage = 1;
   closeResult: string;
@@ -43,14 +43,9 @@ export class AccountManagementComponent implements OnInit {
       .getListAccounts(page, filter)
       .subscribe((v: any) => {
         if (v.responseType === 'success') {
-          self.listAccounts = v.data.listAccounts;
+          self.listAccounts = v.data;
           self.currentPage = page;
-          self.totalPage = v.data.numberOfPage;
-        }
-        if (v.returnMessage === 'ACCOUNT_NOT_FOUND') {
-          self.listAccounts = [];
-          self.currentPage = 1;
-          self.totalPage = 1;
+          self.totalPage = v.data.paginationReturnData.totalPages;
         }
       });
   }

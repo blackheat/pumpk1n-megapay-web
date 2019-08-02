@@ -9,7 +9,7 @@ import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { RegisterComponent } from './account/register/register.component';
-import { EmployeeComponent } from './employee/employee.component';
+import { OrderManagementComponent } from './admin/order-management/order-management.component';
 import { RoleGuard } from './role.guard';
 const routes: Routes = [
   {
@@ -78,5 +78,5 @@ export const RoutingComponent = [
   UserComponent,
   RegisterComponent,
   AdminComponent,
-  EmployeeComponent
+  OrderManagementComponent
 ];

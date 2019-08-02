@@ -117,7 +117,7 @@ export class AccountService {
 
   getListAccounts(page, filter) {
     const self = this;
-    let queryParam = `${API_GET_ACCOUNT}?page=${page}&accountsPerPage=${MAX_ACCOUNTS_PER_PAGE}&token=${self.getAccessToken()}`;
+    let queryParam = `${API_GET_ACCOUNT}?page=${page}&accountsPerPage=${MAX_ACCOUNTS_PER_PAGE}`;
 
     if (filter.username.trim() !== '') {
       queryParam += `&username=${filter.username}`;

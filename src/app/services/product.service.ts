@@ -29,7 +29,7 @@ export class ProductService {
     // typeId?: number,
     // brandId?: number
   ) {
-    let queryParam = `${API_PRODUCT}?startAt=${(page - 1) * productsPerPage}&count=${productsPerPage}`;
+    let queryParam = `${API_PRODUCT}?page=${page}&count=${productsPerPage}`;
 
     productName && productName !== '' ? (queryParam = `${queryParam}&name=${productName}`) : null;
     // priceOption && priceOption !== '' ? (queryParam = `${queryParam}&priceOption=${priceOption}`) : null;
@@ -40,7 +40,7 @@ export class ProductService {
   }
 
   getNewestProducts() {
-    return this.httpClient.get(`${API_PRODUCT}?startAt=0&count=5`);
+    return this.httpClient.get(`${API_PRODUCT}?page=1&count=5`);
   }
 
   getCart() {

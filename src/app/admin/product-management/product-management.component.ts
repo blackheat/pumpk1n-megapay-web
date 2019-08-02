@@ -36,17 +36,13 @@ export class ProductManagementComponent implements OnInit {
     const self = this;
     self.filterForm = new FormGroup({
       nameFilter: new FormControl(''),
-      typeFilter: new FormControl(0),
-      brandFilter: new FormControl(0)
     });
     self.productForm = new FormGroup({
       name: new FormControl('', Validators.required),
       price: new FormControl('', Validators.compose([ Validators.min(1000000), Validators.required ])),
-      brand: new FormControl('', null),
-      type: new FormControl('', null),
-      quantity: new FormControl('', Validators.compose([ Validators.min(0), Validators.required ])),
-      specs: new FormControl('', Validators.required),
+      image: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
+      shortDescription: new FormControl('', Validators.required),
       isDeleted: new FormControl(false, null)
     });
     // self.getTypesAndBrands().subscribe((result: any) => {
@@ -67,7 +63,7 @@ export class ProductManagementComponent implements OnInit {
       .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter)
       .subscribe((v: any) => {
         if (v.responseType === 'success') {
-          self.listProducts = v.data.listProducts;
+          self.listProducts = v.data;
           self.currentPage = page;
           self.totalPage = v.data.numberOfPage;
         }
@@ -107,42 +103,19 @@ export class ProductManagementComponent implements OnInit {
   }
 
 
-  // getProductDetail(product, index) {
-  //   const self = this;
-  //   self.productIndex = index;
-  //   self.productForm.controls['name'].setValue(product.name);
-  //   self.productForm.controls['price'].setValue(product.price);
-  //   self.productForm.controls['quantity'].setValue(product.leftItems);
-  //   self.productForm.controls['isDeleted'].setValue(product.isDeleted);
-  //   self.productForm.controls['specs'].setValue(
-  //     self.productService.converJsonToMultipleLinesString(self.productService.convertSpecs(product.specs))
-  //   );
-  //   self.productForm.controls['description'].setValue(product.description);
-  //   self.productService.getProductById(product.id).subscribe((value: any) => {
-  //     self.product = value.data.product;
-  //     self.getTypesAndBrands().subscribe((result: any) => {
-  //       self.isShowingSpinner = false;
-  //       self.brand =
-  //         result[0].data.listBrands[
-  //           result[0].data.listBrands
-  //             .map(function(e) {
-  //               return e.id;
-  //             })
-  //             .indexOf(self.product.brandId)
-  //         ];
-  //       self.type =
-  //         result[1].data.listType[
-  //           result[1].data.listType
-  //             .map(function(e) {
-  //               return e.id;
-  //             })
-  //             .indexOf(self.product.typeId)
-  //         ];
-  //       self.productForm.controls['brand'].setValue(self.brand.id);
-  //       self.productForm.controls['type'].setValue(self.type.id);
-  //     });
-  //   });
-  // }
+  getProductDetail(product, index) {
+    const self = this;
+    self.productIndex = index;
+    self.productForm.controls['name'].setValue(product.name);
+    self.productForm.controls['image'].setValue(product.image);
+    self.productForm.controls['price'].setValue(product.price);
+    self.productForm.controls['isDeleted'].setValue(product.predecated);
+    self.productForm.controls['description'].setValue(product.longDescription);
+    self.productForm.controls['shortDescription'].setValue(product.shortDescription);
+    self.productService.getProductById(product.id).subscribe((value: any) => {
+      self.product = value.data;
+    });
+  }
 
   validate() {
     const self = this;
