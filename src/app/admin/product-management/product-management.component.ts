@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { MAX_PRODUCTS_ROW_PER_PAGE } from 'src/app/shared/constants';
 import { ProductService } from 'src/app/services/product.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
   selector: 'app-product-management',
@@ -17,7 +17,6 @@ export class ProductManagementComponent implements OnInit {
   totalPage = 1;
   closeResult: string;
   product;
-  isShowingSpinner = false;
   productIndex;
   productForm: FormGroup;
   filterForm: FormGroup;
@@ -26,10 +25,12 @@ export class ProductManagementComponent implements OnInit {
   };
   mode: string;
   title: string;
-  constructor(private productService: ProductService, private modalService: NgbModal) { }
+  emitter: EventEmitter<boolean>;
+  constructor(private productService: ProductService, private modalService: NgbModal, private spinnerService: SpinnerService) { }
 
   ngOnInit() {
     const self = this;
+    self.emitter = self.spinnerService.listener;
     self.filterForm = new FormGroup({
       nameFilter: new FormControl(''),
     });
@@ -46,18 +47,15 @@ export class ProductManagementComponent implements OnInit {
 
   getListProducts(page, filter) {
     const self = this;
+    self.emitter.emit(true);
     self.productService
       .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter)
       .subscribe((v: any) => {
+        self.emitter.emit(false);
         if (v.responseType === 'success') {
           self.listProducts = v.data;
           self.currentPage = page;
           self.totalPage = v.data.numberOfPage;
-        }
-        if (v.returnMessage === 'PRODUCT_NOT_FOUND') {
-          self.listProducts = [];
-          self.currentPage = 1;
-          self.totalPage = 1;
         }
       });
   }
@@ -101,7 +99,9 @@ export class ProductManagementComponent implements OnInit {
     self.productForm.controls['deprecated'].setValue(product.deprecated);
     self.productForm.controls['description'].setValue(product.longDescription);
     self.productForm.controls['shortDescription'].setValue(product.shortDescription);
+    self.emitter.emit(true);
     self.productService.getProductById(product.id).subscribe((value: any) => {
+      self.emitter.emit(false);
       self.product = value.data;
     });
   }
@@ -150,8 +150,8 @@ export class ProductManagementComponent implements OnInit {
 
   addProduct(value) {
     const self = this;
-
     self.productService.addProduct(value).subscribe((v: any) => {
+      self.emitter.emit(false);
       if (v.responseType === 'success') {
         swal({
           title: 'Congratulations',
@@ -168,6 +168,7 @@ export class ProductManagementComponent implements OnInit {
     const self = this;
     value.id = self.product.id;
     self.productService.modifyProduct(value).subscribe((v: any) => {
+      self.emitter.emit(false);
       if (v.responseType === 'success') {
         swal({
           title: 'Congratulations',
@@ -190,6 +191,7 @@ export class ProductManagementComponent implements OnInit {
   filter(value) {
     const self = this;
     self.filterValue = value;
+    self.emitter.emit(true);
     self.getListProducts(1, self.filterValue);
   }
 
@@ -202,5 +204,20 @@ export class ProductManagementComponent implements OnInit {
     self.productForm.controls['deprecated'].setValue('');
     self.productForm.controls['description'].setValue('');
     self.productForm.controls['shortDescription'].setValue('');
+  }
+
+  changeStockStatus(product, index) {
+    const self = this;
+    self.emitter.emit(true);
+    self.productService.changeStockStatus(product).subscribe(v => {
+      self.emitter.emit(false);
+      swal({
+        title: 'Congratulations',
+        text: 'Change stock status successfully.',
+        icon: 'success'
+      }).then(() => {
+        self.listProducts[index].outOfStock = !self.listProducts[index].outOfStock;
+      });
+    })
   }
 }

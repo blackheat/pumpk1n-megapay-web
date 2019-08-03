@@ -152,28 +152,6 @@ export class ProductService {
     });
     return returnValue.slice(0, -1);
   }
-
-  convertSpecs(specs) {
-    specs = specs
-      .replace(/\\n/g, '\\n')
-      .replace(/\{/g, '')
-      .replace(/\}/g, '')
-      .replace(/\\'/g, "\\'")
-      .replace(/\\"/g, '\\"')
-      .replace(/\\&/g, '\\&')
-      .replace(/\\r/g, '\\r')
-      .replace(/\\t/g, '\\t')
-      .replace(/\\b/g, '\\b')
-      .replace(/\\f/g, '\\f');
-    // remove non-printable and other non-valid JSON chars
-    specs = specs.replace(/[\u0000-\u0019]+/g, '');
-    const specsList = JSON.parse(`{${specs}}`);
-    const specsReturn = [];
-    Object.keys(specsList).forEach(function (key) {
-      specsReturn.push({ title: `"${key.toLocaleUpperCase()}"`, value: `"${specsList[key]}"` });
-    });
-    return specsReturn;
-  }
   // getOrdersHistory(page) {
   //   const self = this;
   //   return self.httpClient.get(
@@ -205,5 +183,10 @@ export class ProductService {
     }
 
     return self.httpClient.post(`${API_PRODUCT}`, body, { headers: self.headers });
+  }
+
+  changeStockStatus(product) {
+    const self = this;
+    return self.httpClient.put(`${API_PRODUCT}/${product.id}/stock/${!product.outOfStock}`, null, { headers: self.headers });
   }
 }

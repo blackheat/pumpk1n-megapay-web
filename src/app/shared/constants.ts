@@ -3,7 +3,6 @@ export const MAX_PRODUCTS_ROW_PER_PAGE = 5;
 export const MAX_ORDERS_PER_PAGE = 8;
 export const MAX_ACCOUNTS_PER_PAGE = 10;
 export const DEFAULT_ID = 0;
-export const IMAGE_PATH = 'assets/pictures/img';
 export const API_URL = `https://api.pumpk1n.xyz`;
 
 // Normal User
@@ -15,6 +14,7 @@ export const API_LOGIN = `${API_URL}/account/login`;
 
 // Internal User 
 
+export const API_SUPPLIER = `${API_URL}/supplier`;
 export const API_GET_ACCOUNT = `${API_URL}/account`;
 export const API_INTERNAL_ACCOUNT = `${API_URL}/internal/account`;
 

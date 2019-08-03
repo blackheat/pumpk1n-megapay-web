@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { AccountService } from '../services/account.service';
 import { ProductService } from '../services/product.service';
+import { SpinnerService } from '../services/spinner.service';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ export class HomeComponent implements OnInit {
     'assets/pictures/slideshow/slideshow3.jpg'
   ];
   products = [];
-  constructor (private service: ProductService, private accountService: AccountService) {}
+  constructor (private service: ProductService, private accountService: AccountService, private spinnerService: SpinnerService) {}
   isShowingSpinner = true;
   options: any;
   ngOnInit() {
@@ -38,6 +39,9 @@ export class HomeComponent implements OnInit {
       result.data.forEach(product => {
         self.products.push(product);
       });
+    });
+    self.spinnerService.listener.subscribe((v) => {
+      self.isShowingSpinner = v;
     });
     self.userRole = self.accountService.getUserRole();
   }

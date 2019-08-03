@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { OrderService } from '../../services/order.service';
 import { AccountService } from '../../services/account.service';
@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { isValidDate } from '../../shared/validators/validators';
 import { convertDate } from '../../shared/constants';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
   selector: 'app-order-management',
@@ -18,7 +19,6 @@ export class OrderManagementComponent implements OnInit {
   totalPage = 1;
   order = new Object();
   listOrders;
-  isShowingSpinner = false;
   closeResult: string;
   selectedState;
   orderIndex = -1;
@@ -37,16 +37,19 @@ export class OrderManagementComponent implements OnInit {
     }
   ];
   filterForm: FormGroup;
+  emitter: EventEmitter<boolean>;
   constructor(
     private service: OrderService,
     private accountService: AccountService,
     private productService: ProductService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal, 
+    private spinnerService: SpinnerService
   ) {}
 
   ngOnInit() {
     const self = this;
+    self.emitter = self.spinnerService.listener;
     self.filterForm = new FormGroup({
       orderId: new FormControl('', null),
       dateFrom: new FormControl('', null),
@@ -66,10 +69,10 @@ export class OrderManagementComponent implements OnInit {
 
   getListOrders(page) {
     const self = this;
-    self.isShowingSpinner = true;
+    self.emitter.emit(true);
     const filter = self.getFilter();
     self.service.getListOrders(page, filter).subscribe((value: any) => {
-      self.isShowingSpinner = false;
+      self.emitter.emit(false);
       if (value.responseType === 'success') {
         self.currentPage = page;
         self.totalPage = value.data.numberOfPage;
@@ -88,12 +91,12 @@ export class OrderManagementComponent implements OnInit {
     (<any>self.order).createDate = value.createDate;
     (<any>self.order).state = value.state;
     list.forEach((product) => {
-      self.isShowingSpinner = true;
+      self.emitter.emit(true);
       self.productService.getProductById(product.productId).subscribe((v: any) => {
         if ((v.returnMessage = 'SUCCESS')) {
           (<any>self.order).listProducts.push({ product: v.data.product, quantity: product.quantity });
         }
-        self.isShowingSpinner = false;
+        self.emitter.emit(false);
       });
     });
   }

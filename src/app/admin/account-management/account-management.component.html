@@ -12,10 +12,10 @@
               <h5 class="text-center">Filter</h5>
                 <form [formGroup]="filterForm" (ngSubmit)="filter(filterForm.value)" class="align-content-center">
                   <div class="row col-6 offset-3">
-                    <label class="col-11">Username:
-                      <input placeholder="Filter by username" type="text"class="form-control" id="username" name="username" formControlName="username">
+                    <label class="col-11">Email:
+                      <input placeholder="Filter by email" type="text"class="form-control" id="username" name="username" formControlName="username">
                     </label> 
-                    <div class="col-1">
+                    <div class="col-1 search-button">
                       <button class="btn btn-danger" type="submit">
                           <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"></i>
                       </button>

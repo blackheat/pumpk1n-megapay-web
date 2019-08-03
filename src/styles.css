@@ -25,3 +25,16 @@ input[type=number]::-webkit-outer-spin-button {
   min-width: 50em !important;   
   width: 95% !important;
 }
+
+.black-overlay {
+  position: fixed !important;
+}
+
+.search-button {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+owl-carousel-child {
+  margin: 0 auto !important;
+}

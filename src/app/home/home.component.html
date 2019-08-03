@@ -14,7 +14,7 @@
       <b> OUR NEW PRODUCTS </b>
       <i style = "color: rgb(255, 234, 117)" class="fa fa-star" aria-hidden="true"></i>
     </h2>
-    <owl-carousel style="margin-left: 10px" [options]="options" [items]="products" [carouselClasses]="['owl-theme', 'row', 'sliding']">
+    <owl-carousel [options]="options" [items]="products" [carouselClasses]="['owl-theme', 'row', 'sliding']">
       <div class="item" style="padding:10px" *ngFor="let product of products;let i = index">
         <app-product-card [product] = "product"></app-product-card>
       </div>
@@ -24,5 +24,5 @@
 
 
 <ng-container *ngIf="userRole == 'InternalUser'">
-  <app-admin></app-admin>
+  <app-admin [isShowingSpinner]="isShowingSpinner"></app-admin>
 </ng-container>

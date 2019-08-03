@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { IMAGE_PATH } from 'src/app/shared/constants';
 import { ProductService } from 'src/app/services/product.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
 import { AccountService } from 'src/app/services/account.service';
 @Component({
   selector: 'app-product-info',
@@ -90,7 +88,7 @@ export class ProductInfoComponent implements OnInit {
 
   addCart(value) {
     const self = this;
-    if(!self.accountService.getAccessToken()) {
+    if (!self.accountService.getAccessToken()) {
       self.router.navigate(['/login']);
     } else {
       self.productService.addCart(self.product, value.quantity);
