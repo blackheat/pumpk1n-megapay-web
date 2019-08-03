@@ -47,7 +47,7 @@
                 {{account.fullName}}
               </td>
               <td class="align-middle">
-                {{account.role}}
+                {{account.role.toString() === '1' ? 'Normal User' : 'Internal User'}}
               </td>
               <td class="align-middle"><button class="btn btn-danger" (click) = "open(content); setRoleForUser(account, i)">Change Role</button></td>
             </tr>
@@ -81,10 +81,10 @@
             <label style="max-height: 2.2em" class="input-group-text btn btn-danger" for="inputGroupSelect01">State</label>
           </div>
           <select  (change)="onChange($event.target.value)" style="max-height: 2.2em" class="custom-select form-control" id="inputGroupSelect01" [value]='user.role'>
-              <option *ngFor="let role of listRoles" value="{{role}}">{{role}}</option>
+              <option *ngFor="let role of listRoles" value="{{role.value}}">{{role.title}}</option>
           </select>
           <div class="input-group-append">
-            <button (click)="changeRole(); c('Change State click')" style="max-height: 2.2em" class="btn btn-danger" type="button" id="inputGroupFileAddon04">Change State</button>
+            <button (click)="changeRole(); c('Change State click')" style="max-height: 2.2em" class="btn btn-danger" type="button" id="inputGroupFileAddon04">Change Role</button>
           </div>
         </div>
       </div> 

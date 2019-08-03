@@ -11,12 +11,12 @@ export const API_GET_USER_INFO = `${API_URL}/account/info`;
 export const API_PRODUCT = `${API_URL}/product`;
 export const API_REGISTER = `${API_URL}/account/register`;
 export const API_LOGIN = `${API_URL}/account/login`;
-export const API_INTERNAL_REGISTER = `${API_URL}/internal/account/register`;
 // export const API_MODIFY_USER_INFO = `${API_USER}/account/modifyInfo`;
 
 // Internal User 
 
 export const API_GET_ACCOUNT = `${API_URL}/account`;
+export const API_INTERNAL_ACCOUNT = `${API_URL}/internal/account`;
 
 export const API_EMPLOYEE = `${API_URL}/employee`;
 export const API_GET_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/getOrders`;
@@ -24,8 +24,6 @@ export const API_MODIFY_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/modifyOrder`;
 
 // export const API_GET_USER_ORDERS = `${API_USER}/order/getOrders`;
 // export const API_ADD_USER_ORDERS = `${API_USER}/order/addOrder`;
-export const API_MODIFY_PRODUCT = `${API_URL}/product/modifyProduct`;
-export const API_MODIFY_ACCOUNT_ROLE = `${API_URL}/account/modifyAccountRole`;
 export const API_GET_ORDER_BY_RANGE = `${API_URL}/order/getOrdersByRange`;
 
 

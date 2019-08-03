@@ -15,7 +15,15 @@ import { AccountService } from 'src/app/services/account.service';
 export class AccountManagementComponent implements OnInit {
   @ViewChild('content') public modal: NgbModalRef;
   listAccounts = [];
-  listRoles = ['NormalUser', 'InternalUser']
+  listRoles = [
+    {
+      title: 'NormalUser',
+      value: 1
+    }, {
+      title: 'InternalUser',
+      value: 2
+    }
+  ];
   currentPage = 1;
   totalPage = 1;
   closeResult: string;
@@ -27,7 +35,7 @@ export class AccountManagementComponent implements OnInit {
   filterValue = {
     username: ''
   };
-  constructor(private accountService: AccountService, private modalService: NgbModal) {}
+  constructor(private accountService: AccountService, private modalService: NgbModal) { }
 
   ngOnInit() {
     const self = this;
@@ -91,20 +99,18 @@ export class AccountManagementComponent implements OnInit {
   changeRole() {
     const self = this;
     const value = {
-      userId: self.user.id,
-      role: self.selectedRole
+      id: self.user.id,
+      roleId: self.selectedRole
     };
     self.accountService.modifyAccountRole(value).subscribe((v: any) => {
-      if (v.responseType === 'success') {
-        swal({
-          title: 'Congratulations',
-          text: 'Change role successfully.',
-          icon: 'success'
-        }).then(() => {
-          self.user.role = self.selectedRole;
-          self.listAccounts[self.userIndex] = self.user;
-        });
-      }
+      swal({
+        title: 'Congratulations',
+        text: 'Change role successfully.',
+        icon: 'success'
+      }).then(() => {
+        self.user.role = self.selectedRole;
+        self.listAccounts[self.userIndex] = self.user;
+      });
     });
   }
 
@@ -113,4 +119,5 @@ export class AccountManagementComponent implements OnInit {
     self.filterValue = value;
     self.getListAccounts(1, self.filterValue);
   }
+
 }

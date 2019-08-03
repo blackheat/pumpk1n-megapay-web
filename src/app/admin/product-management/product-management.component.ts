@@ -8,7 +8,7 @@ import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
-  styleUrls: [ './product-management.component.css' ]
+  styleUrls: ['./product-management.component.css']
 })
 export class ProductManagementComponent implements OnInit {
   @ViewChild('content') public modal: NgbModalRef;
@@ -18,19 +18,15 @@ export class ProductManagementComponent implements OnInit {
   closeResult: string;
   product;
   isShowingSpinner = false;
-  brand;
-  type;
-  brands = [];
-  types = [];
   productIndex;
   productForm: FormGroup;
   filterForm: FormGroup;
   filterValue = {
-    nameFilter: '',
-    typeFilter: 0,
-    brandFilter: 0
+    nameFilter: ''
   };
-  constructor(private productService: ProductService, private modalService: NgbModal) {}
+  mode: string;
+  title: string;
+  constructor(private productService: ProductService, private modalService: NgbModal) { }
 
   ngOnInit() {
     const self = this;
@@ -39,21 +35,12 @@ export class ProductManagementComponent implements OnInit {
     });
     self.productForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      price: new FormControl('', Validators.compose([ Validators.min(1000000), Validators.required ])),
+      price: new FormControl('', Validators.compose([Validators.min(1000000), Validators.required])),
       image: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
       shortDescription: new FormControl('', Validators.required),
-      isDeleted: new FormControl(false, null)
+      deprecated: new FormControl(false, null)
     });
-    // self.getTypesAndBrands().subscribe((result: any) => {
-    //   self.isShowingSpinner = false;
-    //   result[0].data.listBrands.forEach((brand) => {
-    //     self.brands.push(brand);
-    //   });
-    //   result[1].data.listType.forEach((type) => {
-    //     self.types.push(type);
-    //   });
-    // });
     self.getListProducts(1, self.filterValue);
   }
 
@@ -79,9 +66,11 @@ export class ProductManagementComponent implements OnInit {
     const self = this;
     self.getListProducts(value, self.filterValue);
   }
-  open(content) {
+  open(content, mode) {
     const self = this;
-    this.modalService
+    self.clearForm();
+    self.mode = mode;
+    self.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg', windowClass: 'modal-wide' })
       .result.then(
         (result) => {
@@ -109,7 +98,7 @@ export class ProductManagementComponent implements OnInit {
     self.productForm.controls['name'].setValue(product.name);
     self.productForm.controls['image'].setValue(product.image);
     self.productForm.controls['price'].setValue(product.price);
-    self.productForm.controls['isDeleted'].setValue(product.predecated);
+    self.productForm.controls['deprecated'].setValue(product.deprecated);
     self.productForm.controls['description'].setValue(product.longDescription);
     self.productForm.controls['shortDescription'].setValue(product.shortDescription);
     self.productService.getProductById(product.id).subscribe((value: any) => {
@@ -128,18 +117,14 @@ export class ProductManagementComponent implements OnInit {
         ? 'Product price is required.'
         : formControl.price.value < 1000000 ? 'Product price cannot be lower than 1000000' : null,
 
-      !formControl.brand.value ? 'Product brand is required.' : null,
-
-      !formControl.type.value ? 'Product type is required.' : null,
-
-      !formControl.price.value
-        ? `Product's available quantity is required.`
-        : formControl.price.value < 0 ? `Product's available quantity cannot be lower than 0` : null,
-
-      !formControl.specs.value.trim() || !formControl.specs.value ? 'Product specs is required.' : null,
+      !formControl.image.value.trim() || !formControl.image.value ? 'Product image URL is required.' : null,
 
       !formControl.description.value.trim() || !formControl.description.value
         ? 'Product description is required.'
+        : null,
+
+      !formControl.shortDescription.value.trim() || !formControl.shortDescription.value
+        ? 'Product short description is required.'
         : null
     ];
 
@@ -155,13 +140,33 @@ export class ProductManagementComponent implements OnInit {
         text: self.validate(),
         icon: 'error'
       });
-      self.open(self.modal);
+      self.open(self.modal, self.mode);
       return;
     }
+
+    self.mode === 'add' ? self.addProduct(value) : self.editProduct(value);
+
+  }
+
+  addProduct(value) {
+    const self = this;
+
+    self.productService.addProduct(value).subscribe((v: any) => {
+      if (v.responseType === 'success') {
+        swal({
+          title: 'Congratulations',
+          text: 'Product is added successfully.',
+          icon: 'success'
+        }).then(() => {
+          self.getListProducts(self.currentPage, self.filterValue);
+        });
+      }
+    });
+  }
+
+  editProduct(value) {
+    const self = this;
     value.id = self.product.id;
-    let specs = value.specs.replace(/\n/gi, ',');
-    specs = `{${specs}}`;
-    value.specs = specs;
     self.productService.modifyProduct(value).subscribe((v: any) => {
       if (v.responseType === 'success') {
         swal({
@@ -171,12 +176,10 @@ export class ProductManagementComponent implements OnInit {
         }).then(() => {
           self.product.name = value.name;
           self.product.price = value.price;
-          self.product.brandId = value.brand;
-          self.product.typeId = value.type;
-          self.product.leftItems = value.quantity;
-          self.product.description = value.description;
-          self.product.specs = value.specs;
-          self.product.isDeleted = value.isDeleted;
+          self.product.longDescription = value.description;
+          self.product.shortDescription = value.shortDescription;
+          self.product.image = value.image;
+          self.product.deprecated = value.deprecated;
 
           self.listProducts[self.productIndex] = self.product;
         });
@@ -188,5 +191,16 @@ export class ProductManagementComponent implements OnInit {
     const self = this;
     self.filterValue = value;
     self.getListProducts(1, self.filterValue);
+  }
+
+  clearForm() {
+    const self = this;
+    self.product = {};
+    self.productForm.controls['name'].setValue('');
+    self.productForm.controls['image'].setValue('');
+    self.productForm.controls['price'].setValue('');
+    self.productForm.controls['deprecated'].setValue('');
+    self.productForm.controls['description'].setValue('');
+    self.productForm.controls['shortDescription'].setValue('');
   }
 }

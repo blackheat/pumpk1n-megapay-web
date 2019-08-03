@@ -28,7 +28,7 @@
     </div>
     <br>
     <div class="text-center">
-      <button class="btn btn-primary" (click)="open(addProduct)">Add product</button>
+      <button class="btn btn-primary" (click)="open(content, 'add');">Add product</button>
     </div>
     <br>
     <div *ngIf="listProducts?.length > 0">
@@ -48,7 +48,7 @@
             <td class="align-middle">
                 {{product.name}}
             </td>
-            <td class="align-middle"><button class="btn btn-danger" (click) = "open(content); getProductDetail(product, i)">Detail</button></td>
+            <td class="align-middle"><button class="btn btn-danger" (click) = "open(content, 'edit'); getProductDetail(product, i)">Detail</button></td>
           </tr>
         </tbody>
       </table>
@@ -68,15 +68,15 @@
 <ng-template #content let-modal let-d="dismiss" let-c="close">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit(productForm.value); c('Save click')" class="align-content-center">
     <div class="modal-header">
-      <h4 class="modal-title">Product Detail</h4>
+      <h4 class="modal-title">{{mode === 'add' ? 'Add New Product' : 'Product Detail'}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-        <div class="row offset-1 col-10">
-          <div class="col-3">
-            <img *ngIf="product" class="card-img-top" src="{{product.image}}" alt="Card image cap">
+        <div [class.row.offset-1.col-10]="mode === 'edit'">
+          <div *ngIf="mode === 'edit'" class="col-3" style="margin: auto">
+            <img *ngIf="product" class="card-img-top" src="{{product.image || 'http://www.stleos.uq.edu.au/wp-content/uploads/2016/08/image-placeholder-350x350.png'}}" alt="Card image cap">
             <p></p>
             <!-- Save picture - coming soon. -->
             <!-- <div class="input-group mb-3">
@@ -86,11 +86,11 @@
                 </div>
             </div> -->
             <div class="custom-control custom-checkbox text-center">
-              <input type="checkbox" class="custom-control-input" id="isDeleted" name="isDeleted" formControlName="isDeleted">
-              <label class="custom-control-label" for="isDeleted">Is Deleted</label>
+              <input type="checkbox" class="custom-control-input" id="deprecated" name="deprecated" formControlName="deprecated">
+              <label class="custom-control-label" for="deprecated">Is Deleted</label>
             </div>
           </div>
-          <div class="col-9">
+          <div [class.col-9]="mode === 'edit'">
               <table class="table table-light">
                 <thead>
                   <td colspan="2" class="text-center product-info-header">
@@ -136,19 +136,4 @@
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
     </div>
   </form>
-</ng-template>
-
-<ng-template #addProduct let-modal let-d="dismiss" let-c="close">
-    <div class="modal-header">
-      <h4 class="modal-title">Add new product</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body text-center">
-       <p>Coming soon!</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
-    </div>
 </ng-template>

@@ -1,9 +1,7 @@
 import { Injectable, OnInit, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
-  API_PRODUCT,
-  MAX_ORDERS_PER_PAGE,
-  API_MODIFY_PRODUCT
+  API_PRODUCT
 } from '../shared/constants';
 import { AccountService } from './account.service';
 @Injectable({
@@ -15,7 +13,7 @@ export class ProductService {
   cartChange: EventEmitter<any> = new EventEmitter();
   constructor(private httpClient: HttpClient, private accountService: AccountService) { }
 
-  headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' });
+  headers = new HttpHeaders({ 'Content-Type': 'application/json', Accept: '*/*' });
 
   getProductById(id: number) {
     return this.httpClient.get(`${API_PRODUCT}/${id}`);
@@ -184,18 +182,28 @@ export class ProductService {
   // }
   modifyProduct(value) {
     const self = this;
-    const body = new HttpParams()
-      .set('productId', value.id)
-      .set('brandId', value.brand)
-      .set('typeId', value.type)
-      .set('name', value.name)
-      .set('description', value.description)
-      .set('price', value.price)
-      .set('leftItems', value.quantity)
-      .set('specs', value.specs)
-      .set('isDeleted', value.isDeleted ? '1' : '0')
-      .set('token', self.accountService.getAccessToken());
+    const body = {
+      name: value.name,
+      longDescription: value.description,
+      shortDescription: value.shortDescription,
+      price: value.price,
+      image: value.image,
+      deprecated: value.deprecated
+    }
 
-    return self.httpClient.post(API_MODIFY_PRODUCT, body.toString(), { headers: self.headers });
+    return self.httpClient.patch(`${API_PRODUCT}/${value.id}`, body, { headers: self.headers });
+  }
+  addProduct(value) {
+    const self = this;
+    const body = {
+      name: value.name,
+      longDescription: value.description,
+      shortDescription: value.shortDescription,
+      price: value.price,
+      image: value.image,
+      deprecated: false
+    }
+
+    return self.httpClient.post(`${API_PRODUCT}`, body, { headers: self.headers });
   }
 }
