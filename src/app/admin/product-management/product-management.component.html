@@ -57,10 +57,11 @@
                 </ng-template>
               </td>
               <td class="align-middle">
-                <button style="margin-right: 10px" class="btn" [class.btn-danger]="!product.outOfStock" [class.btn-success]="product.outOfStock" (click)="changeStockStatus(product, i)"> 
+                <button style="margin-right: 10px" class="btn" [class.btn-danger]="!product.outOfStock"
+                  [class.btn-success]="product.outOfStock" (click)="changeStockStatus(product, i)">
                   {{product.outOfStock ? 'Make In Stock' : 'Make Out of Stock'}}
                 </button>
-                
+
                 <button class="btn btn-primary" (click)="open(content, 'edit'); getProductDetail(product, i)">Detail
                 </button>
               </td>

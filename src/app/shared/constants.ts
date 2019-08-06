@@ -15,6 +15,9 @@ export const API_LOGIN = `${API_URL}/account/login`;
 // Internal User 
 
 export const API_SUPPLIER = `${API_URL}/supplier`;
+export const API_INVENTORY = `${API_URL}/inventory`;
+export const API_INVENTORY_IMPORT = `${API_INVENTORY}/imported`;
+export const API_INVENTORY_EXPORT = `${API_INVENTORY}/exported`;
 export const API_GET_ACCOUNT = `${API_URL}/account`;
 export const API_INTERNAL_ACCOUNT = `${API_URL}/internal/account`;
 

@@ -4,7 +4,6 @@ import { ProductService } from 'src/app/services/product.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { SpinnerService } from 'src/app/services/spinner.service';
-
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',

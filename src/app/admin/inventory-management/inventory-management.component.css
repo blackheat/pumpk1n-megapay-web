@@ -1,0 +1,39 @@
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.col-content {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.product-img {
+  width: 17em;
+  height: 10em;
+  margin: 4px 0 0 27px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
