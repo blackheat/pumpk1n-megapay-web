@@ -1,9 +1,7 @@
 import { Injectable, OnInit, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
-  API_PRODUCT,
-  MAX_ORDERS_PER_PAGE,
-  API_MODIFY_PRODUCT
+  API_PRODUCT
 } from '../shared/constants';
 import { AccountService } from './account.service';
 @Injectable({
@@ -13,9 +11,9 @@ export class ProductService {
   searchByNavbar = '';
   searchNavBarEvent: EventEmitter<any> = new EventEmitter();
   cartChange: EventEmitter<any> = new EventEmitter();
-  constructor(private httpClient: HttpClient, private accountService: AccountService) {}
+  constructor(private httpClient: HttpClient, private accountService: AccountService) { }
 
-  headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' });
+  headers = new HttpHeaders({ 'Content-Type': 'application/json', Accept: '*/*' });
 
   getProductById(id: number) {
     return this.httpClient.get(`${API_PRODUCT}/${id}`);
@@ -25,22 +23,22 @@ export class ProductService {
     page: number,
     productsPerPage: number,
     productName?: string,
-    priceOption?: string,
-    typeId?: number,
-    brandId?: number
+    // priceOption?: string,
+    // typeId?: number,
+    // brandId?: number
   ) {
-    let queryParam = `${API_PRODUCT}?page=${page}&productsPerPage=${productsPerPage}`;
+    let queryParam = `${API_PRODUCT}?page=${page}&count=${productsPerPage}`;
 
-    productName && productName !== '' ? (queryParam = `${queryParam}&productName=${productName}`) : null;
-    priceOption && priceOption !== '' ? (queryParam = `${queryParam}&priceOption=${priceOption}`) : null;
-    typeId && typeId !== 0 && typeId.toString() !== '0' ? (queryParam = `${queryParam}&typeId=${typeId}`) : null;
-    brandId && brandId !== 0 && brandId.toString() !== '0' ? (queryParam = `${queryParam}&brandId=${brandId}`) : null;
+    productName && productName !== '' ? (queryParam = `${queryParam}&name=${productName}`) : null;
+    // priceOption && priceOption !== '' ? (queryParam = `${queryParam}&priceOption=${priceOption}`) : null;
+    // typeId && typeId !== 0 && typeId.toString() !== '0' ? (queryParam = `${queryParam}&typeId=${typeId}`) : null;
+    // brandId && brandId !== 0 && brandId.toString() !== '0' ? (queryParam = `${queryParam}&brandId=${brandId}`) : null;
 
     return this.httpClient.get(queryParam);
   }
 
   getNewestProducts() {
-    return this.httpClient.get(`${API_PRODUCT}?startAt=0&count=5`);
+    return this.httpClient.get(`${API_PRODUCT}?page=1&count=5`);
   }
 
   getCart() {
@@ -56,13 +54,13 @@ export class ProductService {
       const currentCart = self.getCart();
       if (
         currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .includes(product.id)
       ) {
         const index = currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .indexOf(product.id);
@@ -86,13 +84,13 @@ export class ProductService {
       const currentCart = self.getCart();
       if (
         currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .includes(id)
       ) {
         const index = currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .indexOf(id);
@@ -113,13 +111,13 @@ export class ProductService {
       const currentCart = self.getCart();
       if (
         currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .includes(id)
       ) {
         const index = currentCart.listProducts
-          .map(function(e) {
+          .map(function (e) {
             return e.product.id;
           })
           .indexOf(id);
@@ -154,28 +152,6 @@ export class ProductService {
     });
     return returnValue.slice(0, -1);
   }
-
-  convertSpecs(specs) {
-    specs = specs
-      .replace(/\\n/g, '\\n')
-      .replace(/\{/g, '')
-      .replace(/\}/g, '')
-      .replace(/\\'/g, "\\'")
-      .replace(/\\"/g, '\\"')
-      .replace(/\\&/g, '\\&')
-      .replace(/\\r/g, '\\r')
-      .replace(/\\t/g, '\\t')
-      .replace(/\\b/g, '\\b')
-      .replace(/\\f/g, '\\f');
-    // remove non-printable and other non-valid JSON chars
-    specs = specs.replace(/[\u0000-\u0019]+/g, '');
-    const specsList = JSON.parse(`{${specs}}`);
-    const specsReturn = [];
-    Object.keys(specsList).forEach(function(key) {
-      specsReturn.push({title: `"${key.toLocaleUpperCase()}"`, value: `"${specsList[key]}"`});
-    });
-    return specsReturn;
-  }
   // getOrdersHistory(page) {
   //   const self = this;
   //   return self.httpClient.get(
@@ -184,18 +160,33 @@ export class ProductService {
   // }
   modifyProduct(value) {
     const self = this;
-    const body = new HttpParams()
-      .set('productId', value.id)
-      .set('brandId', value.brand)
-      .set('typeId', value.type)
-      .set('name', value.name)
-      .set('description', value.description)
-      .set('price', value.price)
-      .set('leftItems', value.quantity)
-      .set('specs', value.specs)
-      .set('isDeleted', value.isDeleted ? '1' : '0')
-      .set('token', self.accountService.getAccessToken());
+    const body = {
+      name: value.name,
+      longDescription: value.description,
+      shortDescription: value.shortDescription,
+      price: value.price,
+      image: value.image,
+      deprecated: value.deprecated
+    }
 
-    return self.httpClient.post(API_MODIFY_PRODUCT, body.toString(), { headers: self.headers });
+    return self.httpClient.patch(`${API_PRODUCT}/${value.id}`, body, { headers: self.headers });
+  }
+  addProduct(value) {
+    const self = this;
+    const body = {
+      name: value.name,
+      longDescription: value.description,
+      shortDescription: value.shortDescription,
+      price: value.price,
+      image: value.image,
+      deprecated: false
+    }
+
+    return self.httpClient.post(`${API_PRODUCT}`, body, { headers: self.headers });
+  }
+
+  changeStockStatus(product) {
+    const self = this;
+    return self.httpClient.put(`${API_PRODUCT}/${product.id}/stock/${!product.outOfStock}`, null, { headers: self.headers });
   }
 }

@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { MAX_PRODUCTS_ROW_PER_PAGE } from 'src/app/shared/constants';
 import { ProductService } from 'src/app/services/product.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-
+import { SpinnerService } from 'src/app/services/spinner.service';
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
-  styleUrls: [ './product-management.component.css' ]
+  styleUrls: ['./product-management.component.css']
 })
 export class ProductManagementComponent implements OnInit {
   @ViewChild('content') public modal: NgbModalRef;
@@ -17,64 +16,45 @@ export class ProductManagementComponent implements OnInit {
   totalPage = 1;
   closeResult: string;
   product;
-  isShowingSpinner = false;
-  brand;
-  type;
-  brands = [];
-  types = [];
   productIndex;
   productForm: FormGroup;
   filterForm: FormGroup;
   filterValue = {
-    nameFilter: '',
-    typeFilter: 0,
-    brandFilter: 0
+    nameFilter: ''
   };
-  constructor(private productService: ProductService, private modalService: NgbModal) {}
+  mode: string;
+  title: string;
+  emitter: EventEmitter<boolean>;
+  constructor(private productService: ProductService, private modalService: NgbModal, private spinnerService: SpinnerService) { }
 
   ngOnInit() {
     const self = this;
+    self.emitter = self.spinnerService.listener;
     self.filterForm = new FormGroup({
       nameFilter: new FormControl(''),
-      typeFilter: new FormControl(0),
-      brandFilter: new FormControl(0)
     });
     self.productForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      price: new FormControl('', Validators.compose([ Validators.min(1000000), Validators.required ])),
-      brand: new FormControl('', null),
-      type: new FormControl('', null),
-      quantity: new FormControl('', Validators.compose([ Validators.min(0), Validators.required ])),
-      specs: new FormControl('', Validators.required),
+      price: new FormControl('', Validators.compose([Validators.min(1000000), Validators.required])),
+      image: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
-      isDeleted: new FormControl(false, null)
+      shortDescription: new FormControl('', Validators.required),
+      deprecated: new FormControl(false, null)
     });
-    // self.getTypesAndBrands().subscribe((result: any) => {
-    //   self.isShowingSpinner = false;
-    //   result[0].data.listBrands.forEach((brand) => {
-    //     self.brands.push(brand);
-    //   });
-    //   result[1].data.listType.forEach((type) => {
-    //     self.types.push(type);
-    //   });
-    // });
     self.getListProducts(1, self.filterValue);
   }
 
   getListProducts(page, filter) {
     const self = this;
+    self.emitter.emit(true);
     self.productService
-      .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter, null, filter.typeFilter, filter.brandFilter)
+      .getSearchFilter(page, MAX_PRODUCTS_ROW_PER_PAGE, filter.nameFilter)
       .subscribe((v: any) => {
+        self.emitter.emit(false);
         if (v.responseType === 'success') {
-          self.listProducts = v.data.listProducts;
+          self.listProducts = v.data;
           self.currentPage = page;
           self.totalPage = v.data.numberOfPage;
-        }
-        if (v.returnMessage === 'PRODUCT_NOT_FOUND') {
-          self.listProducts = [];
-          self.currentPage = 1;
-          self.totalPage = 1;
         }
       });
   }
@@ -83,9 +63,11 @@ export class ProductManagementComponent implements OnInit {
     const self = this;
     self.getListProducts(value, self.filterValue);
   }
-  open(content) {
+  open(content, mode) {
     const self = this;
-    this.modalService
+    self.clearForm();
+    self.mode = mode;
+    self.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg', windowClass: 'modal-wide' })
       .result.then(
         (result) => {
@@ -107,42 +89,21 @@ export class ProductManagementComponent implements OnInit {
   }
 
 
-  // getProductDetail(product, index) {
-  //   const self = this;
-  //   self.productIndex = index;
-  //   self.productForm.controls['name'].setValue(product.name);
-  //   self.productForm.controls['price'].setValue(product.price);
-  //   self.productForm.controls['quantity'].setValue(product.leftItems);
-  //   self.productForm.controls['isDeleted'].setValue(product.isDeleted);
-  //   self.productForm.controls['specs'].setValue(
-  //     self.productService.converJsonToMultipleLinesString(self.productService.convertSpecs(product.specs))
-  //   );
-  //   self.productForm.controls['description'].setValue(product.description);
-  //   self.productService.getProductById(product.id).subscribe((value: any) => {
-  //     self.product = value.data.product;
-  //     self.getTypesAndBrands().subscribe((result: any) => {
-  //       self.isShowingSpinner = false;
-  //       self.brand =
-  //         result[0].data.listBrands[
-  //           result[0].data.listBrands
-  //             .map(function(e) {
-  //               return e.id;
-  //             })
-  //             .indexOf(self.product.brandId)
-  //         ];
-  //       self.type =
-  //         result[1].data.listType[
-  //           result[1].data.listType
-  //             .map(function(e) {
-  //               return e.id;
-  //             })
-  //             .indexOf(self.product.typeId)
-  //         ];
-  //       self.productForm.controls['brand'].setValue(self.brand.id);
-  //       self.productForm.controls['type'].setValue(self.type.id);
-  //     });
-  //   });
-  // }
+  getProductDetail(product, index) {
+    const self = this;
+    self.productIndex = index;
+    self.productForm.controls['name'].setValue(product.name);
+    self.productForm.controls['image'].setValue(product.image);
+    self.productForm.controls['price'].setValue(product.price);
+    self.productForm.controls['deprecated'].setValue(product.deprecated);
+    self.productForm.controls['description'].setValue(product.longDescription);
+    self.productForm.controls['shortDescription'].setValue(product.shortDescription);
+    self.emitter.emit(true);
+    self.productService.getProductById(product.id).subscribe((value: any) => {
+      self.emitter.emit(false);
+      self.product = value.data;
+    });
+  }
 
   validate() {
     const self = this;
@@ -155,18 +116,14 @@ export class ProductManagementComponent implements OnInit {
         ? 'Product price is required.'
         : formControl.price.value < 1000000 ? 'Product price cannot be lower than 1000000' : null,
 
-      !formControl.brand.value ? 'Product brand is required.' : null,
-
-      !formControl.type.value ? 'Product type is required.' : null,
-
-      !formControl.price.value
-        ? `Product's available quantity is required.`
-        : formControl.price.value < 0 ? `Product's available quantity cannot be lower than 0` : null,
-
-      !formControl.specs.value.trim() || !formControl.specs.value ? 'Product specs is required.' : null,
+      !formControl.image.value.trim() || !formControl.image.value ? 'Product image URL is required.' : null,
 
       !formControl.description.value.trim() || !formControl.description.value
         ? 'Product description is required.'
+        : null,
+
+      !formControl.shortDescription.value.trim() || !formControl.shortDescription.value
+        ? 'Product short description is required.'
         : null
     ];
 
@@ -182,14 +139,35 @@ export class ProductManagementComponent implements OnInit {
         text: self.validate(),
         icon: 'error'
       });
-      self.open(self.modal);
+      self.open(self.modal, self.mode);
       return;
     }
+
+    self.mode === 'add' ? self.addProduct(value) : self.editProduct(value);
+
+  }
+
+  addProduct(value) {
+    const self = this;
+    self.productService.addProduct(value).subscribe((v: any) => {
+      self.emitter.emit(false);
+      if (v.responseType === 'success') {
+        swal({
+          title: 'Congratulations',
+          text: 'Product is added successfully.',
+          icon: 'success'
+        }).then(() => {
+          self.getListProducts(self.currentPage, self.filterValue);
+        });
+      }
+    });
+  }
+
+  editProduct(value) {
+    const self = this;
     value.id = self.product.id;
-    let specs = value.specs.replace(/\n/gi, ',');
-    specs = `{${specs}}`;
-    value.specs = specs;
     self.productService.modifyProduct(value).subscribe((v: any) => {
+      self.emitter.emit(false);
       if (v.responseType === 'success') {
         swal({
           title: 'Congratulations',
@@ -198,12 +176,10 @@ export class ProductManagementComponent implements OnInit {
         }).then(() => {
           self.product.name = value.name;
           self.product.price = value.price;
-          self.product.brandId = value.brand;
-          self.product.typeId = value.type;
-          self.product.leftItems = value.quantity;
-          self.product.description = value.description;
-          self.product.specs = value.specs;
-          self.product.isDeleted = value.isDeleted;
+          self.product.longDescription = value.description;
+          self.product.shortDescription = value.shortDescription;
+          self.product.image = value.image;
+          self.product.deprecated = value.deprecated;
 
           self.listProducts[self.productIndex] = self.product;
         });
@@ -214,6 +190,33 @@ export class ProductManagementComponent implements OnInit {
   filter(value) {
     const self = this;
     self.filterValue = value;
+    self.emitter.emit(true);
     self.getListProducts(1, self.filterValue);
+  }
+
+  clearForm() {
+    const self = this;
+    self.product = {};
+    self.productForm.controls['name'].setValue('');
+    self.productForm.controls['image'].setValue('');
+    self.productForm.controls['price'].setValue('');
+    self.productForm.controls['deprecated'].setValue('');
+    self.productForm.controls['description'].setValue('');
+    self.productForm.controls['shortDescription'].setValue('');
+  }
+
+  changeStockStatus(product, index) {
+    const self = this;
+    self.emitter.emit(true);
+    self.productService.changeStockStatus(product).subscribe(v => {
+      self.emitter.emit(false);
+      swal({
+        title: 'Congratulations',
+        text: 'Change stock status successfully.',
+        icon: 'success'
+      }).then(() => {
+        self.listProducts[index].outOfStock = !self.listProducts[index].outOfStock;
+      });
+    })
   }
 }

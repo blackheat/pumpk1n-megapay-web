@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "../node_modules/font-awesome/css/font-awesome.css";
@@ -12,16 +13,33 @@ body {
   background-color: rgba(122, 122, 122, 0.247);
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   margin: 0;
 }
 
-.modal-wide > .modal-dialog {
-  max-width: 100em !important;
-  min-width: 50em !important;   
+.modal-wide>.modal-dialog {
+  max-width: 60em !important;
+  min-width: 30em !important;
   width: 95% !important;
+}
+
+.black-overlay {
+  position: fixed !important;
+}
+
+.search-button {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+owl-carousel-child {
+  margin: 0 auto !important;
+}
+
+.carousel.slide {
+  text-align: center;
+  background: darkgray;
 }

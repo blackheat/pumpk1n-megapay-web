@@ -4,8 +4,7 @@ import { Http } from '@angular/http';
 import { map, catchError } from 'rxjs/operators';
 import { throwError } from '../../../node_modules/rxjs';
 import * as jwt_decode from 'jwt-decode';
-import { API_REGISTER, API_LOGIN, API_GET_ACCOUNT, MAX_ACCOUNTS_PER_PAGE, API_MODIFY_ACCOUNT_ROLE } from '../shared/constants';
-import { decode } from 'punycode';
+import { API_REGISTER, API_LOGIN, API_GET_ACCOUNT, MAX_ACCOUNTS_PER_PAGE, API_INTERNAL_ACCOUNT } from '../shared/constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -76,7 +75,7 @@ export class AccountService {
           const decoding = this.decodeJWT(result.data.token);
           const currentUser = {
             token: result.data.token,
-            name: decoding.unique_name,
+            name: decoding.nameid,
             permission: decoding.role
           };
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -117,23 +116,18 @@ export class AccountService {
 
   getListAccounts(page, filter) {
     const self = this;
-    let queryParam = `${API_GET_ACCOUNT}?page=${page}&accountsPerPage=${MAX_ACCOUNTS_PER_PAGE}&token=${self.getAccessToken()}`;
+    let queryParam = `${API_GET_ACCOUNT}?page=${page}&accountsPerPage=${MAX_ACCOUNTS_PER_PAGE}`;
 
     if (filter.username.trim() !== '') {
-      queryParam += `&username=${filter.username}`;
+      queryParam += `&email=${filter.username}`;
     }
     return self.httpClient.get(queryParam);
   }
 
   modifyAccountRole(value) {
     const self = this;
-    const body = new HttpParams()
-      .set('userId', value.userId)
-      .set('role', value.role)
-      .set('token', self.getAccessToken());
-
     return self.httpClient
-      .post(API_MODIFY_ACCOUNT_ROLE, body.toString(), { headers: self.headers });
+      .put(`${API_INTERNAL_ACCOUNT}/${value.id}/role/${value.roleId}`, null, { headers: self.headers });
   }
 
   decodeJWT(jwt) {

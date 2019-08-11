@@ -4,179 +4,167 @@
     <div class="card-header text-center">
       <h4>Products Management</h4>
     </div>
-  <div class="card-body">
-    <div>
-      <div class="justify-content-center">
+    <div class="card-body">
+      <div>
+        <div class="justify-content-center">
           <div class="card">
             <div class="card-body">
               <h5 class="text-center">Filter</h5>
-                <form [formGroup]="filterForm" (ngSubmit)="filter(filterForm.value)" class="align-content-center">
-                  <div class="row col-10 offset-1">
-                    <label class="col-5">Product Name:
-                      <input placeholder="Filter by product name" type="text"class="form-control" id="nameFilter" name="nameFilter" formControlName="nameFilter">
-                    </label> 
-                    <label class="col-3">Product Brand:
-                      <select class="form-control" id="brand" formControlName="brandFilter" >
-                        <option value="0"></option>
-                        <option *ngFor="let brand of brands;"  value="{{brand.id}}">{{brand.name}}</option>
-                      </select>
-                    </label> 
-                    <label class="col-3">Product Type:
-                      <select class="form-control" id="type" formControlName="typeFilter">
-                        <option value="0"></option>
-                        <option *ngFor="let type of types;" value="{{type.id}}">{{type.name}}</option>
-                      </select>
-                    </label> 
-                    <div class="col-1">
-                      <button class="btn btn-danger" type="submit">
-                          <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"></i>
-                      </button>
-                    </div>
+              <form [formGroup]="filterForm" (ngSubmit)="filter(filterForm.value)" class="align-content-center">
+                <div class="row col-6 offset-3">
+                  <label class="col-11">Product Name:
+                    <input placeholder="Filter by product name" type="text" class="form-control" id="nameFilter"
+                      name="nameFilter" formControlName="nameFilter">
+                  </label>
+                  <div class="col-1 search-button">
+                    <button class="btn btn-danger" type="submit">
+                      <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"></i>
+                    </button>
                   </div>
-                </form>
+                </div>
+              </form>
             </div>
-        </div>  
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="text-center">
+        <button class="btn btn-primary" (click)="open(content, 'add');">Add product</button>
+      </div>
+      <br>
+      <div *ngIf="listProducts?.length > 0">
+        <table class="table table-light">
+          <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+            <th style="width: 5%;">#</th>
+            <th style="width: 30%;">Image</th>
+            <th style="width: 30%;">Name</th>
+            <th style="width: 10%;">Status</th>
+            <th style="width: 25%;">Action</th>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let product of listProducts; let i = index">
+              <td class="align-middle"><b>{{i + 1}}</b></td>
+              <td class="align-middle">
+                <img style="width: 50%" src={{product.image}}>
+              </td>
+              <td class="align-middle">
+                {{product.name}}
+              </td>
+              <td class="align-middle">
+                <span *ngIf="!product.outOfStock; else outBlock" class="badge badge-success">In stock</span>
+                <ng-template #outBlock>
+                  <span class="badge badge-danger">Out of stock</span>
+                </ng-template>
+              </td>
+              <td class="align-middle">
+                <button style="margin-right: 10px" class="btn" [class.btn-danger]="!product.outOfStock"
+                  [class.btn-success]="product.outOfStock" (click)="changeStockStatus(product, i)">
+                  {{product.outOfStock ? 'Make In Stock' : 'Make Out of Stock'}}
+                </button>
+
+                <button class="btn btn-primary" (click)="open(content, 'edit'); getProductDetail(product, i)">Detail
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <br>
-    <div class="text-center">
-      <button class="btn btn-primary" (click)="open(addProduct)">Add product</button>
-    </div>
-    <br>
-    <div *ngIf="listProducts.length > 0">
-      <table class="table table-light"> 
-        <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
-          <th style="width: 10%;">#</th>
-          <th style="width: 30%;">Image</th>
-          <th style="width: 40%;">Name</th>
-          <th style="width: 20%;">Action</th>
-        </thead>
-        <tbody class="text-center">
-          <tr *ngFor="let product of listProducts; let i = index" >
-            <td class="align-middle"><b>{{i + 1}}</b></td>
-            <td class="align-middle">
-              <img style="width: 50%" src="assets/pictures/img/{{product.id}}.jpg">
-            </td>
-            <td class="align-middle">
-                {{product.name}}
-            </td>
-            <td class="align-middle"><button class="btn btn-danger" (click) = "open(content); getProductDetail(product, i)">Detail</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
     <div *ngIf="listProducts.length > 0; else notFound" class="mx-auto">
-      <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage"></app-pagination>
+      <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event)" [totalPage]="totalPage">
+      </app-pagination>
     </div>
-    <ng-template #notFound >
+    <ng-template #notFound>
       <div class="text-center">
-          <h4 style="color:rgb(73, 9, 9)">Cannot find what you are looking for.</h4>
+        <h4 style="color:rgb(73, 9, 9)">Cannot find what you are looking for.</h4>
       </div>
     </ng-template>
-  </div>  
+  </div>
 </div>
 <br>
 <ng-template #content let-modal let-d="dismiss" let-c="close">
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit(productForm.value); c('Save click')" class="align-content-center">
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit(productForm.value); c('Save click')"
+    class="align-content-center">
     <div class="modal-header">
-      <h4 class="modal-title">Product Detail</h4>
+      <h4 class="modal-title">{{mode === 'add' ? 'Add New Product' : 'Product Detail'}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-        <div class="row offset-1 col-10">
-          <div class="col-3">
-            <img *ngIf="product" class="card-img-top" src="assets/pictures/img/{{product?.id}}.jpg" alt="Card image cap">
-            <p></p>
-            <!-- Save picture - coming soon. -->
-            <!-- <div class="input-group mb-3">
+      <div [class.row.offset-1.col-10]="mode === 'edit'">
+        <div *ngIf="mode === 'edit'" class="col-3" style="margin: auto">
+          <img *ngIf="product" class="card-img-top"
+            src="{{product.image || 'http://www.stleos.uq.edu.au/wp-content/uploads/2016/08/image-placeholder-350x350.png'}}"
+            alt="Card image cap">
+          <p></p>
+          <!-- Save picture - coming soon. -->
+          <!-- <div class="input-group mb-3">
                 <div class="upload-btn-wrapper mx-auto">
                   <button class="upload-btn">Change Product Image</button>
                   <input type="file" name="myfile" />
                 </div>
             </div> -->
-            <div class="custom-control custom-checkbox text-center">
-              <input type="checkbox" class="custom-control-input" id="isDeleted" name="isDeleted" formControlName="isDeleted">
-              <label class="custom-control-label" for="isDeleted">Is Deleted</label>
+          <div class="custom-control custom-checkbox text-center">
+            <input type="checkbox" class="custom-control-input" id="deprecated" name="deprecated"
+              formControlName="deprecated">
+            <label class="custom-control-label" for="deprecated">Is Deleted</label>
+          </div>
+        </div>
+        <div [class.col-9]="mode === 'edit'">
+          <table class="table table-light">
+            <thead>
+              <td colspan="2" class="text-center product-info-header">
+                <h3>Product detail</h3>
+              </td>
+            </thead>
+          </table>
+          <div class="form-group row">
+            <label for="name" class="col-sm-3 col-form-label">
+              <h4>Name</h4>
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="name" name="name" formControlName="name">
             </div>
           </div>
-          <div class="col-9">
-              <table class="table table-light">
-                <thead>
-                  <td colspan="2" class="text-center product-info-header">
-                    <h3>Product detail</h3>
-                  </td>
-                </thead>
-              </table>
-                <div class="form-group row">
-                  <label for="name" class="col-sm-3 col-form-label"><h4>Name</h4></label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" id="name" name="name" formControlName="name">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="price" class="col-sm-3 col-form-label"><h4>Price</h4></label>
-                  <div class="col-sm-9">
-                    <input type="number" class="form-control" id="price" name="price" formControlName="price">
-                  </div>
-                </div> 
-                <div class="form-group row">
-                    <label for="brand" class="col-sm-3 col-form-label"><h4>Brand</h4></label>
-                  <div class="col-sm-9">
-                  <select class="form-control" id="brand" formControlName="brand" >
-                    <option *ngFor="let brand of brands;"  value="{{brand.id}}">{{brand.name}}</option>
-                  </select>
-                  </div>
-                </div>
-                <div class="form-group row">
-                    <label for="type" class="col-sm-3 col-form-label"><h4>Type</h4></label>
-                  <div class="col-sm-9">
-                  <select class="form-control" id="type" formControlName="type">
-                    <option *ngFor="let type of types;" value="{{type.id}}">{{type.name}}</option>
-                  </select>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="quantity" class="col-sm-3 col-form-label"><h4>Available Quantity</h4></label>
-                  <div class="col-sm-9">
-                    <input type="number" class="form-control" id="quantity" name="quantity" formControlName="quantity">
-                  </div>
-                </div> 
-                <div class="form-group row">
-                  <label for="specs" class="col-sm-3 col-form-label"><h4>Specs</h4></label>
-                  <div class="col-sm-9">
-                      <textarea class="form-control" formControlName="specs" rows="3"></textarea>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="description" class="col-sm-3 col-form-label"><h4>Description</h4></label>
-                  <div class="col-sm-9">
-                      <textarea class="form-control" formControlName="description" rows="3"></textarea>
-                  </div>
-                </div>
+          <div class="form-group row">
+            <label for="price" class="col-sm-3 col-form-label">
+              <h4>Price</h4>
+            </label>
+            <div class="col-sm-9">
+              <input type="number" class="form-control" id="price" name="price" formControlName="price">
+            </div>
           </div>
-        </div> 
+          <div class="form-group row">
+            <label for="name" class="col-sm-3 col-form-label">
+              <h4>Image URL</h4>
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="image" name="image" formControlName="image">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="description" class="col-sm-3 col-form-label">
+              <h4>Description</h4>
+            </label>
+            <div class="col-sm-9">
+              <textarea class="form-control" formControlName="description" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="description" class="col-sm-3 col-form-label">
+              <h4>Short Description</h4>
+            </label>
+            <div class="col-sm-9">
+              <textarea class="form-control" formControlName="shortDescription" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-footer mx-auto">
-      <button class="btn btn-primary" type="submit" >Save</button>
+      <button class="btn btn-primary" type="submit">{{mode ==='add' ? 'Add' : 'Save'}}</button>
       <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
     </div>
   </form>
-</ng-template>
-
-<ng-template #addProduct let-modal let-d="dismiss" let-c="close">
-    <div class="modal-header">
-      <h4 class="modal-title">Add new product</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body text-center">
-       <p>Coming soon!</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
-    </div>
 </ng-template>

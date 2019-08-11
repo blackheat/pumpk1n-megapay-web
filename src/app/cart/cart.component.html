@@ -1,5 +1,5 @@
-<app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
-<ng-template #content let-modal let-d="dismiss" let-c="close">
+<!-- <app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner> -->
+<!-- <ng-template #content let-modal let-d="dismiss" let-c="close">
   <div class="modal-header">
     <h4 class="modal-title">Order History</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -38,7 +38,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
   </div>
-</ng-template>
+</ng-template> -->
 
 
 <ng-template #orderDetail let-modal let-d="dismiss" let-c="close">
@@ -63,7 +63,7 @@
             <tr *ngFor="let product of order.listProducts; let i = index" >
               <td><b>{{i + 1}}</b></td>
               <td>
-                <img style="width: 50%" src="assets/pictures/img/{{product.product.id}}.jpg">
+                <img style="width: 50%" src="{{product.product.image}}">
               </td>
               <td>
                   {{product.product.name}}
@@ -101,7 +101,7 @@
       <tr *ngFor="let product of cart.listProducts; let i = index" >
         <td><b>{{i + 1}}</b></td>
         <td>
-          <img style="width: 50%" src="assets/pictures/img/{{product.product.id}}.jpg">
+          <img style="width: 50%" src="{{product.product.image}}">
         </td>
         <td>
           <a class="link" (click)="navigate(product.product.id)">
@@ -136,5 +136,5 @@
 <br>
 <div class="text-center">
   <button class="btn btn-danger" (click)="checkout()"><b>Checkout</b></button>
-  <button class="btn btn-secondary" style="margin-left: 5px" (click)="open(content)"><b>Order History</b></button>
+  <!-- <button class="btn btn-secondary" style="margin-left: 5px" (click)="open(content)"><b>Order History</b></button> -->
 </div>

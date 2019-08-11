@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IMAGE_PATH } from '../constants';
 import { Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { AccountService } from 'src/app/services/account.service';
@@ -17,7 +16,6 @@ export class ProductCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.product);
     
   }
 
@@ -33,7 +31,12 @@ export class ProductCardComponent implements OnInit {
       self.router.navigate(['/login']);
     } else {
       self.service.getProductById(id).subscribe((value: any) => {
-        self.service.addCart(value.data.product, 1);
+        self.service.addCart(value.data, 1);
+        swal({
+          title: 'Congratulations!',
+          text: 'Add product to cart successfully.',
+          icon: 'success'
+        });
       });
     }
   }

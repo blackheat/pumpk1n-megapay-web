@@ -195,7 +195,7 @@ export class CartComponent implements OnInit {
     list.forEach((product) => {
       self.isShowingSpinner = true;
       self.service.getProductById(product.productId).subscribe((v: any) => {
-        if ((v.returnMessage = 'SUCCESS')) {
+        if ((v.responseType = 'success')) {
           (<any>self.order).listProducts.push({product: v.data.product, quantity: product.quantity});
         }
         self.isShowingSpinner = false;

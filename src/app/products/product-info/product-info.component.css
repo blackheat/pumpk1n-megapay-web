@@ -16,3 +16,8 @@
     border-radius: 5px;
     text-align: right
 }
+
+.img-background {
+    background-color: white;
+    padding: 5px;
+}

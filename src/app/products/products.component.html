@@ -1,6 +1,6 @@
 <app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
 <br>
-<div class="row d-flex justify-content-center" syle="max-width: 80em">
+<div class="row d-flex justify-content-center" syle="max-width: 85em">
   <div class="col-3">
     <app-filter-fields (searchFilter)="filter($event)"></app-filter-fields>
   </div>
@@ -11,8 +11,8 @@
       </div>
       <ng-container *ngIf="products?.length > 0; else Elseblock">
         <div class="card-body row">
-          <div *ngFor="let product of products" class="col-3">
-            <app-product-card [product]="product" style="padding: 10px;"></app-product-card>
+          <div style="padding-bottom: 35px" *ngFor="let product of products" [class.col-3]="screenWidth >= 1918"  [class.col-4]="screenWidth < 1918">
+            <app-product-card [product]="product"></app-product-card>
           </div>
         </div>
         <div class="mx-auto">

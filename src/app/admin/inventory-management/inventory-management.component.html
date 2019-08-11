@@ -1,0 +1,243 @@
+<app-loading-spinner [isShowing]="isShowingSpinner"></app-loading-spinner>
+<br>
+<div class="justify-content-center">
+  <div class="card bg-light">
+    <div class="card-header text-center">
+      <h4>Inventory Management</h4>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="justify-content-center">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="text-center">Filter</h5>
+              <form [formGroup]="filterForm" (ngSubmit)="filter(filterForm.value)" class="align-content-center">
+                <div class="row col-8 offset-2">
+                  <label class="col-5">Product Name:
+                    <input placeholder="Filter by product name" type="text" class="form-control" id="productName"
+                      name="productName" formControlName="productName">
+                  </label>
+                  <label class="col-5">Supplier Name:
+                    <input placeholder="Filter by supplier name" type="text" class="form-control" id="supplierName"
+                      name="supplierName" formControlName="supplierName">
+                  </label>
+                  <div class="col-2 search-button">
+                    <button class="btn btn-danger" type="submit">
+                      <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="text-center">
+        <button class="btn btn-primary" (click)="open(addInventory);">Import inventory</button>
+      </div>
+      <br>
+      <div *ngIf="inventoryGroup?.length > 0">
+        <table class="table table-light">
+          <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+            <th style="width: 10%;">#</th>
+            <th style="width: 30%;">Product's Name</th>
+            <th style="width: 30%;">Supplier's Name</th>
+            <th style="width: 10%;">Action</th>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let inventory of inventoryGroup; let i = index">
+              <td class="align-middle"><b>{{i + 1}}</b></td>
+              <td class="align-middle">
+                {{inventory.productDetails.name}}
+              </td>
+              <td class="align-middle">
+                {{inventory.supplierDetails.name}}
+              </td>
+              <td class="align-middle"><button class="btn btn-danger"
+                  (click)="open(exportInventory); getInventoryDetail(inventory, i)">Detail</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="inventoryGroup?.length > 0; else notFound" class="mx-auto">
+      <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event, 'list')" [totalPage]="totalPage">
+      </app-pagination>
+    </div>
+    <ng-template #notFound>
+      <div class="text-center">
+        <h4 style="color:rgb(73, 9, 9)">Cannot find what you are looking for.</h4>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+
+<br>
+
+
+<ng-template #addInventory let-modal let-d="dismiss" let-c="close">
+  <form [formGroup]="inventoryForm" (ngSubmit)="onSubmit(inventoryForm.value); c('Save click')"
+    class="align-content-center">
+    <div class="modal-header">
+      <h4 class="modal-title">Import New Inventory</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <table class="table table-light">
+        <thead>
+          <td colspan="2" class="text-center product-info-header">
+            <h3>Inventory detail</h3>
+          </td>
+        </thead>
+      </table>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text btn btn-danger" for="inputGroupSelect01">Product</label>
+        </div>
+        <select (change)="onProductChange($event.target.value)" class="custom-select form-control"
+          id="inputGroupSelect01">
+          <option style="color: gray" value="-1">Please select product</option>
+          <option *ngFor="let product of listProducts" value="{{product.id}}">{{product.name}}</option>
+        </select>
+      </div>
+      <br>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text btn btn-danger" for="inputGroupSelect02">Supplier</label>
+        </div>
+        <select (change)="onSupplierChange($event.target.value)" class="custom-select form-control"
+          id="inputGroupSelect02">
+          <option style="color: gray" value="-1">Please select supplier</option>
+          <option *ngFor="let supplier of listSuppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+        </select>
+      </div>
+      <br>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text btn btn-danger" for="inputGroupSelect03">Product's unique identifier</label>
+        </div>
+        <input placeholder="You can input multiple identifier by adding ',' between 2 identifiers" type="text"
+          class="form-control" id="inputGroupSelect03" name="productUniqueIdentifier"
+          formControlName="productUniqueIdentifier">
+      </div>
+    </div>
+    <div class="modal-footer mx-auto">
+      <button class="btn btn-primary" type="submit">Import</button>
+      <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #exportInventory let-modal let-d="dismiss" let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Export Product</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div class="col-4 mx-auto">
+        <img class="product-img" src="{{inventory.productDetails?.image}}">
+      </div>
+      <div class="col-8">
+        <div class="text-center product-info-header">
+          <h3>Product detail</h3>
+        </div>
+        <div class="form-group row">
+          <label for="name" class="col-3 col-form-label text-right">
+            <h4>Name</h4>
+          </label>
+          <div class="col-9 col-content">
+            {{inventory.productDetails?.name}}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="price" class="col-3 col-form-label text-right">
+            <h4>Price</h4>
+          </label>
+          <div class="col-9 col-content">
+            {{inventory.productDetails?.price}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center product-info-header">
+      <h3>Supplier detail</h3>
+    </div>
+    <div class="row">
+      <div class="col-4 row">
+        <label for="name" class="col-3 col-form-label text-right">
+          <h4>Name:</h4>
+        </label>
+        <div class="col-9 col-content">
+          {{inventory.supplierDetails?.name}}
+        </div>
+      </div>
+      <div class="col-4 row">
+        <label for="price" class="col-4 col-form-label text-right">
+          <h4>Phone:</h4>
+        </label>
+        <div style="margin-left: -18px" class="col-8 col-content">
+          {{inventory.supplierDetails?.telephone}}
+        </div>
+      </div>
+      <div class="col-4 row">
+        <label for="price" class="col-4 col-form-label text-right">
+          <h4>Website:</h4>
+        </label>
+        <div class="col-8 col-content">
+          {{inventory.supplierDetails?.website}}
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="text-center product-info-header">
+      <h3>Inventory</h3>
+    </div>
+    <form class="align-content-center">
+      <div class="row col-8 offset-2">
+        <label for="name" class="col-4 col-form-label text-right">
+          <b>Customer's ID:</b>
+        </label>
+        <div class="col-8 col-content">
+          <input placeholder="Input customer id to export" type="number" class="form-control" id="customerId"
+            name="customerId" [(ngModel)]="customerId">
+        </div>
+      </div>
+    </form>
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 10%" scope="col">#</th>
+          <th class="text-center" style="width: 40%" scope="col">Product Unique Identifier</th>
+          <th class="text-center" style="width: 30%" scope="col">Status</th>
+          <th class="text-center" style="width: 20%" scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="mx-auto" *ngFor="let item of inventory.displaying; index as i">
+          <th class="text-center" scope="row">{{item.index}}</th>
+          <td class="text-center">{{item.productUniqueIdentifier}}</td>
+          <td class="text-center">
+            {{getStatus(item.isExported)}}
+          </td>
+          <td class="text-center">
+            <button *ngIf="!item.isExported" class="btn btn-danger" (click)="onExport(item)">Export</button>
+            <span *ngIf="item.isExported" style="color: brown"><b>Exported</b></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="inventory.displaying?.length > 0" class="pagination">
+      <app-pagination [currentPage]="currentExportPage" (changePage)="goToPage($event, 'export')"
+        [totalPage]="totalExportPage">
+      </app-pagination>
+    </div>
+  </div>
+</ng-template>

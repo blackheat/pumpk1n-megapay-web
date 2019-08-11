@@ -16,7 +16,9 @@ import { SharedModule } from './shared/shared.module';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ProductManagementComponent } from './admin/product-management/product-management.component';
 import { AccountManagementComponent } from './admin/account-management/account-management.component';
-import { RevenueStatisticComponent } from './admin/revenue-statistic/revenue-statistic.component';
+import { OrderManagementComponent } from './admin/order-management/order-management.component';
+import { SupplierManagementComponent } from './admin/supplier-management/supplier-management.component';
+import { InventoryManagementComponent } from './admin/inventory-management/inventory-management.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +27,9 @@ import { RevenueStatisticComponent } from './admin/revenue-statistic/revenue-sta
     NavbarComponent,
     ProductManagementComponent,
     AccountManagementComponent,
-    RevenueStatisticComponent
+    OrderManagementComponent,
+    SupplierManagementComponent,
+    InventoryManagementComponent
   ],
   imports: [
     NgbModule.forRoot(),

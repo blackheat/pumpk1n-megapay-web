@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { MAX_PRODUCTS_ROW_PER_PAGE } from 'src/app/shared/constants';
 import { ProductService } from 'src/app/services/product.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { AccountService } from 'src/app/services/account.service';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 
 @Component({
@@ -15,22 +16,31 @@ import { AccountService } from 'src/app/services/account.service';
 export class AccountManagementComponent implements OnInit {
   @ViewChild('content') public modal: NgbModalRef;
   listAccounts = [];
-  listRoles = ['user', 'employee', 'admin']
+  listRoles = [
+    {
+      title: 'NormalUser',
+      value: 1
+    }, {
+      title: 'InternalUser',
+      value: 2
+    }
+  ];
   currentPage = 1;
   totalPage = 1;
   closeResult: string;
   user;
   userIndex;
   selectedRole;
-  isShowingSpinner = false;
+  emitter: EventEmitter<boolean>;
   filterForm: FormGroup;
   filterValue = {
     username: ''
   };
-  constructor(private accountService: AccountService, private modalService: NgbModal) {}
+  constructor(private accountService: AccountService, private modalService: NgbModal, private spinnerService: SpinnerService) { }
 
   ngOnInit() {
     const self = this;
+    self.emitter = self.spinnerService.listener;
     self.filterForm = new FormGroup({
       username: new FormControl('')
     });
@@ -38,19 +48,16 @@ export class AccountManagementComponent implements OnInit {
   }
 
   getListAccounts(page, filter) {
-    const self = this;
+    const self = this;    
+    self.emitter.emit(true);
     self.accountService
       .getListAccounts(page, filter)
       .subscribe((v: any) => {
+        self.emitter.emit(false);
         if (v.responseType === 'success') {
-          self.listAccounts = v.data.listAccounts;
+          self.listAccounts = v.data;
           self.currentPage = page;
-          self.totalPage = v.data.numberOfPage;
-        }
-        if (v.returnMessage === 'ACCOUNT_NOT_FOUND') {
-          self.listAccounts = [];
-          self.currentPage = 1;
-          self.totalPage = 1;
+          self.totalPage = v.paginationReturnData.totalPages;
         }
       });
   }
@@ -96,20 +103,20 @@ export class AccountManagementComponent implements OnInit {
   changeRole() {
     const self = this;
     const value = {
-      userId: self.user.id,
-      role: self.selectedRole
+      id: self.user.id,
+      roleId: self.selectedRole
     };
+    self.emitter.emit(true);
     self.accountService.modifyAccountRole(value).subscribe((v: any) => {
-      if (v.responseType === 'success') {
-        swal({
-          title: 'Congratulations',
-          text: 'Change role successfully.',
-          icon: 'success'
-        }).then(() => {
-          self.user.role = self.selectedRole;
-          self.listAccounts[self.userIndex] = self.user;
-        });
-      }
+      self.emitter.emit(false);
+      swal({
+        title: 'Congratulations',
+        text: 'Change role successfully.',
+        icon: 'success'
+      }).then(() => {
+        self.user.role = self.selectedRole;
+        self.listAccounts[self.userIndex] = self.user;
+      });
     });
   }
 
@@ -118,4 +125,5 @@ export class AccountManagementComponent implements OnInit {
     self.filterValue = value;
     self.getListAccounts(1, self.filterValue);
   }
+
 }

@@ -9,7 +9,6 @@ import { AuthGuard } from './auth.guard';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { RegisterComponent } from './account/register/register.component';
-import { EmployeeComponent } from './employee/employee.component';
 import { RoleGuard } from './role.guard';
 const routes: Routes = [
   {
@@ -44,7 +43,7 @@ const routes: Routes = [
         component: CartComponent,
         canActivate: [RoleGuard],
         data: {
-          expectedRole: ['InternalUser']
+          expectedRole: ['NormalUser']
         }
       },
       {
@@ -78,5 +77,4 @@ export const RoutingComponent = [
   UserComponent,
   RegisterComponent,
   AdminComponent,
-  EmployeeComponent
 ];

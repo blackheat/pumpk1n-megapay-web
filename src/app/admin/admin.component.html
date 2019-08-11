@@ -1,4 +1,3 @@
-<app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
 <br>
 <div class="col-10 offset-1" style="background: white">
   <ngb-tabset #t="ngbTabset" class="nav-fill" [justify]="justified">
@@ -14,10 +13,22 @@
         <app-account-management></app-account-management>
       </ng-template>
     </ngb-tab>
-    <ngb-tab>
-      <ng-template ngbTabTitle><b>Revenue Statistics</b></ng-template>
+    <!-- <ngb-tab>
+      <ng-template ngbTabTitle><b>Order Management</b></ng-template>
       <ng-template ngbTabContent>
-        <app-revenue-statistic></app-revenue-statistic>
+        <app-order-management></app-order-management>
+      </ng-template>
+    </ngb-tab> -->
+    <ngb-tab>
+      <ng-template ngbTabTitle><b>Supplier Management</b></ng-template>
+      <ng-template ngbTabContent>
+        <app-supplier-management></app-supplier-management>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+      <ng-template ngbTabTitle><b>Inventory Management</b></ng-template>
+      <ng-template ngbTabContent>
+        <app-inventory-management></app-inventory-management>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
