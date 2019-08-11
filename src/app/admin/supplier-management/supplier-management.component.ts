@@ -54,7 +54,7 @@ export class SupplierManagementComponent implements OnInit {
         if (v.responseType === 'success') {
           self.listSuppliers = v.data;
           self.currentPage = page;
-          self.totalPage = v.data.numberOfPage;
+          self.totalPage = v.paginationReturnData.totalPages;
         }
       });
   }

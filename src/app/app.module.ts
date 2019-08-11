@@ -19,6 +19,7 @@ import { AccountManagementComponent } from './admin/account-management/account-m
 import { OrderManagementComponent } from './admin/order-management/order-management.component';
 import { SupplierManagementComponent } from './admin/supplier-management/supplier-management.component';
 import { InventoryManagementComponent } from './admin/inventory-management/inventory-management.component';
+import { BalanceComponent } from './balance/balance.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { InventoryManagementComponent } from './admin/inventory-management/inven
     AccountManagementComponent,
     OrderManagementComponent,
     SupplierManagementComponent,
-    InventoryManagementComponent
+    InventoryManagementComponent,
+    BalanceComponent
   ],
   imports: [
     NgbModule.forRoot(),

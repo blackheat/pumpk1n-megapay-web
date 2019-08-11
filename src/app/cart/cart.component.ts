@@ -38,7 +38,7 @@ export class CartComponent implements OnInit {
   //   self.service.getOrdersHistory(1).subscribe((v: any) => {
   //     if (v.responseType === 'success') {
   //       self.listOrders = v.data.listOrders;
-  //       self.totalPage = v.data.numberOfPage;
+  //       self.totalPage = v.paginationReturnData.totalPages;
   //     }
   //     self.isShowingSpinner = false;
   //   });
@@ -181,7 +181,7 @@ export class CartComponent implements OnInit {
     // self.service.getOrdersHistory(page).subscribe((v: any) => {
     //   if (v.responseType === 'success') {
     //     self.listOrders = v.data.listOrders;
-    //     self.totalPage = v.data.numberOfPage;
+    //     self.totalPage = v.paginationReturnData.totalPages;
     //     self.currentPage = page;
     //   }
     //   self.isShowingSpinner = false;
