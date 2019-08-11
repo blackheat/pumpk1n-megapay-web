@@ -20,6 +20,9 @@ export const API_INVENTORY_IMPORT = `${API_INVENTORY}/imported`;
 export const API_INVENTORY_EXPORT = `${API_INVENTORY}/exported`;
 export const API_GET_ACCOUNT = `${API_URL}/account`;
 export const API_INTERNAL_ACCOUNT = `${API_URL}/internal/account`;
+export const API_BALANCE_SERVICE = `${API_URL}/token/balance`;
+export const API_TOKEN_PURCHASE_REQUEST = `${API_URL}/token/transaction/request`;
+
 
 export const API_EMPLOYEE = `${API_URL}/employee`;
 export const API_GET_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/getOrders`;

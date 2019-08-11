@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { NgbModal } from 'node_modules/@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProductService } from 'src/app/services/product.service';
+import { BalanceService } from 'src/app/services/balance.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: [ './navbar.component.css' ]
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
   auth: boolean;
@@ -16,8 +17,13 @@ export class NavbarComponent implements OnInit {
   navSearchForm: FormGroup;
   username: string;
   userRole;
+  balance = 0;
   numberOfProducts = 0;
-  constructor(private accountService: AccountService, private productService: ProductService, private router: Router) {
+  constructor(private accountService: AccountService,
+    private productService: ProductService,
+    private router: Router,
+    private balanceService: BalanceService)
+    {
     const self = this;
     self.listener = accountService.listener;
     self.listener.subscribe(() => {
@@ -32,7 +38,7 @@ export class NavbarComponent implements OnInit {
     self.auth = !self.auth;
     self.accountService.logout();
     self.userRole = null;
-    self.router.navigate([ '/login' ]);
+    self.router.navigate(['/login']);
   }
 
   ngOnInit() {
@@ -47,12 +53,17 @@ export class NavbarComponent implements OnInit {
     self.productService.cartChange.subscribe(() => {
       self.numberOfProducts = self.productService.getCart().total;
     });
+    self.balanceService.getBalanceToken().subscribe((v: any) => {
+      if (v.responseType === 'success') {
+        self.balance = v.data.balance;
+      }
+    })
   }
 
   search(value) {
     const self = this;
     if (value.search !== '') {
-      self.router.navigate([ '/products' ]);
+      self.router.navigate(['/products']);
       self.productService.searchByNavbar = value.search;
       self.productService.searchNavBarEvent.emit();
       self.navSearchForm.controls['search'].setValue('');

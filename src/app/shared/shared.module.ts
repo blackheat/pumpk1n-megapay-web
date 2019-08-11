@@ -12,6 +12,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { TruncatePipe } from './custom-pipe/truncate.pipe';
 import { PaginationComponent } from './pagination/pagination.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { CoinComponent } from './icon/coin/coin.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     FilterFieldsComponent,
     LoadingSpinnerComponent,
     TruncatePipe,
-    PaginationComponent
+    PaginationComponent,
+    CoinComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -38,7 +40,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     FilterFieldsComponent,
     LoadingSpinnerComponent,
     TruncatePipe,
-    PaginationComponent
+    PaginationComponent,
+    CoinComponent
   ]
 })
 export class SharedModule { }

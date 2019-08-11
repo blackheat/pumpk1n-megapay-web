@@ -10,6 +10,7 @@ import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { RegisterComponent } from './account/register/register.component';
 import { RoleGuard } from './role.guard';
+import { BalanceComponent } from './balance/balance.component';
 const routes: Routes = [
   {
     path: '',
@@ -56,6 +57,14 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'balance',
+        component: BalanceComponent,
+        canActivate: [RoleGuard],
+        data: {
+          expectedRole: ['NormalUser']
+        }
+      },
+      {
         path: '**',
         component: NotFoundComponent
       }
@@ -67,7 +76,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
 export const RoutingComponent = [
   NotFoundComponent,
   LoginComponent,

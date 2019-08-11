@@ -1,19 +1,24 @@
 <div class="card" style="max-width: 18em">
   <img style="height:200px" class="card-img-top" src={{product.image}} alt="Card image cap">
   <div class="card-body" style="background-color: gray; color: ghostwhite">
-    <h5 *ngIf="product.name.length >= 40; else nameElseBlock" class="card-title">{{product.name | truncate : 40 : true}}</h5>
+    <h5 *ngIf="product.name.length >= 40; else nameElseBlock" class="card-title">{{product.name | truncate : 40 : true}}
+    </h5>
     <ng-template #nameElseBlock>
       <h5 class="card-title">{{product.name}}</h5>
     </ng-template>
-    <p *ngIf="product.shortDescription.length > 100; else desElseBlock" class="card-text">{{product.shortDescription | truncate : 80 : true}}</p>
+    <p *ngIf="product.shortDescription.length > 100; else desElseBlock" class="card-text">
+      {{product.shortDescription | truncate : 80 : true}}</p>
     <ng-template #desElseBlock>
       <p class="card-text">{{product.shortDescription}}</p>
     </ng-template>
     <div *ngIf="!product.deprecated">
-      <h4 style = "color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} VND</h4>
+      <h4 style="color: rgb(235, 235, 122)">{{product.price | currency:' ':'code':'0.0-0'}} 
+        <icon-coin></icon-coin>
+      </h4>
+      
     </div>
     <div *ngIf="product.deprecated">
-      <h4 style = "color: rgb(235, 235, 122)">Product is unavailable</h4>
+      <h4 style="color: rgb(235, 235, 122)">Product is unavailable</h4>
     </div>
     <br>
     <div class="text-center">
@@ -22,7 +27,8 @@
         <b> Detail</b>
       </a>
       &nbsp;
-      <a class="btn" *ngIf="!product.deprecated && !product.outOfStock" (click)="addToCart(product.id)" style="color: white; background-color: rgb(192, 192, 192)">
+      <a class="btn" *ngIf="!product.deprecated && !product.outOfStock" (click)="addToCart(product.id)"
+        style="color: white; background-color: rgb(192, 192, 192)">
         <i class="fa fa-cart-plus"></i>
         <b> Add to Cart</b>
       </a>

@@ -59,10 +59,16 @@
     </ul>
     <ng-container *ngIf="auth && userRole == 'NormalUser'">
       <a class="btn btn-dark" [routerLink]="['/user']">Welcome {{username}}</a>
-      <a [routerLink]="['/cart']" style="margin-right:1em" class="btn btn-dark">
+      <a [routerLink]="['/cart']" class="btn btn-dark">
         <span>
           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
           {{numberOfProducts}}
+        </span>
+      </a>
+      <a [routerLink]="['/balance']" class="btn btn-dark">
+        <span>
+          <icon-coin></icon-coin>
+          {{balance}}
         </span>
       </a>
     </ng-container>

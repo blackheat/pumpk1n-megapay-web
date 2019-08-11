@@ -75,7 +75,7 @@ export class OrderManagementComponent implements OnInit {
       self.emitter.emit(false);
       if (value.responseType === 'success') {
         self.currentPage = page;
-        self.totalPage = value.data.numberOfPage;
+        self.totalPage = value.paginationReturnData.totalPages;
         self.listOrders = value.data.listOrders;
       }
     });

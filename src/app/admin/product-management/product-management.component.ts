@@ -54,7 +54,7 @@ export class ProductManagementComponent implements OnInit {
         if (v.responseType === 'success') {
           self.listProducts = v.data;
           self.currentPage = page;
-          self.totalPage = v.data.numberOfPage;
+          self.totalPage = v.paginationReturnData.totalPages;
         }
       });
   }
