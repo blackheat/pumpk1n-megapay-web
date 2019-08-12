@@ -18,7 +18,9 @@ export class PaginationComponent implements OnInit {
 
   goToPage(value) {
     const self = this;
-    if (value <= self.totalPage && value >= 0) {
+    if (value === self.totalPage && self.currentPage === self.totalPage || value === 1 && self.currentPage === 1)
+      return;
+    if (value <= self.totalPage && value > 0) {
       self.changePage.emit(value);
     }
   }

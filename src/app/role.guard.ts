@@ -11,7 +11,7 @@ export class RoleGuard implements CanActivate {
 
         const expectedRole = route.data.expectedRole;
         const userRole = this.accountService.getUserRole();
-        if (!localStorage.getItem('currentUser') && route.data.component !== 'products') {
+        if (!localStorage.getItem('currentUser')) {
             this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
             return false;
         }

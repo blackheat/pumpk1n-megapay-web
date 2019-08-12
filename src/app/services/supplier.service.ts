@@ -34,11 +34,10 @@ export class SupplierService {
         const self = this;
         const body = {
             name: value.name,
-            longDescription: value.description,
-            shortDescription: value.shortDescription,
-            price: value.price,
-            image: value.image,
-            deprecated: value.deprecated
+            description: value.description,
+            address: value.address,
+            telephone: value.telephone,
+            website: value.website
         }
 
         return self.httpClient.patch(`${API_SUPPLIER}/${value.id}`, body, { headers: self.headers });
@@ -47,12 +46,11 @@ export class SupplierService {
         const self = this;
         const body = {
             name: value.name,
-            longDescription: value.description,
-            shortDescription: value.shortDescription,
-            price: value.price,
-            image: value.image,
-            deprecated: false
-        }
+            description: value.description,
+            address: value.address,
+            telephone: value.telephone,
+            website: value.website
+        };
 
         return self.httpClient.post(`${API_SUPPLIER}`, body, { headers: self.headers });
     }

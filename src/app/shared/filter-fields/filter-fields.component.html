@@ -6,7 +6,7 @@
   <div class="card-body">
     <form [formGroup]="filterForm" (ngSubmit)="Search(filterForm.value)">
       <div class="row" style="padding: 10px">
-        <label for="productName" class="col-3">
+        <label style="text-align: right" for="productName" class="col-4">
           <h4>Name</h4>
         </label>
         <input id="productName" class="col-8" type="text" formControlName="productName">

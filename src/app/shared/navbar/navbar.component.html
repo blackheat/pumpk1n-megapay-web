@@ -24,14 +24,14 @@
           </span>
         </a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" [routerLink]="['/about']">
           <span>
             <i class="fa fa-address-card-o" aria-hidden="true"></i>
             About
           </span>
         </a>
-      </li>
+      </li> -->
       <div *ngIf="!auth then thenBlock; else elseBlock"></div>
       <ng-template #thenBlock>
       <li  class="nav-item">
@@ -72,10 +72,10 @@
         </span>
       </a>
     </ng-container>
-    <form *ngIf="userRole == 'user' || !userRole" [formGroup] = "navSearchForm" (ngSubmit) = "search(navSearchForm.value)" class="form-inline">
+    <!-- <form *ngIf="userRole == 'NormalUser' || !userRole" [formGroup] = "navSearchForm" (ngSubmit) = "search(navSearchForm.value)" class="form-inline">
       <i style="color: white" class="fa fa-search fa-2x" aria-hidden="true"> &nbsp;</i>
       <input style="width: 20em" class="form-control" id = "search" name="search" formControlName="search" type="text" placeholder="Search products by name" aria-label="Search">
       <button style="margin: 0.5em" class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> -->
   </div>
 </nav>

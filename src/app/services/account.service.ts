@@ -16,9 +16,6 @@ export class AccountService {
   listener: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private httpClient: HttpClient) {
-    if (localStorage.getItem('currentUser')) {
-      this.setLoggedIn(true);
-    }
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -34,12 +31,9 @@ export class AccountService {
     return throwError('Something bad happened; please try again later.');
   }
 
-  setLoggedIn(value: boolean) {
-    this.loggedInStatus = value;
-  }
 
   isLoggedIn() {
-    return this.loggedInStatus;
+    return JSON.parse(localStorage.getItem('currentUser')) !== null;
   }
 
   getName() {
@@ -80,7 +74,6 @@ export class AccountService {
           };
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
           localStorage.setItem('cart', JSON.stringify({ listProducts: [], total: 0 }));
-          self.setLoggedIn(true);
           self.listener.emit(self.getAccessToken());
         }
         return result.responseType;
@@ -90,7 +83,6 @@ export class AccountService {
 
   logout() {
     // remove user from local storage to log user out
-    this.setLoggedIn(false);
     localStorage.removeItem('currentUser');
     localStorage.removeItem('cart');
   }

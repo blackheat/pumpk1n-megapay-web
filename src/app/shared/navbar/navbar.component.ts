@@ -22,8 +22,7 @@ export class NavbarComponent implements OnInit {
   constructor(private accountService: AccountService,
     private productService: ProductService,
     private router: Router,
-    private balanceService: BalanceService)
-    {
+    private balanceService: BalanceService) {
     const self = this;
     self.listener = accountService.listener;
     self.listener.subscribe(() => {
@@ -47,26 +46,16 @@ export class NavbarComponent implements OnInit {
     self.username = self.accountService.getName();
     self.userRole = self.accountService.getUserRole();
     self.numberOfProducts = self.productService.getCart() ? self.productService.getCart().total : 0;
-    self.navSearchForm = new FormGroup({
-      search: new FormControl('', null)
-    });
     self.productService.cartChange.subscribe(() => {
       self.numberOfProducts = self.productService.getCart().total;
     });
-    self.balanceService.getBalanceToken().subscribe((v: any) => {
-      if (v.responseType === 'success') {
-        self.balance = v.data.balance;
-      }
-    })
-  }
-
-  search(value) {
-    const self = this;
-    if (value.search !== '') {
-      self.router.navigate(['/products']);
-      self.productService.searchByNavbar = value.search;
-      self.productService.searchNavBarEvent.emit();
-      self.navSearchForm.controls['search'].setValue('');
+    if (self.auth) {
+      self.balanceService.getBalanceToken().subscribe((v: any) => {
+        if (v.responseType === 'success') {
+          self.balance = v.data.balance;
+        }
+      });
     }
   }
+
 }
