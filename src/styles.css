@@ -43,3 +43,6 @@ owl-carousel-child {
   text-align: center;
   background: darkgray;
 }
+h4 img {
+  display: inline !important;
+}
