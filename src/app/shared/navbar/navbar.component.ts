@@ -14,6 +14,7 @@ import { BalanceService } from 'src/app/services/balance.service';
 export class NavbarComponent implements OnInit {
   auth: boolean;
   listener: EventEmitter<any>;
+  balanceEmitter: EventEmitter<any>;
   navSearchForm: FormGroup;
   username: string;
   userRole;
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
     private balanceService: BalanceService) {
     const self = this;
     self.listener = accountService.listener;
+    self.balanceEmitter = balanceService.updateBalanceEmitter;
     self.listener.subscribe(() => {
       self.username = self.accountService.getName();
       self.userRole = self.accountService.getUserRole();
@@ -50,12 +52,19 @@ export class NavbarComponent implements OnInit {
       self.numberOfProducts = self.productService.getCart().total;
     });
     if (self.auth) {
-      self.balanceService.getBalanceToken().subscribe((v: any) => {
-        if (v.responseType === 'success') {
-          self.balance = v.data.balance;
-        }
+      self.getBalance();
+      self.balanceEmitter.subscribe(v => {
+        self.getBalance();
       });
     }
   }
 
+  getBalance() {
+    const self = this;
+    self.balanceService.getBalanceToken().subscribe((v: any) => {
+      if (v.responseType === 'success') {
+        self.balance = v.data.balance;
+      }
+    });
+  }
 }

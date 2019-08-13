@@ -1,6 +1,7 @@
+<app-loading-spinner [isShowing] = "isShowingSpinner"></app-loading-spinner>
 <br>
-<div class="justify-content-center col-6 offset-3">
-  <form class="align-content-center">
+<div class="justify-content-center col-8 offset-2">
+  <div class="align-content-center">
     <div class="form-container card bg-light">
       <div class="card-header text-center">
         <h4>Token balance</h4>
@@ -13,8 +14,56 @@
           <button class="btn btn-primary" (click)="open(content)">Top up</button>
         </div>
       </div>
+      <div *ngIf="topupList.length > 0" class="justify-content-center">
+        <div class="card bg-light">
+          <div class="card-header text-center">
+            <h4>Topup Request Management</h4>
+          </div>
+          <div class="card-body">
+            <div>
+              <table class="table table-light">
+                <thead class="text-center" style="background-color: gray; color: white; font-size: 20px">
+                  <th style="width: 10%;">#</th>
+                  <th style="width: 20%;">Amount</th>
+                  <th style="width: 40%;">Notes</th>
+                  <th style="width: 30%;">Action</th>
+                </thead>
+                <tbody class="text-center">
+                  <tr *ngFor="let item of topupList; let i = index">
+                    <td class="align-middle"><b>{{i + 1}}</b></td>
+                    <td class="align-middle">
+                      {{item.amount}}
+                    </td>
+                    <td class="align-middle">
+                      {{item.notes}}
+                    </td>
+                    <td class="align-middle">
+                      <div *ngIf="item.confirmedDate >= item.createdDate; else elseBlock">
+                        <b style="color: brown">Paid</b>
+                      </div>
+                      <ng-template #elseBlock>
+                        <div *ngIf="item.cancelledDate >= item.createdDate">
+                          <b style="color: grey">Cancelled</b>
+                        </div>
+                      </ng-template>
+                      <div *ngIf="item.confirmedDate < item.createdDate && item.cancelledDate < item.createdDate">
+                        <button style="margin-right: 5px" class="btn btn-success" (click)="pay(item.id)">Pay</button>
+                        <button class="btn btn-danger" (click)="cancel(item.id)">Cancel</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div *ngIf="topupList?.length > 0;" class="mx-auto">
+            <app-pagination [currentPage]="currentPage" (changePage)="goToPage($event, 'list')" [totalPage]="totalPages">
+            </app-pagination>
+          </div>
+        </div>
+      </div>
     </div>
-  </form>
+  </div>
 </div>
 <ng-template #content let-modal let-d="dismiss" let-c="close">
   <form [formGroup]="topupForm" (ngSubmit)="onSubmit(topupForm.value); c('Save click')" class="align-content-center">

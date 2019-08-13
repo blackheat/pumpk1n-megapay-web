@@ -173,7 +173,9 @@ export class InventoryManagementComponent implements OnInit {
     }
     self.inventoryIndex = index;
     self.customerId = '';
+    self.emitter.emit(true);
     self.service.getSearchFilter(1, 1000000, filter).subscribe((v: any) => {
+      self.emitter.emit(false);
       if (v.responseType === 'success') {
         self.inventory.productDetails = v.data[0].productDetails;
         self.inventory.supplierDetails = v.data[0].supplierDetails;
@@ -223,7 +225,7 @@ export class InventoryManagementComponent implements OnInit {
       self.open(self.modal);
       return;
     }
-
+    self.emitter.emit(true);
     self.service.importInventory(self.selectedProduct, self.selectedSupplier, value).subscribe((v: any) => {
       self.emitter.emit(false);
       if (v.responseType === 'success') {
