@@ -141,8 +141,9 @@ export class BalanceComponent implements OnInit {
 
   pay(id) {
     const self = this;
-    
+    self.isShowingSpinner = true
     self.service.getTopupById(id).subscribe((v: any) => {
+      self.isShowingSpinner = false;
       if (v.responseType === 'success') {
         if (!v.data.paymentInvoices || v.data.paymentInvoices.length <= 0) {
           self.service.payForTopup(id).subscribe((u: any) => {

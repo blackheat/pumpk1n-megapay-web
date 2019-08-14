@@ -1,7 +1,7 @@
 <app-loading-spinner [isShowing]="isShowingSpinner"></app-loading-spinner>
 <br>
 <div class="row offset-2 col-8">
-  <div class="col-3">
+  <div class="col-4">
     <img class="card-img-top img-background" src={{product?.image}} alt="Card image cap">
     <p></p>
     <form *ngIf="!product?.deprecated && !product?.outOfStock" class="form-group row mx-auto" [formGroup]="quantityForm" (ngSubmit)="addCart(quantityForm.value)">
@@ -17,7 +17,7 @@
       <button class="btn btn-success col-auto" type="submit" [disabled]="!quantityForm.valid">Add to cart</button>
     </form>
   </div>
-  <div class="col-9">
+  <div class="col-8">
     <table class="table table-light">
       <thead>
         <td colspan="2" class="text-center product-info-header">

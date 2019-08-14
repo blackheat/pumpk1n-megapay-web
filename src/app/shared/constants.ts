@@ -10,9 +10,11 @@ export const API_GET_USER_INFO = `${API_URL}/account/info`;
 export const API_PRODUCT = `${API_URL}/product`;
 export const API_REGISTER = `${API_URL}/account/register`;
 export const API_LOGIN = `${API_URL}/account/login`;
-// export const API_MODIFY_USER_INFO = `${API_USER}/account/modifyInfo`;
-
-// Internal User 
+export const API_ORDER = `${API_URL}/order`;
+export const API_CHECKOUT = `${API_ORDER}/checkout`;
+export const API_CONFIRM = `${API_ORDER}/confirmation`;
+export const API_CANCEL = `${API_ORDER}/cancellation`;
+// Internal User
 
 export const API_SUPPLIER = `${API_URL}/supplier`;
 export const API_INVENTORY = `${API_URL}/inventory`;
@@ -24,13 +26,8 @@ export const API_BALANCE_SERVICE = `${API_URL}/token/balance`;
 export const API_TOKEN_PURCHASE_REQUEST = `${API_URL}/token/transaction/request`;
 
 
-export const API_EMPLOYEE = `${API_URL}/employee`;
-export const API_GET_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/getOrders`;
-export const API_MODIFY_EMPLOYEE_ORDERS = `${API_EMPLOYEE}/order/modifyOrder`;
-
 // export const API_GET_USER_ORDERS = `${API_USER}/order/getOrders`;
-// export const API_ADD_USER_ORDERS = `${API_USER}/order/addOrder`;
-export const API_GET_ORDER_BY_RANGE = `${API_URL}/order/getOrdersByRange`;
+// export const API_ADD_USER_ORDERS = `${API_USER}/order/addOrder`;;
 
 
 export const EMAIL_PATTERN =  /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/g;
