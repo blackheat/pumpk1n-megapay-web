@@ -138,12 +138,6 @@ export class ProductService {
     self.cartChange.emit();
   }
 
-  checkout(value) {
-    const self = this;
-    const body = new HttpParams().set('items', value.items).set('token', value.token);
-
-    // return self.httpClient.post(API_ADD_USER_ORDERS, body.toString(), { headers: self.headers });
-  }
 
   converJsonToMultipleLinesString(value) {
     let returnValue = '';
@@ -187,6 +181,6 @@ export class ProductService {
 
   changeStockStatus(product) {
     const self = this;
-    return self.httpClient.put(`${API_PRODUCT}/${product.id}/stock/${!product.outOfStock}`, null, { headers: self.headers });
+    return self.httpClient.put(`${API_PRODUCT}/${product.id}/stock/${product.outOfStock}`, null, { headers: self.headers });
   }
 }

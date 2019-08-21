@@ -1,6 +1,6 @@
-export const MAX_PRODUCTS_PER_PAGE = 8;
-export const MAX_PRODUCTS_ROW_PER_PAGE = 5;
-export const MAX_ORDERS_PER_PAGE = 8;
+export const MAX_PRODUCTS_PER_PAGE = 10;
+export const MAX_PRODUCTS_ROW_PER_PAGE = 10;
+export const MAX_ORDERS_PER_PAGE = 10;
 export const MAX_ACCOUNTS_PER_PAGE = 10;
 export const DEFAULT_ID = 0;
 export const API_URL = `https://api.pumpk1n.xyz`;

@@ -114,7 +114,7 @@ export class ProductManagementComponent implements OnInit {
 
       !formControl.price.value
         ? 'Product price is required.'
-        : formControl.price.value < 1000000 ? 'Product price cannot be lower than 1000000' : null,
+        : formControl.price.value < 0 ? 'Product price cannot be lower than 0' : null,
 
       !formControl.image.value.trim() || !formControl.image.value ? 'Product image URL is required.' : null,
 

@@ -2,54 +2,65 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
 import swal from 'sweetalert';
-import { AccountService } from '../services/account.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { BalanceService } from '../services/balance.service';
+import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: [ './cart.component.css' ]
+  styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+  @ViewChild('content') public modal: NgbModalRef;
   cart;
+  orderForm: FormGroup;
   order = new Object();
-  currentPage;
-  totalPage = 0;
   listOrders;
   isShowingSpinner;
   closeResult: string;
   constructor(
     private service: ProductService,
-    private accountService: AccountService,
+    private orderService: OrderService,
+    private balanceService: BalanceService,
     private router: Router,
     private modalService: NgbModal
-  ) {}
+  ) { }
 
   ngOnInit() {
     const self = this;
-    self.currentPage = 1;
     self.cart = self.service.getCart();
-    // self.updateOrdersHistory();
+    self.orderForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      notes: new FormControl(''),
+    });
+    self.updateOrdersHistory();
   }
 
-  // updateOrdersHistory() {
-  //   const self = this;
-  //   self.isShowingSpinner = true;
-  //   self.service.getOrdersHistory(1).subscribe((v: any) => {
-  //     if (v.responseType === 'success') {
-  //       self.listOrders = v.data.listOrders;
-  //       self.totalPage = v.paginationReturnData.totalPages;
-  //     }
-  //     self.isShowingSpinner = false;
-  //   });
-  // }
+  updateOrdersHistory() {
+    const self = this;
+    self.isShowingSpinner = true;
+    self.orderService.getOrdersHistory(1).subscribe((v: any) => {
+      self.isShowingSpinner = false;
+      if (v.responseType === 'success') {
+        self.listOrders = v.data;
+      }
+    });
+  }
+
+  getOrderDetail(order) {
+    const self = this;
+    self.order = order;
+  }
 
   deleteCart(id) {
     const self = this;
     self.service.deleteCart(id);
 
     const index = self.cart.listProducts
-      .map(function(e) {
+      .map(function (e) {
         return e.id;
       })
       .indexOf(id);
@@ -58,7 +69,7 @@ export class CartComponent implements OnInit {
 
   navigate(id) {
     const self = this;
-    self.router.navigate([ '/products/', id ]);
+    self.router.navigate(['/products/', id]);
   }
 
   minQuantity(id, quantity) {
@@ -95,13 +106,13 @@ export class CartComponent implements OnInit {
   getOrderTotal() {
     const self = this;
     let total = 0;
-    (<any>self.order).listProducts.forEach((item) => {
+    (<any>self.order).items.forEach((item) => {
       total += item.product.price * item.quantity;
     });
     return total;
   }
 
-  checkout() {
+  checkout(form) {
     const self = this;
     if (!self.service.getCart() || self.service.getCart().listProducts.length <= 0) {
       swal({
@@ -111,45 +122,60 @@ export class CartComponent implements OnInit {
       });
       return;
     }
+    if (self.validate() !== '') {
+      swal({
+        title: 'Failed to edit product',
+        text: self.validate(),
+        icon: 'error'
+      });
+      self.open(self.modal);
+      return;
+    }
+
     swal({
       title: 'Are you sure?',
       text: 'Do you want to checkout?',
       icon: 'info',
-      buttons: [ 'No', 'Yes' ]
+      buttons: ['No', 'Yes']
     }).then((v) => {
       if (v) {
-        const listProducts = [];
+        let total = 0;
+        const items = [];
+        self.isShowingSpinner = true;
         self.cart.listProducts.forEach((item) => {
-          listProducts.push({
+          total += item.product.price;
+          items.push({
             productId: item.product.id,
-            quantity: item.quantity,
-            price: item.product.price
+            quantity: item.quantity
           });
         });
-        const result = new Object();
-        (<any>result).items = JSON.stringify(listProducts);
-        (<any>result).token = self.accountService.getAccessToken();
-
-        // self.service.checkout(result).subscribe((value: any) => {
-        //   if (value.responseType === 'success') {
-        //     swal({
-        //       title: 'Congratulations',
-        //       text: 'Checkout successfully!',
-        //       icon: 'success'
-        //     }).then(() => {
-        //       self.service.emptyCart();
-        //       self.cart = self.service.getCart();
-        //       self.updateOrdersHistory();
-        //     });
-        //   }
-        //   if (value.returnMessage === 'PRODUCT_OVER_QUANTITY') {
-        //     swal({
-        //       title: 'Checkout unsuccessfully!',
-        //       text: 'Product is insufficient.',
-        //       icon: 'error'
-        //     });
-        //   }
-        // });
+        self.balanceService.getBalanceToken().subscribe((b: any) => {
+          if (b.data.balance < total) {
+            swal({
+              title: 'Error!',
+              text: 'Failed to checkout! Your balance is not enough.',
+              icon: 'error'
+            });
+            self.isShowingSpinner = false;
+            return;
+          }
+          const value = {
+            name: form.name,
+            address: form.address,
+            notes: form.notes,
+            items: items
+          };
+          self.orderService.checkout(value).subscribe((r: any) => {
+            self.isShowingSpinner = false;
+            self.service.emptyCart();
+            swal({
+              title: 'Congratulations!',
+              text: 'Checkout successfully!!!',
+              icon: 'success'
+            });
+            return;
+          });
+        });
       }
     });
   }
@@ -158,9 +184,11 @@ export class CartComponent implements OnInit {
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg', windowClass: 'modal-wide' })
       .result.then(
         (result) => {
+          this.clearForm();
           this.closeResult = `Closed with: ${result}`;
         },
         (reason) => {
+          this.clearForm();
           this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
       );
@@ -176,30 +204,25 @@ export class CartComponent implements OnInit {
     }
   }
 
-  goToPage(page) {
+  validate() {
     const self = this;
-    // self.service.getOrdersHistory(page).subscribe((v: any) => {
-    //   if (v.responseType === 'success') {
-    //     self.listOrders = v.data.listOrders;
-    //     self.totalPage = v.paginationReturnData.totalPages;
-    //     self.currentPage = page;
-    //   }
-    //   self.isShowingSpinner = false;
-    // });
+    const formControl = self.orderForm.controls;
+
+    const errors = [
+      !formControl.name.value.trim() || !formControl.name.value ? 'Customer name is required.' : null,
+
+      !formControl.address.value.trim() || !formControl.address.value ? 'Customer address is required.' : null,
+    ];
+
+    return errors.filter((e) => e != null).join('\n');
   }
 
-  getOrderDetail(value) {
+  clearForm() {
     const self = this;
-    const list = JSON.parse(value.products);
-    (<any>self.order).listProducts = [];
-    list.forEach((product) => {
-      self.isShowingSpinner = true;
-      self.service.getProductById(product.productId).subscribe((v: any) => {
-        if ((v.responseType = 'success')) {
-          (<any>self.order).listProducts.push({product: v.data.product, quantity: product.quantity});
-        }
-        self.isShowingSpinner = false;
-      });
-    });
+    self.orderForm.controls.name.setValue('');
+    self.orderForm.controls.address.setValue('');
+    self.orderForm.controls.notes.setValue('');
   }
+
 }
+

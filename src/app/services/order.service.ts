@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AccountService } from './account.service';
 import {
-  MAX_ORDERS_PER_PAGE,
+  MAX_ORDERS_PER_PAGE, API_CHECKOUT, API_ORDER,
 } from '../shared/constants';
 import { DatePipe } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' });
+  headers = new HttpHeaders({ 'Content-Type': 'application/json', Accept: '*/*' });
 
-  constructor(private httpClient: HttpClient, private accountService: AccountService, private datePipe: DatePipe) {}
+  constructor(private httpClient: HttpClient, private accountService: AccountService, private datePipe: DatePipe) { }
 
   getListOrders(page, filter) {
     const self = this;
@@ -44,14 +44,13 @@ export class OrderService {
 
     return self.httpClient.post('a', body.toString(), { headers: self.headers });
   }
-
-  getListOrdersByDateRange(page, filter, ORDERS_PER_PAGE?) {
+  getOrdersHistory(page) {
     const self = this;
-    page = page <= 0 ? 1 : page;
-    const ordersPerPage = ORDERS_PER_PAGE && ORDERS_PER_PAGE > 0 ? ORDERS_PER_PAGE : MAX_ORDERS_PER_PAGE;
-    return self.httpClient.get(
-      `${'a'}?page=${page}&ordersPerPage=${ordersPerPage}` +
-      `&from=${filter.dateFrom}&to=${filter.dateTo}&token=${self.accountService.getAccessToken()}`
-    );
+    return self.httpClient.get(`${API_ORDER}?page=${page}&count=${99999}`);
+  }
+
+  checkout(value) {
+    const self = this;
+    return self.httpClient.post(API_CHECKOUT, value, { headers: self.headers });
   }
 }
