@@ -12,8 +12,6 @@ export const API_REGISTER = `${API_URL}/account/register`;
 export const API_LOGIN = `${API_URL}/account/login`;
 export const API_ORDER = `${API_URL}/order`;
 export const API_CHECKOUT = `${API_ORDER}/checkout`;
-export const API_CONFIRM = `${API_ORDER}/confirmation`;
-export const API_CANCEL = `${API_ORDER}/cancellation`;
 // Internal User
 
 export const API_SUPPLIER = `${API_URL}/supplier`;

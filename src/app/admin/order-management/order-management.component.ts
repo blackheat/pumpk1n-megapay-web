@@ -12,7 +12,7 @@ import { SpinnerService } from 'src/app/services/spinner.service';
 @Component({
   selector: 'app-order-management',
   templateUrl: './order-management.component.html',
-  styleUrls: [ './order-management.component.css' ]
+  styleUrls: ['./order-management.component.css']
 })
 export class OrderManagementComponent implements OnInit {
   currentPage = 1;
@@ -22,20 +22,6 @@ export class OrderManagementComponent implements OnInit {
   closeResult: string;
   selectedState;
   orderIndex = -1;
-  states = [
-    {
-      title: 'Pending',
-      value: 'Chưa giao'
-    },
-    {
-      title: 'Delivering',
-      value: 'Đang giao'
-    },
-    {
-      title: 'Done',
-      value: 'Đã giao'
-    }
-  ];
   filterForm: FormGroup;
   emitter: EventEmitter<boolean>;
   constructor(
@@ -43,9 +29,9 @@ export class OrderManagementComponent implements OnInit {
     private accountService: AccountService,
     private productService: ProductService,
     private router: Router,
-    private modalService: NgbModal, 
+    private modalService: NgbModal,
     private spinnerService: SpinnerService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const self = this;
@@ -58,25 +44,15 @@ export class OrderManagementComponent implements OnInit {
     self.getListOrders(1);
   }
 
-  getFilter() {
-    const self = this;
-    const filter = new Object;
-    (<any>filter).orderId = self.filterForm.controls['orderId'].value;
-    (<any>filter).dateFrom = convertDate(self.filterForm.controls['dateFrom'].value, 'MMddyyyy');
-    (<any>filter).dateTo = convertDate(self.filterForm.controls['dateTo'].value, 'MMddyyyy');
-    return filter;
-  }
-
   getListOrders(page) {
     const self = this;
     self.emitter.emit(true);
-    const filter = self.getFilter();
-    self.service.getListOrders(page, filter).subscribe((value: any) => {
+    self.service.getListOrders(page).subscribe((value: any) => {
       self.emitter.emit(false);
       if (value.responseType === 'success') {
         self.currentPage = page;
         self.totalPage = value.paginationReturnData.totalPages;
-        self.listOrders = value.data.listOrders;
+        self.listOrders = value.data;
       }
     });
   }
@@ -84,27 +60,13 @@ export class OrderManagementComponent implements OnInit {
   getOrderDetail(value, index) {
     const self = this;
     self.orderIndex = index;
-    const list = JSON.parse(value.products);
-    (<any>self.order).listProducts = [];
-    (<any>self.order).id = value.id;
-    (<any>self.order).userId = value.userId;
-    (<any>self.order).createDate = value.createDate;
-    (<any>self.order).state = value.state;
-    list.forEach((product) => {
-      self.emitter.emit(true);
-      self.productService.getProductById(product.productId).subscribe((v: any) => {
-        if ((v.returnMessage = 'SUCCESS')) {
-          (<any>self.order).listProducts.push({ product: v.data.product, quantity: product.quantity });
-        }
-        self.emitter.emit(false);
-      });
-    });
+    self.order = value;
   }
 
   getOrderTotal() {
     const self = this;
     let total = 0;
-    (<any>self.order).listProducts.forEach((item) => {
+    (<any>self.order).items.forEach((item) => {
       total += item.product.price * item.quantity;
     });
     return total;
@@ -131,62 +93,38 @@ export class OrderManagementComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  
-  onChange(value) {
-    const self = this;
-    self.selectedState = value;
-  }
 
-  changeState() {
-    const self = this;
-    (<any>self.order).state = self.selectedState;
-    self.service.modifyOrder(self.order).subscribe((v: any) => {
-      if (v.responseType === 'success') {
-        swal({
-          title: 'Congratulations',
-          text: 'State is changed successfully.',
-          icon: 'success'
-        }).then(() => {
-          self.listOrders[self.orderIndex].state = self.selectedState;
-        });
-      }
-    });
-  }
 
   goToPage(page) {
     const self = this;
     self.getListOrders(page);
   }
 
-  validate() {
+  confirm(order) {
     const self = this;
-
-    const dF = convertDate(self.filterForm.controls['dateFrom'].value, 'MMddyyyy');
-    const dT = convertDate(self.filterForm.controls['dateTo'].value, 'MMddyyyy');
-    const errors = [
-      self.filterForm.controls['dateFrom'].value &&
-      !isValidDate(convertDate(self.filterForm.controls['dateFrom'].value, 'ddMMyyyy')) ? 'Date from is invalid.' : null,
-
-      self.filterForm.controls['dateTo'].value &&
-      !isValidDate(convertDate(self.filterForm.controls['dateTo'].value, 'ddMMyyyy')) ? 'Date to is invalid.' : null,
-
-      dF && dT && new Date(dF) > new Date(dT) ? 'Date From value cannot precede Date To value' : null
-
-    ];
-
-    return errors.filter((e) => e != null).join('\n');
+    self.service.confirm(order.id).subscribe((v: any) => {
+      if (v.responseType === 'success') {
+        swal({
+          title: 'Success!',
+          text: 'Confirm order successfully!!!',
+          icon: 'success'
+        });
+        self.goToPage(self.currentPage);
+      }
+    });
   }
 
-  filter(value) {
+  cancel(order) {
     const self = this;
-    if (self.validate() !== '') {
-      swal({
-        title: 'Failed to filter orders!',
-        text: self.validate(),
-        icon: 'error'
-      });
-      return;
-    }
-    self.getListOrders(1);
+    self.service.cancel(order.id).subscribe((v: any) => {
+      if (v.responseType === 'success') {
+        swal({
+          title: 'Success!',
+          text: 'Cancel order successfully!!!',
+          icon: 'success'
+        });
+        self.goToPage(self.currentPage);
+      }
+    });
   }
 }
