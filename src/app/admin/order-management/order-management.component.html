@@ -82,9 +82,10 @@
               <td class="align-middle">
                 <button class="btn btn-primary" style="margin-left: 5px"
                   (click)="open(orderDetail); getOrderDetail(order, i)"><b>Detail</b></button>
-                <button class="btn btn-success" style="margin-left: 5px"
-                  (click)="confirm(order)"><b>Deliver</b></button>
-                <button class="btn btn-danger" style="margin-left: 5px" (click)="cancel(order)"><b>Cancel</b></button>
+                <button *ngIf="order?.cancelledDate<order?.checkedOutDate && order?.confirmedDate<order?.checkedOutDate"
+                  class="btn btn-success" style="margin-left: 5px" (click)="confirm(order)"><b>Deliver</b></button>
+                <button *ngIf="order?.cancelledDate<order?.checkedOutDate && order?.confirmedDate<order?.checkedOutDate"
+                  class="btn btn-danger" style="margin-left: 5px" (click)="cancel(order)"><b>Cancel</b></button>
               </td>
             </tr>
           </tbody>
