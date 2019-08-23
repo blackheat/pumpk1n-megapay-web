@@ -31,7 +31,7 @@
         </tr>
         <tr *ngIf="!product?.deprecated">
           <th class="product-info-row-header">Price: </th>
-          <td class="product-info ">{{product?.price | currency:' ':'code':'0.0-0'}} VND</td>
+          <td class="product-info ">{{product?.price | currency:' ':'code':'0.0-0'}} PKN</td>
         </tr>
         <tr *ngIf="product?.outOfStock">
           <th class="product-info-row-header" style="width:20%">Quantity Status:</th>
