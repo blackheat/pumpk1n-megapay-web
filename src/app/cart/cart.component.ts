@@ -168,6 +168,7 @@ export class CartComponent implements OnInit {
           self.orderService.checkout(value).subscribe((r: any) => {
             self.isShowingSpinner = false;
             self.service.emptyCart();
+            self.balanceService.updateBalanceEmitter.emit('update');
             swal({
               title: 'Congratulations!',
               text: 'Checkout successfully!!!',
